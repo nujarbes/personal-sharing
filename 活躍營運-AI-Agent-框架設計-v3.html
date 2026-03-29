@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>活躍營運 AI Agent 框架設計 v3</title>
+<style>
+  body {
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #fff;
+    color: #1a1a1a;
+    line-height: 1.75;
+    margin: 0;
+    padding: 40px 20px 80px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 1.8rem; margin-bottom: 0.2rem; }
+  h2 { font-size: 1.3rem; margin-top: 2.5rem; margin-bottom: 0.5rem; border-bottom: 1px solid #e0e0e0; padding-bottom: 0.3rem; }
+  h3 { font-size: 1.05rem; margin-top: 1.8rem; margin-bottom: 0.3rem; }
+  h4 { font-size: 0.95rem; margin-top: 1.2rem; margin-bottom: 0.2rem; }
+  p { margin: 0.5rem 0 0.8rem; }
+  ul, ol { padding-left: 1.5rem; margin: 0.4rem 0 1rem; }
+  li { margin-bottom: 0.25rem; }
+  code { background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-size: 0.88em; font-family: 'Courier New', monospace; }
+  pre { background: #f5f5f5; padding: 16px; border-radius: 4px; overflow-x: auto; font-size: 0.82em; line-height: 1.55; }
+  pre code { background: none; padding: 0; }
+  blockquote { border-left: 3px solid #c0c0c0; background: #f9f9f9; margin: 0.8rem 0; padding: 0.5rem 1rem; color: #444; font-size: 0.92em; }
+  table { width: 100%; border-collapse: collapse; margin: 0.8rem 0; font-size: 0.88em; }
+  th { background: #f2f2f2; text-align: left; padding: 6px 10px; border: 1px solid #ddd; font-weight: 600; }
+  td { padding: 6px 10px; border: 1px solid #ddd; vertical-align: top; }
+  .meta { font-size: 0.85em; color: #777; margin-bottom: 2rem; }
+  .tag { display: inline-block; font-size: 0.72em; font-weight: 700; padding: 2px 7px; border-radius: 3px; margin-right: 4px; }
+  .tag-pb { background: #e3f2fd; color: #1565c0; }
+  .tag-sk { background: #f3e5f5; color: #7b1fa2; }
+  .tag-good { background: #e8f5e9; color: #2e7d32; }
+  .tag-bad { background: #fce8e8; color: #c62828; }
+  .tag-layer { background: #f0f0f0; color: #555; }
+  .reason { font-size: 0.88em; color: #555; background: #fafafa; border-left: 3px solid #ddd; padding: 0.5rem 1rem; margin: 0.4rem 0 1rem; }
+  .warn { background: #fff8e1; border-left: 3px solid #f0c040; padding: 0.5rem 1rem; margin: 0.8rem 0; font-size: 0.9em; }
+  .summary-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 4px; padding: 1rem 1.2rem; margin: 1rem 0; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #1a1a1a; margin-right: 2px; }
+  .dot-empty { display: inline-block; width: 8px; height: 8px; border-radius: 50%; border: 1px solid #bbb; margin-right: 2px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>活躍營運 AI Agent 框架設計 v3</h1>
+<p class="meta">版本：v3.0 ｜ 日期：2026-03-29 ｜ 負責人：Jarvis</p>
+
+<div class="summary-box">
+<p><strong>執行摘要</strong></p>
+<p>三層按需載入架構（Context → Playbook → Skill），每次對話僅消耗 ~1,700 tokens 指令層。<br>
+<strong>7 個 Playbook</strong> 涵蓋活躍組全部高頻工作流。<strong>12 個 Skill</strong> 可跨 Playbook 複用。<br>
+預估建置：<strong>15 個工作日</strong>（3 週），每日 4-6 小時。</p>
+</div>
+
+<h2>一、檔案結構</h2>
+<pre><code>projects/活躍營運 AI Agent/
+├── agent-context.md              ← L1：Agent 身份（永遠載入）
+├── playbooks/
+│   ├── PB-01_活動設計.md
+│   ├── PB-02_指標異動分析.md
+│   ├── PB-03_週報產出.md
+│   ├── PB-04_活動上線審查.md
+│   ├── PB-05_活動復盤.md
+│   ├── PB-06_競品分析.md
+│   └── PB-07_回流活動設計.md
+├── skills/
+│   ├── SK-01 ~ SK-12（12 個可複用執行單元）
+├── reference/
+│   ├── 歷史活動案例.md
+│   ├── 指標基準值.md
+│   ├── 玩家分群定義.md
+│   └── 活動類型清單.md
+└── 框架設計文件/</code></pre>
+
+<h2>二、三層架構定義</h2>
+<table>
+<tr><th>層級</th><th>回答的問題</th><th>token</th><th>載入時機</th></tr>
+<tr><td><strong>L1 Context</strong></td><td>我是誰？邊界？模糊情況怎麼辦？</td><td>~300</td><td>永遠</td></tr>
+<tr><td><strong>L2 Playbook</strong></td><td>這個任務從頭到尾怎麼跑？</td><td>300–500</td><td>按情境，一次一個</td></tr>
+<tr><td><strong>L3 Skill</strong></td><td>這個具體步驟如何執行？</td><td>400–600</td><td>按需，由 Playbook 呼叫</td></tr>
+</table>
+
+<h2>三、Playbook × Skill 對應矩陣</h2>
+<table>
+<tr>
+<th></th><th>SK-01<br>機制</th><th>SK-02<br>指標</th><th>SK-03<br>分群</th><th>SK-04<br>獎勵</th><th>SK-05<br>文案</th><th>SK-06<br>QA</th><th>SK-07<br>假設樹</th><th>SK-08<br>日曆</th><th>SK-09<br>競品</th><th>SK-10<br>推播</th><th>SK-11<br>復盤</th><th>SK-12<br>AB</th>
+</tr>
+<tr><td><strong>PB-01 活動設計</strong></td><td><span class="dot"></span></td><td></td><td><span class="dot"></span></td><td><span class="dot"></span></td><td><span class="dot"></span></td><td></td><td></td><td><span class="dot"></span></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>PB-02 指標異動</strong></td><td></td><td><span class="dot"></span></td><td><span class="dot"></span></td><td></td><td></td><td></td><td><span class="dot"></span></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>PB-03 週報</strong></td><td></td><td><span class="dot"></span></td><td></td><td></td><td></td><td></td><td></td><td><span class="dot"></span></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>PB-04 上線審查</strong></td><td></td><td></td><td></td><td><span class="dot"></span></td><td><span class="dot"></span></td><td><span class="dot"></span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>PB-05 復盤</strong></td><td></td><td><span class="dot"></span></td><td><span class="dot"></span></td><td></td><td></td><td></td><td><span class="dot"></span></td><td></td><td><span class="dot"></span></td><td></td><td><span class="dot"></span></td><td><span class="dot"></span></td></tr>
+<tr><td><strong>PB-06 競品分析</strong></td><td><span class="dot"></span></td><td></td><td></td><td><span class="dot"></span></td><td></td><td></td><td></td><td></td><td><span class="dot"></span></td><td></td><td></td><td></td></tr>
+<tr><td><strong>PB-07 回流設計</strong></td><td><span class="dot"></span></td><td></td><td><span class="dot"></span></td><td><span class="dot"></span></td><td><span class="dot"></span></td><td></td><td></td><td></td><td></td><td><span class="dot"></span></td><td></td><td><span class="dot"></span></td></tr>
+</table>
+<p><strong>So what：</strong>每個 Skill 至少被 2 個 Playbook 引用。SK-02（指標解讀）和 SK-03（玩家分群）複用率最高，優先建置。</p>
+
+<h2>四、Playbook 清單</h2>
+
+<h3><span class="tag tag-pb">PB-01</span>活躍活動設計</h3>
+<p><strong>觸發：</strong>需要規劃新的活躍活動<br>
+<strong>確認：</strong>活動目標 / 目標族群 / 上線時間 / IP或節慶主題<br>
+<strong>步驟：</strong>確認族群[SK-03] → 機制設計[SK-01] → 日曆排布[SK-08] → 獎勵設計[SK-04] → 文案[SK-05] → 整合企劃書<br>
+<strong>輸出：</strong>完整活動企劃書</p>
+
+<h3><span class="tag tag-pb">PB-02</span>指標異動分析</h3>
+<p><strong>觸發：</strong>活躍指標波動超出 ±5%<br>
+<strong>確認：</strong>指標名稱 / 幅度 / 時間 / 市場 / 近期活動或版本變動<br>
+<strong>步驟：</strong>指標解讀[SK-02] → 分群分析[SK-03] → 假設樹[SK-07] → 應對方案<br>
+<strong>輸出：</strong>問題分析報告（問題→影響→根因假設→解方）</p>
+
+<h3><span class="tag tag-pb">PB-03</span>活躍週報產出</h3>
+<p><strong>觸發：</strong>每週固定產出<br>
+<strong>步驟：</strong>指標解讀[SK-02] → 對照日曆節點[SK-08] → highlight + lowlight → 下週建議<br>
+<strong>輸出：</strong>週報 Markdown</p>
+
+<h3><span class="tag tag-pb">PB-04</span>活動上線審查</h3>
+<p><strong>觸發：</strong>活動即將上線<br>
+<strong>步驟：</strong>獎勵驗證[SK-04] → 文案驗證[SK-05] → QA Checklist[SK-06] → 風險彙整<br>
+<strong>輸出：</strong>QA Checklist + 風險摘要</p>
+
+<h3><span class="tag tag-pb">PB-05</span>活動復盤</h3>
+<p><strong>觸發：</strong>活動結束後 3-14 天<br>
+<strong>步驟：</strong>指標解讀[SK-02] → 分群差異[SK-03] → 競品對比[SK-09] → 假設樹[SK-07] → AB Test建議[SK-12] → 復盤報告[SK-11]<br>
+<strong>輸出：</strong>復盤報告（成果/分群差異/成功因素/失敗點/迭代計畫）</p>
+
+<h3><span class="tag tag-pb">PB-06</span>競品分析</h3>
+<p><strong>觸發：</strong>需要了解競品活動策略<br>
+<strong>步驟：</strong>競品拆解[SK-09] → 機制對比[SK-01] → 獎勵對比[SK-04] → 差異化建議<br>
+<strong>輸出：</strong>競品分析報告</p>
+
+<h3><span class="tag tag-pb">PB-07</span>回流活動設計</h3>
+<p><strong>觸發：</strong>需要設計流失/風險玩家回流策略<br>
+<strong>步驟：</strong>族群定義[SK-03] → 機制設計[SK-01] → 獎勵設計[SK-04] → 推播序列[SK-10] → 文案[SK-05] → AB Test[SK-12]<br>
+<strong>輸出：</strong>回流方案（族群/機制/獎勵/推播序列/AB Test）</p>
+
+<h2>五、Skill 清單與 Few-shot</h2>
+
+<h3><span class="tag tag-sk">SK-01</span>活動機制設計</h3>
+<p><strong>用途：</strong>根據目標與族群，產出 3 個機制選項並比較 trade-off</p>
+<blockquote>
+<strong>Few-shot：</strong><br>
+<strong>輸入：</strong>目標：提升 D7 Retention｜族群：D4-14 早期活躍玩家｜天數：7 天｜無 IP<br><br>
+<strong>輸出：</strong><br>
+A. 7 日任務串：每日完成 1 模式任務→累積解鎖 D3/D5/D7 階梯獎勵｜⭐⭐⭐⭐ engagement｜低複雜度<br>
+B. 新手排位衝刺：7 天打 20 場排位→前 30% 獲限定掛件｜⭐⭐⭐ 排斥休閒玩家｜低複雜度<br>
+C. 好友組隊挑戰：邀 1 好友組隊打 5 場→雙方獲獎｜⭐⭐⭐⭐ 社交黏著｜中複雜度<br><br>
+<strong>建議：</strong>A 主體 + C 支線。B 不適合此族群（早期玩家排位能力弱，挫敗風險高）。
+</blockquote>
+
+<h3><span class="tag tag-sk">SK-02</span>指標解讀框架</h3>
+<p><strong>用途：</strong>結構化解讀活躍指標，產出判斷而非轉述數字</p>
+<blockquote>
+<strong>Few-shot：</strong><br>
+<strong>輸入：</strong>D7 Retention 本週 18.2%（台灣）、上週 21.5%、無活動變動<br><br>
+<strong>輸出：</strong>🔴 D7 Retention 下滑 3.3pp（-15%），幅度超出正常波動。無活動節點可解釋，且為台灣單一市場現象。建議排查：(1) 近期版本更新是否引入台灣地區 bug；(2) UA 投放渠道結構變化導致新用戶品質下降。
+</blockquote>
+
+<h3><span class="tag tag-sk">SK-03</span>玩家分群與定向</h3>
+<p><strong>用途：</strong>根據任務目標識別目標族群，給出行為特徵與觸達策略</p>
+<blockquote>
+<strong>Few-shot：</strong><br>
+<strong>輸入：</strong>設計一個提升 D7 Retention 的活動<br><br>
+<strong>輸出：</strong>目標族群：早期活躍期（D4-14）<br>
+行為特徵：已完成教程，週登入 3-4 天，社交功能使用率低<br>
+觸達：遊戲內彈窗 + 推播（D4/D6/D7）<br>
+注意：任務難度需低於核心玩家標準，避免高門檻機制
+</blockquote>
+
+<h3><span class="tag tag-sk">SK-04</span>獎勵結構設計</h3>
+<p><strong>用途：</strong>設計獎勵的品項、數量、發放節奏與稀缺感</p>
+<blockquote>
+<strong>Few-shot：</strong>7 天登入活動 → 早期活躍玩家<br><br>
+D1: 500幣+經驗卡（低門檻進門）<br>
+D2: 普通掛件（視覺獎勵開始）<br>
+D3: 1000幣（加倍強化慣性）<br>
+D4: 皮膚碎片×3（沉沒成本鉤子——需5個合成）<br>
+D5: 皮膚碎片×2→可合成（達成感 peak）<br>
+D6: 限時武器試用卡（製造付費動機）<br>
+D7: 限定頭像框（稀缺性收尾）<br><br>
+<strong>節奏：</strong>D1-3 建慣性、D4 設鉤子、D5 達成感、D6 付費轉化、D7 稀缺收尾
+</blockquote>
+
+<h3><span class="tag tag-sk">SK-05</span>活動文案產出</h3>
+<p><strong>用途：</strong>產出活動標題、說明、推播文案（可直接用）</p>
+<blockquote>
+<strong>Few-shot：</strong>7天新兵集結｜每日完成指定模式→累積獎勵｜限定皮膚｜台灣<br><br>
+<strong>標題：</strong>新兵集結令——連續 7 天，解鎖限定裝備<br>
+<strong>說明：</strong>每日完成指定模式任務，累積天數解鎖階梯獎勵。堅持 7 天，限定皮膚直接入手。<br>
+<strong>推播 D1：</strong>「新兵集結！7天任務已開啟，限定皮膚等你拿」<br>
+<strong>推播 D3：</strong>「你已完成 3 天任務，限定皮膚只差 4 天」<br>
+<strong>推播 D6：</strong>「最後 1 天！完成今日任務即可解鎖限定皮膚」
+</blockquote>
+
+<h3><span class="tag tag-sk">SK-06</span>QA Checklist 生成</h3>
+<p><strong>用途：</strong>根據活動類型生成上線前檢查清單</p>
+<p>固定 7 項 + 按活動類型追加（登入/排位/公會/IP 聯動各有額外檢查項）。輸出為表格：檢查項/預期/實際/狀態/備註。</p>
+
+<h3><span class="tag tag-sk">SK-07</span>假設樹產出</h3>
+<p><strong>用途：</strong>針對異動產出 MECE 假設樹，每個假設附驗證方法</p>
+<blockquote>
+<strong>Few-shot：</strong>台灣 D7 Retention 下滑 3.3pp，無活動變動<br><br>
+<pre><code>D7 Retention 下滑 3.3pp
+├── A. 新用戶品質（UA端）
+│   ├── A1. 渠道 mix 變更 → 比對渠道結構
+│   ├── A2. 新素材引入低意圖用戶 → 按素材分組比較
+│   └── A3. 自然/付費量比例變化 → 拉分組D7
+├── B. 遊戲體驗（產品端）
+│   ├── B1. 版本 bug → 查客服工單量
+│   ├── B2. 新手引導異常 → 查 Tutorial 完成率
+│   └── B3. 配對不均 → 查新手勝率分布
+└── C. 外部因素
+    ├── C1. 競品搶量 → 查競品活動時間
+    └── C2. 假期/考試季 → 查歷史同期</code></pre>
+</blockquote>
+
+<h3><span class="tag tag-sk">SK-08</span>事件日曆排布</h3>
+<p><strong>用途：</strong>評估活動在月度日曆中的位置，避免過載或空檔</p>
+<blockquote>
+<strong>Few-shot：</strong>4月日曆有 4/1-14 賽季活動、4/21-28 公會聯賽，想加 7 天登入活動<br><br>
+建議 <strong>4/15-4/21</strong>。賽季 4/14 結束後有 DAU 回落，此時段填補空檔。4/21 與公會聯賽重疊 1 天可接受。不建議 4/7-13（與賽季重疊，任務過載）。
+</blockquote>
+
+<h3><span class="tag tag-sk">SK-09</span>競品活動拆解</h3>
+<p><strong>用途：</strong>結構化拆解競品活動（目標/族群/機制/獎勵/可借鑑點/差異化）</p>
+<blockquote>
+<strong>Few-shot：</strong>PUBG Mobile「Evangelion 聯動」3 週<br><br>
+目標推測：拉新+DAU（EVA IP 吸引動漫受眾）<br>
+機制：主線 8 關故事任務 + 每日登入 + 聯動抽獎池<br>
+獎勵：免費 EVA 頭像框/塗裝；付費抽 EVA 角色皮膚<br>
+可借鑑：IP 聯動做完整故事線→提升沉浸感<br>
+差異化：PUBG 是單人 PVE，CODM 可做多人合作 PVE 任務線
+</blockquote>
+
+<h3><span class="tag tag-sk">SK-10</span>推播策略設計</h3>
+<p><strong>用途：</strong>設計推播觸發規則、時機、文案與頻率控制</p>
+<blockquote>
+<strong>Few-shot：</strong>回流推播，族群：7-14 天未登入<br><br>
+Day 7：「你錯過了新地圖 XX 的首次挑戰」（內容驅動）<br>
+Day 10：「你的戰隊夥伴 [好友名] 正在等你上線」（社交驅動）<br>
+Day 14：「回來就送 500 CP + 限定武器試用卡（限 48h）」（獎勵+時間壓力）<br><br>
+頻率：7 天內最多 3 則，超過不再推播。
+</blockquote>
+
+<h3><span class="tag tag-sk">SK-11</span>復盤報告產出</h3>
+<p><strong>用途：</strong>結構化輸出復盤報告（摘要/指標/分群差異/成功因素/失敗點/迭代行動）</p>
+
+<h3><span class="tag tag-sk">SK-12</span>A/B Test 設計</h3>
+<p><strong>用途：</strong>設計 AB Test 方案（假設/Control vs Treatment/指標/樣本/成功標準）</p>
+<blockquote>
+<strong>Few-shot：</strong>假設：D4 獎勵改為皮膚碎片可提升 D4→D5 留存<br><br>
+Control：D4 = 500 幣（現行）<br>
+Treatment：D4 = 皮膚碎片×3（需 5 個合成）<br>
+主指標：D4→D5 繼續參與率<br>
+次指標：D7 完成率、活動 DAU<br>
+分配：50/50，排除付費大戶<br>
+時間：7 天<br>
+成功：Treatment 提升 ≥ 3pp，p &lt; 0.05
+</blockquote>
+
+<h2>六、寫法原則（好壞案例）</h2>
+
+<h3><span class="tag tag-layer">L1</span>Agent Context</h3>
+<p><strong>寫什麼：</strong>角色定位、職責邊界、輸出對象、遇到模糊情況的預設行為。<br>
+<strong>不寫什麼：</strong>任務步驟、輸出格式細節、執行邏輯——這些屬於 L2/L3。</p>
+
+<h4><span class="tag tag-good">✅ 好案例</span></h4>
+<pre><code>## 活躍營運 AI Agent
+
+你是 CODM 活躍組的資深執行夥伴。你的輸出對象是活躍組同事，不是主管或開發商。
+
+**職責範圍：**
+- 設計與優化活躍活動（任務機制、獎勵、時程）
+- 解讀活躍指標並提出應對方案
+- 產出活動企劃書、週報分析、上線審查、活動復盤、競品分析、回流策略
+
+**邊界（不碰）：**
+- 付費相關定價與排期（屬商業化）
+- 產品功能開發與 bug 修復（屬產品組）
+- 跨市場發行策略對齊（屬 Producer 層級）
+
+**遇到模糊情況：**
+- 缺少必要資料時，先列出「我需要以下資訊才能繼續」，不要猜測
+- 有多個合理方向時，給出選項讓使用者決定，不要自行選擇</code></pre>
+<div class="reason">
+  <strong>為什麼好：</strong>明確定義「輸出對象」→ 語氣調整為同事層級，不是彙報口吻；邊界寫的是「不碰什麼 + 為什麼」→ 不會越界；預設行為有明確指令 → 遇到模糊情況有一致的處理方式。
+</div>
+
+<h4><span class="tag tag-bad">❌ 壞案例</span></h4>
+<pre><code>你是一個活躍營運 AI 助手，幫助團隊做活動設計和數據分析。
+你要友善、專業、有效率。
+有任何問題請回答。</code></pre>
+<div class="reason">
+  <strong>為什麼壞：</strong>「友善、專業、有效率」沒有可操作的行為指令，Agent 無法依此做判斷；沒有邊界定義 → 遇到付費問題會嘗試回答；沒有輸出對象 → 語氣和格式會飄移；沒有模糊情況規則 → Agent 自行猜測，出錯後你不知道為什麼。
+</div>
+
+<h3><span class="tag tag-layer">L2</span>Playbook</h3>
+<p><strong>寫什麼：</strong>觸發情境、執行前需確認的資訊、步驟順序（每步一行）、輸出物定義。<br>
+<strong>不寫什麼：</strong>每個步驟的具體執行細節——那是 Skill 的工作。</p>
+
+<h4><span class="tag tag-good">✅ 好案例</span></h4>
+<pre><code>## PB-01：活躍活動設計
+
+**觸發情境：** 使用者需要規劃一個新的活躍活動
+
+**執行前確認（缺少時主動詢問）：**
+- 活動目標（提升 DAU / 改善 D7 Retention / 拉回流失用戶）
+- 目標玩家族群（全玩家 / 核心玩家 / 流失玩家）
+- 活動上線時間與持續天數
+
+**執行步驟：**
+1. 確認目標玩家族群 → [呼叫 SK-03]
+2. 設計活動機制選項 → [呼叫 SK-01]
+3. 安排活動在月度日曆中的位置 → [呼叫 SK-08]
+4. 設定獎勵結構與發放節奏 → [呼叫 SK-04]
+5. 產出活動文案草稿 → [呼叫 SK-05]
+6. 整合輸出完整活動企劃書
+
+**輸出物：** 活動企劃書（目標 / 族群 / 機制 / 獎勵 / 時程 / 預期 impact / 風險）
+
+**成功標準：** 輸出可直接送審，不需要使用者大幅補充或修改</code></pre>
+<div class="reason">
+  <strong>為什麼好：</strong>「執行前確認」明確列出缺少哪些資訊時要問 → 不會在資訊不足時就輸出；每步只有一行，細節全部委託 Skill → Playbook 保持精簡；「成功標準」讓 Agent 有自我驗證的基準。
+</div>
+
+<h4><span class="tag tag-bad">❌ 壞案例</span></h4>
+<pre><code>## 活動設計流程
+
+當使用者要設計活動時，你需要：
+1. 先了解活動目標是什麼
+2. 幫他想一些好的活動機制，例如每日登入獎勵、累積任務、限時挑戰等，
+   要考慮玩家的參與意願和執行難度，以及獎勵設計要有吸引力但不能太貴，
+   要符合遊戲的經濟體系，同時也要考慮文案的清晰度...
+3. 輸出企劃書</code></pre>
+<div class="reason">
+  <strong>為什麼壞：</strong>步驟 2 把機制設計、獎勵設計、文案三件事混在一起 → 這是三個不同 Skill 應該分別處理的事；沒有「執行前確認」→ 資訊不足時 Agent 自行猜測；細節描述每次都要載入，即使某個環節這次用不到。
+</div>
+
+<h3><span class="tag tag-layer">L3</span>Skill</h3>
+<p><strong>寫什麼：</strong>輸入需求、執行邏輯、輸出格式、few-shot 範例（品質最大的槓桿）、常見錯誤。<br>
+<strong>不寫什麼：</strong>任務背景、整體目標——那是 Playbook 的工作。</p>
+
+<h4><span class="tag tag-good">✅ 好案例</span></h4>
+<pre><code>## SK-02：指標解讀框架
+
+**輸入需求：** 指標名稱、當期數值、對比基準（上週 / 上月 / 歷史均值）、時間區間
+
+**執行邏輯：**
+1. 計算變動幅度（%）並判斷是否超出正常波動範圍（±5% 為正常，超過需標記）
+2. 對照活動節點：異動是否與活動上線 / 結束時間吻合？
+3. 跨市場比較：是全市場現象還是單一市場
+4. 產出解讀結論（結論先行，數字後補）
+
+**few-shot 範例：**
+輸入：D7 Retention 本週 18.2%（台灣），上週 21.5%，無活動節點變化
+輸出：🔴 D7 Retention 下滑 3.3pp（-15%），幅度超出正常波動範圍，且無活動結束可解釋，
+      且為台灣單一市場現象。建議優先排查：(1) 近期版本更新是否引入台灣地區 bug；
+      (2) UA 投放渠道結構變化導致新用戶品質下降。
+
+**輸出格式：** 每個指標 2-4 行，結論先行，數字後補，標記異常等級（⚠️ 需關注 / 🔴 緊急）
+
+**常見錯誤：** 不要只轉述數字（「本週 DAU 為 X，上週為 Y」），必須給出判斷（正常/異常）和建議方向。</code></pre>
+<div class="reason">
+  <strong>為什麼好：</strong>few-shot 範例直接示範「好的輸出長什麼樣」→ 大幅提升穩定性；「常見錯誤」明確告訴 Agent 不要做什麼 → 避免輸出退化；輸出格式有明確長度預期。
+</div>
+
+<h4><span class="tag tag-bad">❌ 壞案例</span></h4>
+<pre><code>## 指標分析
+
+幫使用者分析活躍指標的表現，包括 DAU、Retention、在線時長等。
+要給出有意義的分析，找出問題並提供建議。</code></pre>
+<div class="reason">
+  <strong>為什麼壞：</strong>沒有輸入需求定義 → 不知道要先問什麼資料；沒有執行邏輯 → 每次輸出結構不同；沒有 few-shot 範例 → 品質完全依賴模型泛化能力，不穩定；「有意義的分析」是主觀描述，對 Agent 毫無指導作用。
+</div>
+
+<h2>附件 A：建置時程（每日 4-6h，共 3 週）</h2>
+
+<h3>Week 1：跑通活動設計</h3>
+<table>
+<tr><th>日期</th><th>任務</th><th>工時</th><th>備註</th></tr>
+<tr><td>Day 1（一）</td><td>L1 Context 初稿 + 整理歷史案例</td><td>4h</td><td>所有 few-shot 的原材料</td></tr>
+<tr><td>Day 2（二）</td><td>PB-01 + SK-01 + SK-08</td><td>5h</td><td></td></tr>
+<tr><td>Day 3（三）</td><td>SK-04 + SK-05</td><td>5h</td><td></td></tr>
+<tr><td>Day 4（四）</td><td>跑通 PB-01 完整流程</td><td>4h</td><td>記錄斷點</td></tr>
+<tr><td>Day 5（五）</td><td>修正 L1 + PB-01 + Skills</td><td>4h</td><td></td></tr>
+</table>
+
+<h3>Week 2：指標分析 + 回流 + 數據串接</h3>
+<table>
+<tr><th>日期</th><th>任務</th><th>工時</th><th>備註</th></tr>
+<tr><td>Day 6（一）</td><td>指標基準值 + SK-02 + SK-07</td><td>5h</td><td></td></tr>
+<tr><td>Day 7（二）</td><td>PB-02 + SK-03</td><td>4h</td><td></td></tr>
+<tr><td>Day 8（三）</td><td>Google Sheets 串接</td><td>4h</td><td>見附件 B</td></tr>
+<tr><td>Day 9（四）</td><td>PB-03 + PB-07 + SK-10</td><td>5h</td><td></td></tr>
+<tr><td>Day 10（五）</td><td>跑通 PB-02/03/07 + 修正</td><td>5h</td><td></td></tr>
+</table>
+
+<h3>Week 3：補完 + 調優 + 交接</h3>
+<table>
+<tr><th>日期</th><th>任務</th><th>工時</th><th>備註</th></tr>
+<tr><td>Day 11（一）</td><td>PB-04 + SK-06 + PB-06 + SK-09</td><td>5h</td><td></td></tr>
+<tr><td>Day 12（二）</td><td>PB-05 + SK-11 + SK-12</td><td>4h</td><td></td></tr>
+<tr><td>Day 13（三）</td><td>團隊試用 + 收集回饋</td><td>4h</td><td></td></tr>
+<tr><td>Day 14（四）</td><td>補充 few-shot、修正邊界</td><td>4h</td><td></td></tr>
+<tr><td>Day 15（五）</td><td>SOP + 最終測試 + 存檔</td><td>4h</td><td></td></tr>
+</table>
+
+<h2>附件 B：Google Sheets 串接方案</h2>
+
+<table>
+<tr><th>方式</th><th>適合</th><th>優點</th><th>缺點</th></tr>
+<tr><td><strong>A. 匯出 CSV</strong></td><td>臨時分析</td><td>零設定</td><td>每次手動匯出</td></tr>
+<tr><td><strong>B. API 串接</strong></td><td>週報、定期追蹤</td><td>自動拉最新數據</td><td>需一次性設定</td></tr>
+</table>
+
+<p><strong>方式 B 設定：</strong></p>
+<ol>
+<li>Google Cloud Console → 建專案 → 啟用 Sheets API → 建 Service Account → 下載 JSON 金鑰</li>
+<li>目標 Sheet →「共用」→ 加入 SA email（Viewer）</li>
+<li>在 Skill 裡定義資料來源（Sheet ID / 工作表名 / 欄位對應）</li>
+</ol>
+<div class="warn">⚠️ 只給 Viewer 權限。指標基準值每季更新後需同步修改 Skill 裡的欄位定義。</div>
+
+<h2>附件 C：你需要提供的資料</h2>
+<table>
+<tr><th>項目</th><th>用途</th><th>對應 Skill</th></tr>
+<tr><td>歷史活動案例 2-3 個（好+壞各一）</td><td>few-shot 原材料</td><td>SK-01 / SK-04 / SK-11</td></tr>
+<tr><td>各市場 DAU / D7 Retention 歷史均值</td><td>指標解讀基準</td><td>SK-02</td></tr>
+<tr><td>活躍組使用的活動類型清單</td><td>機制選項校準</td><td>SK-01</td></tr>
+<tr><td>獎勵品項分類與稀缺度 tier</td><td>獎勵設計精準度</td><td>SK-04</td></tr>
+<tr><td>推播目前的頻率與 CTR 基準</td><td>推播策略設計</td><td>SK-10</td></tr>
+<tr><td>確認 Google Sheets 串接方式（A or B）</td><td>數據流設計</td><td>SK-02 / SK-08</td></tr>
+</table>
+
+</div>
+</body>
+</html>
