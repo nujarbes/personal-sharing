@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DAU Ops Agent — 架構設計 v4</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 15px;
+      line-height: 1.75;
+      color: #1a1a1a;
+      background: #fff;
+      padding: 48px 24px;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* 標題 */
+    h1 {
+      font-size: 26px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-top: 48px;
+      margin-bottom: 16px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-top: 28px;
+      margin-bottom: 10px;
+    }
+
+    /* meta 區塊 */
+    .meta {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 32px;
+    }
+
+    /* 段落 */
+    p {
+      margin-bottom: 14px;
+    }
+
+    /* 引用 */
+    blockquote {
+      border-left: 3px solid #bbb;
+      background: #f7f7f7;
+      padding: 12px 16px;
+      margin: 20px 0;
+      color: #444;
+    }
+
+    /* 表格 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    th {
+      text-align: left;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      background: #f5f5f5;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td {
+      background: #fafafa;
+    }
+
+    /* code block */
+    pre {
+      background: #f4f4f4;
+      border: 1px solid #e0e0e0;
+      padding: 16px;
+      font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+      font-size: 13px;
+      background: #f0f0f0;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+    }
+
+    /* 清單 */
+    ul, ol {
+      padding-left: 22px;
+      margin-bottom: 14px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    /* 小標記 */
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 1px 7px;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+      color: #555;
+      margin-left: 6px;
+      vertical-align: middle;
+      letter-spacing: 0.03em;
+    }
+
+    .tag-auto { border-color: #333; color: #333; }
+    .tag-manual { border-color: #999; color: #999; }
+
+    /* 分隔線 */
+    hr {
+      border: none;
+      border-top: 1px solid #e8e8e8;
+      margin: 40px 0;
+    }
+
+    /* 矩陣表格的 ● */
+    .dot { text-align: center; }
+
+    /* 步驟編號 */
+    .step-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #888;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <h1>DAU Ops Agent — 架構設計 v4</h1>
+  <div class="meta">版本：v4.0 &nbsp;|&nbsp; 日期：2026-03-31 &nbsp;|&nbsp; 負責人：Jarvis</div>
+
+  <!-- 執行摘要 -->
+  <h2>執行摘要</h2>
+
+  <p>本文件定義 DAU Ops Agent 的完整建置架構，對齊 Claude 官方 Skill 標準（<a href="https://agentskills.io">Agent Skills open standard</a>），支援安裝、分享、跨 project 複用，並實現完全自動化 pipeline。</p>
+
+  <blockquote>
+    <strong>v3 → v4 三個核心調整</strong><br>
+    1. 整體從「project 資料夾」改為「可安裝 Skill」格式<br>
+    2. 名詞對齊官方：Playbook → Workflow（WF），Skill → Module（M）<br>
+    3. Frontmatter 加入 <code>context: fork</code>，實現 sub-agent 自動執行
+  </blockquote>
+
+  <!-- 名詞對齊 -->
+  <h2>一、名詞對齊表</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>v3 名稱</th>
+        <th>v4 名稱</th>
+        <th>官方對應</th>
+        <th>說明</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Agent（整體）</td>
+        <td>Skill</td>
+        <td>Skill</td>
+        <td>整個 DAU Ops Agent 打包為一個可安裝 Skill</td>
+      </tr>
+      <tr>
+        <td>agent-context.md</td>
+        <td>SKILL.md 前段</td>
+        <td>SKILL.md frontmatter + body</td>
+        <td>身份定義、邊界、路由邏輯，永遠載入</td>
+      </tr>
+      <tr>
+        <td>Playbook（PB-01～07）</td>
+        <td>Workflow（WF-01～07）</td>
+        <td>references/ 下的流程文件</td>
+        <td>任務觸發後按需 Read，不預載</td>
+      </tr>
+      <tr>
+        <td>Skill（SK-01～12）</td>
+        <td>Module（M-01～12）</td>
+        <td>references/ 下的知識文件</td>
+        <td>由 Workflow 指定 Read，按需載入</td>
+      </tr>
+      <tr>
+        <td>reference/</td>
+        <td>references/context/</td>
+        <td>references/</td>
+        <td>靜態背景知識（歷史案例、基準值等）</td>
+      </tr>
+      <tr>
+        <td>（無）</td>
+        <td>examples/</td>
+        <td>examples/</td>
+        <td>Few-shot 示範，官方明確支援</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 分層邏輯 -->
+  <h2>二、分層載入邏輯</h2>
+
+  <p>官方 Skill 採用三層 Progressive Disclosure，與 v3 的 L1/L2/L3 設計完全吻合：</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>層級</th>
+        <th>載入時機</th>
+        <th>對應內容</th>
+        <th>Token 預算</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>L1 Metadata</strong></td>
+        <td>永遠在 context</td>
+        <td>SKILL.md frontmatter（name + description）</td>
+        <td>~100 tokens</td>
+      </tr>
+      <tr>
+        <td><strong>L2 SKILL.md body</strong></td>
+        <td>Skill 觸發時載入</td>
+        <td>身份定義 + 任務路由邏輯</td>
+        <td>300–500 tokens</td>
+      </tr>
+      <tr>
+        <td><strong>L3 References</strong></td>
+        <td>Claude Read 時才進 context</td>
+        <td>Workflow 文件 + Module 文件 + 背景知識</td>
+        <td>400–1,000 tokens / 件</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <strong>Token 效率：</strong>一次完整任務 ≈ L1（100）+ L2（400）+ 1 個 WF（400）+ 2–3 個 M（900）= ~1,800 tokens。其餘 6 個 WF 和 9 個 M 完全不在 context window。
+  </blockquote>
+
+  <!-- 檔案結構 -->
+  <h2>三、檔案結構</h2>
+
+  <pre>dau-ops-agent/
+├── SKILL.md                          ← 必要，&lt;500 行
+│
+├── references/
+│   ├── workflows/                    ← 原 Playbook
+│   │   ├── WF-01_活動設計.md
+│   │   ├── WF-02_指標異動分析.md
+│   │   ├── WF-03_週報產出.md
+│   │   ├── WF-04_活動上線審查.md
+│   │   ├── WF-05_活動復盤.md
+│   │   ├── WF-06_競品分析.md
+│   │   └── WF-07_回流活動設計.md
+│   │
+│   ├── modules/                      ← 原 Skill
+│   │   ├── M-01_活動機制設計.md
+│   │   ├── M-02_指標解讀框架.md
+│   │   ├── M-03_玩家分群與定向.md
+│   │   ├── M-04_獎勵結構設計.md
+│   │   ├── M-05_活動文案產出.md
+│   │   ├── M-06_QA-Checklist.md
+│   │   ├── M-07_假設樹產出.md
+│   │   ├── M-08_事件日曆排布.md
+│   │   ├── M-09_競品活動拆解.md
+│   │   ├── M-10_推播策略設計.md
+│   │   ├── M-11_復盤報告產出.md
+│   │   └── M-12_AB-Test設計.md
+│   │
+│   └── context/                      ← 靜態背景知識
+│       ├── 歷史活動案例.md
+│       ├── 指標基準值.md
+│       ├── 玩家分群定義.md
+│       └── 活動類型清單.md
+│
+├── examples/                         ← Few-shot 示範
+│   ├── 活動設計示範.md
+│   └── 指標異動分析示範.md
+│
+└── evals/                            ← Skill-creator 測試用
+    └── evals.json</pre>
+
+  <!-- SKILL.md 設計 -->
+  <h2>四、SKILL.md 設計規範</h2>
+
+  <h3>Frontmatter（決定觸發與執行模式）</h3>
+
+  <pre>---
+name: dau-ops-agent
+description: &gt;
+  DAU Ops 活躍營運 AI Agent，專責 CODM 活躍組全部高頻工作流。
+  當用戶提到以下任何情境時自動觸發：活動設計、活動規劃、DAU 異動、
+  指標下降、留存率、週報、上線審查、QA、活動復盤、競品分析、
+  玩家流失、回流策略、推播設計。
+context: fork
+effort: high
+---</pre>
+
+  <table>
+    <thead>
+      <tr>
+        <th>欄位</th>
+        <th>設定值</th>
+        <th>原因</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>context: fork</code></td>
+        <td>fork</td>
+        <td>每次任務在獨立 sub-agent 執行，不汙染主對話；實現無人介入 pipeline</td>
+      </tr>
+      <tr>
+        <td><code>effort: high</code></td>
+        <td>high</td>
+        <td>確保複雜任務有足夠推理深度</td>
+      </tr>
+      <tr>
+        <td><code>disable-model-invocation</code></td>
+        <td>（不設定，保持預設 false）</td>
+        <td>讓 Claude 根據 description 自動判斷觸發，不需要手動 /dau-ops-agent</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>SKILL.md Body 結構</h3>
+
+  <p>Body 只做三件事，保持精簡：</p>
+
+  <ol>
+    <li><strong>身份定義</strong>：我是誰、負責什麼、邊界在哪（取代原 agent-context.md）</li>
+    <li><strong>任務路由表</strong>：識別 7 種情境 → 指定 Read 對應 WF 文件</li>
+    <li><strong>通用輸出規則</strong>：語言、格式、完成標準</li>
+  </ol>
+
+  <h3>任務路由邏輯（示意）</h3>
+
+  <pre>## 任務識別與路由
+
+根據用戶輸入，識別情境後 Read 對應 Workflow 文件：
+
+| 情境關鍵詞                          | 載入 Workflow                            |
+|------------------------------------|------------------------------------------|
+| 活動設計、活動規劃、新活動           | references/workflows/WF-01_活動設計.md  |
+| DAU 異動、指標下降、留存掉           | references/workflows/WF-02_指標異動分析.md |
+| 週報、本週數據、週次報告             | references/workflows/WF-03_週報產出.md  |
+| 上線前、QA、審查、checklist          | references/workflows/WF-04_活動上線審查.md |
+| 復盤、活動結束、績效評估             | references/workflows/WF-05_活動復盤.md  |
+| 競品、PUBG、Free Fire、對手         | references/workflows/WF-06_競品分析.md  |
+| 回流、流失玩家、推播、喚回           | references/workflows/WF-07_回流活動設計.md |</pre>
+
+  <!-- Workflow 格式 -->
+  <h2>五、Workflow 文件格式規範</h2>
+
+  <p>每個 WF 文件開頭必須包含「載入模組」指令，確保 Claude 自動 Read 對應 Module：</p>
+
+  <pre>## 載入模組
+
+執行本 Workflow 前，依序 Read 以下 Module 文件：
+- references/modules/M-03_玩家分群與定向.md
+- references/modules/M-01_活動機制設計.md
+- references/modules/M-04_獎勵結構設計.md
+
+---
+
+## 觸發情境
+...
+
+## 執行前確認
+...
+
+## 執行步驟
+1. 確認目標玩家族群 → [M-03]
+2. 設計活動機制選項 → [M-01]
+...
+
+## 輸出物
+...</pre>
+
+  <!-- Workflow-Module 對應矩陣 -->
+  <h2>六、Workflow × Module 對應矩陣</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th class="dot">M-01<br>機制</th>
+        <th class="dot">M-02<br>指標</th>
+        <th class="dot">M-03<br>分群</th>
+        <th class="dot">M-04<br>獎勵</th>
+        <th class="dot">M-05<br>文案</th>
+        <th class="dot">M-06<br>QA</th>
+        <th class="dot">M-07<br>假設樹</th>
+        <th class="dot">M-08<br>日曆</th>
+        <th class="dot">M-09<br>競品</th>
+        <th class="dot">M-10<br>推播</th>
+        <th class="dot">M-11<br>復盤</th>
+        <th class="dot">M-12<br>A/B</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>WF-01 活動設計</td>
+        <td class="dot">●</td><td></td><td class="dot">●</td><td class="dot">●</td><td class="dot">●</td><td></td><td></td><td class="dot">●</td><td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td>WF-02 指標異動</td>
+        <td></td><td class="dot">●</td><td class="dot">●</td><td></td><td></td><td></td><td class="dot">●</td><td></td><td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td>WF-03 週報</td>
+        <td></td><td class="dot">●</td><td></td><td></td><td></td><td></td><td></td><td class="dot">●</td><td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td>WF-04 上線審查</td>
+        <td></td><td></td><td></td><td class="dot">●</td><td class="dot">●</td><td class="dot">●</td><td></td><td></td><td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td>WF-05 活動復盤</td>
+        <td></td><td class="dot">●</td><td class="dot">●</td><td></td><td></td><td></td><td class="dot">●</td><td></td><td class="dot">●</td><td></td><td class="dot">●</td><td class="dot">●</td>
+      </tr>
+      <tr>
+        <td>WF-06 競品分析</td>
+        <td class="dot">●</td><td></td><td></td><td class="dot">●</td><td></td><td></td><td></td><td></td><td class="dot">●</td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td>WF-07 回流設計</td>
+        <td class="dot">●</td><td></td><td class="dot">●</td><td class="dot">●</td><td class="dot">●</td><td></td><td></td><td></td><td></td><td class="dot">●</td><td></td><td class="dot">●</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    M-02（指標解讀）、M-03（玩家分群）複用率最高，優先建置。
+  </blockquote>
+
+  <!-- 新增功能：動態注入 -->
+  <h2>七、新增功能：動態 Context 注入</h2>
+
+  <p>官方支援 <code>!`command`</code> 語法，在 Skill 觸發前執行 shell command 並將結果注入 context。這是 WF-03 週報自動化的關鍵，無需人工貼數據：</p>
+
+  <pre>## 本次任務 Context（自動注入）
+
+- 本週指標快照：!`python scripts/fetch_metrics.py`
+- 本週活動紀錄：!`cat references/context/event-log.md`
+- 當前日期：!`date +%Y-%m-%d`</pre>
+
+  <p>Skill 觸發時，以上 command 先執行，輸出結果替換進 prompt，Claude 收到的是真實數據。</p>
+
+  <!-- 觸發控制說明 -->
+  <h2>八、觸發控制對照</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>設定</th>
+        <th>你能觸發</th>
+        <th>Claude 自動觸發</th>
+        <th>適用情境</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>（預設，不設任何欄位）</td>
+        <td>✓</td>
+        <td>✓</td>
+        <td><strong>DAU Ops Agent 採用此設定</strong>，全自動</td>
+      </tr>
+      <tr>
+        <td><code>disable-model-invocation: true</code></td>
+        <td>✓</td>
+        <td>✗</td>
+        <td>有副作用的操作（如 deploy、發推播），需手動觸發</td>
+      </tr>
+      <tr>
+        <td><code>user-invocable: false</code></td>
+        <td>✗</td>
+        <td>✓</td>
+        <td>純背景知識，不應暴露為指令</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 建置順序 -->
+  <h2>九、建議建置順序</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>階段</th>
+        <th>工作項目</th>
+        <th>說明</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Phase 1</td>
+        <td>SKILL.md</td>
+        <td>身份定義 + 路由邏輯，先跑通觸發機制</td>
+      </tr>
+      <tr>
+        <td>Phase 2</td>
+        <td>M-02、M-03</td>
+        <td>複用率最高的兩個 Module，先建</td>
+      </tr>
+      <tr>
+        <td>Phase 3</td>
+        <td>WF-01 + 對應 M</td>
+        <td>活動設計是最高頻任務，做第一個端到端測試</td>
+      </tr>
+      <tr>
+        <td>Phase 4</td>
+        <td>WF-02、WF-03</td>
+        <td>指標異動分析 + 週報，加入動態 context 注入</td>
+      </tr>
+      <tr>
+        <td>Phase 5</td>
+        <td>剩餘 WF + M</td>
+        <td>補齊 WF-04～07 與對應 Module</td>
+      </tr>
+      <tr>
+        <td>Phase 6</td>
+        <td>Evals + 打包</td>
+        <td>用 skill-creator 跑測試，打包成 .skill 分發</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 分發方式 -->
+  <h2>十、分發與安裝</h2>
+
+  <p>完成後使用官方打包指令：</p>
+
+  <pre>python -m scripts.package_skill dau-ops-agent/</pre>
+
+  <p>產出 <code>dau-ops-agent.skill</code> 檔案，團隊成員直接安裝即用，不需要複製資料夾或手動設定。</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>安裝層級</th>
+        <th>路徑</th>
+        <th>適用對象</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>個人</td>
+        <td><code>~/.claude/skills/dau-ops-agent/</code></td>
+        <td>Jarvis 本人，所有 project 可用</td>
+      </tr>
+      <tr>
+        <td>Project</td>
+        <td><code>.claude/skills/dau-ops-agent/</code></td>
+        <td>特定 project 的成員</td>
+      </tr>
+      <tr>
+        <td>Plugin</td>
+        <td><code>&lt;plugin&gt;/skills/dau-ops-agent/</code></td>
+        <td>透過 Plugin 分發給整個團隊</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <p style="font-size: 13px; color: #888;">DAU Ops Agent 架構設計 v4 &nbsp;|&nbsp; 2026-03-31 &nbsp;|&nbsp; Jarvis / Garena CODM</p>
+
+</div>
+</body>
+</html>
