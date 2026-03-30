@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CODM 36 版本滿意度問卷｜分析框架報告</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #fff;
+    color: #1a1a1a;
+    line-height: 1.75;
+    font-size: 14px;
+  }
+  .container { max-width: 720px; margin: 0 auto; padding: 48px 24px; }
+
+  h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  h2 { font-size: 16px; font-weight: 700; margin: 40px 0 12px; border-bottom: 1px solid #e0e0e0; padding-bottom: 6px; }
+  h3 { font-size: 14px; font-weight: 700; margin: 24px 0 8px; }
+  p { margin-bottom: 10px; }
+
+  .meta { color: #666; font-size: 12px; margin-bottom: 32px; }
+
+  /* Tag styles */
+  .tag {
+    display: inline-block; font-size: 11px; font-weight: 600;
+    padding: 2px 8px; border-radius: 3px; margin-right: 4px;
+  }
+  .tag-new { background: #FFF3CD; color: #856404; }
+  .tag-keep { background: #D1ECF1; color: #0C5460; }
+  .tag-remove { background: #F8D7DA; color: #721c24; }
+  .tag-merge { background: #D4EDDA; color: #155724; }
+
+  /* Section block */
+  .section-block {
+    border-left: 3px solid #e0e0e0;
+    padding: 12px 16px;
+    margin: 16px 0;
+    background: #fafafa;
+  }
+  .section-block.highlight {
+    border-left-color: #1a1a1a;
+    background: #f5f5f5;
+  }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  th { background: #f5f5f5; text-align: left; padding: 8px 10px; font-weight: 600; border: 1px solid #ddd; }
+  td { padding: 8px 10px; border: 1px solid #ddd; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafafa; }
+
+  /* Question flow */
+  .q-flow { margin: 16px 0; }
+  .q-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+  }
+  .q-num {
+    min-width: 36px; font-weight: 700; font-size: 13px;
+    color: #555; padding-top: 2px;
+  }
+  .q-num.new { color: #856404; }
+  .q-content { flex: 1; }
+  .q-title { font-weight: 600; font-size: 13px; margin-bottom: 3px; }
+  .q-desc { color: #555; font-size: 12px; }
+  .q-meta { margin-top: 4px; }
+
+  /* Analysis card */
+  .analysis-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 16px;
+    margin: 16px 0;
+  }
+  .analysis-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .analysis-card .axis { font-size: 12px; color: #333; margin-bottom: 4px; }
+  .analysis-card .axis span { font-weight: 600; }
+
+  /* Cross-tab matrix */
+  .cross-matrix {
+    overflow-x: auto; margin: 16px 0;
+  }
+  .cross-matrix table th:first-child { background: #1a1a1a; color: #fff; }
+  .cross-matrix table td.y { background: #d4edda; text-align: center; }
+  .cross-matrix table td.n { background: #f8f9fa; text-align: center; color: #999; }
+
+  /* Priority label */
+  .priority { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .priority.high { background: #dc3545; }
+  .priority.mid { background: #fd7e14; }
+  .priority.low { background: #28a745; }
+
+  blockquote {
+    border-left: 3px solid #ccc;
+    background: #f9f9f9;
+    padding: 10px 16px;
+    margin: 12px 0;
+    font-size: 13px;
+    color: #444;
+  }
+
+  .segment-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .segment-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px;
+  }
+  .segment-card h5 { font-size: 12px; font-weight: 700; margin-bottom: 6px; color: #333; }
+  .segment-card p { font-size: 12px; color: #555; margin: 0; }
+
+  .legend { display: flex; gap: 16px; font-size: 12px; margin: 8px 0 16px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>CODM 36 版本滿意度問卷｜分析框架報告</h1>
+  <p class="meta">版本：v2.1 優化版｜覆蓋版本：36.1（戎馬礪刃）+ 36.2（霧蝕警戒）｜市場：CODM Garena 全地區｜更新日期：2026-03-30</p>
+
+  <!-- ============================
+       SECTION 1: 問卷架構總覽
+  ============================= -->
+  <h2>1. 問卷架構總覽</h2>
+  <p>問卷共 36 題（含 3 題新增），依照「玩家畫像 → 競品感知 → 整體遊戲評價 → 版本內容評估 → 商業化 → UI 體驗」六個模組設計。</p>
+
+  <table>
+    <thead>
+      <tr><th>模組</th><th>題號</th><th>題數</th><th>核心目的</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>A. 用戶畫像</strong></td><td>Q1–Q7</td><td>7</td><td>分組變數：性別、年齡、遊遊齡、頻率、玩家類型（新進/活躍/回流）</td></tr>
+      <tr><td><strong>B. 競品感知</strong></td><td>Q8–Q10</td><td>3</td><td>競品重疊度、競品吸引力要素 vs CODM 弱點對照</td></tr>
+      <tr><td><strong>C. 整體遊戲評價</strong></td><td>Q11–Q16</td><td>6</td><td>各維度滿意度、留存/流失主因、App 包體問題深挖</td></tr>
+      <tr><td><strong>D. 版本內容評估</strong></td><td>Q17–Q28</td><td>12（含2新增）</td><td>技術體驗、版本滿意度、留存意願追蹤、36.1/36.2 活動分別評估</td></tr>
+      <tr><td><strong>E. 商業化</strong></td><td>Q29–Q31</td><td>3</td><td>轉盤認知率、購買轉化、未購買阻礙點</td></tr>
+      <tr><td><strong>F. UI 體驗</strong></td><td>Q32–Q34</td><td>3（含1新增）</td><td>入口找尋困擾、根因追問、介面改善優先序</td></tr>
+      <tr><td><strong>G. 開放回饋</strong></td><td>Q35–Q36</td><td>2</td><td>建議收集、訪談意願</td></tr>
+    </tbody>
+  </table>
+
+  <div class="legend">
+    <div class="legend-item"><span class="tag tag-new">NEW</span> 本版新增題目</div>
+    <div class="legend-item"><span class="tag tag-merge">MERGE</span> 合併簡化</div>
+    <div class="legend-item"><span class="tag tag-remove">REMOVED</span> 刪除題目</div>
+    <div class="legend-item"><span class="tag tag-keep">KEEP</span> 維持原版</div>
+  </div>
+
+  <!-- ============================
+       SECTION 2: 題目流程
+  ============================= -->
+  <h2>2. 題目全覽與設計說明</h2>
+
+  <h3>A. 用戶畫像（Q1–Q7）</h3>
+  <div class="q-flow">
+    <div class="q-item">
+      <div class="q-num">Q1</div>
+      <div class="q-content">
+        <div class="q-title">性別 <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">分析時作為 demographic 分組變數，非核心分析軸</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q2</div>
+      <div class="q-content">
+        <div class="q-title">年齡 <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">關鍵分組：13-22 歲 vs 23+ 歲的留存行為與付費傾向差異</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q3</div>
+      <div class="q-content">
+        <div class="q-title">加入時間（玩家類型分流） <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">三路跳題：新進（2026/3後）→ Q5 | 近期（2025/12-2026/2）→ Q6 | 老玩家（2025/11前）→ Q6+Q4</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q4</div>
+      <div class="q-content">
+        <div class="q-title">回流確認（老玩家限定） <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">篩出回流玩家 segment，後續分析流失原因時可拆解</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q5</div>
+      <div class="q-content">
+        <div class="q-title">初始下載原因（新進玩家限定） <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">⚠️ 跳題已修正：僅對 Q3 選「2026/3以後」者顯示</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q6</div>
+      <div class="q-content">
+        <div class="q-title">每週遊玩頻率（絕對值） <span class="tag tag-merge">MERGE</span></div>
+        <div class="q-desc">原 Q7。刪除原 Q6（相對變化），保留絕對頻率，資訊量更高。分析時與 Q3 配合定義「高頻/低頻」玩家</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q7</div>
+      <div class="q-content">
+        <div class="q-title">主要遊玩模式（最多 2 項） <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">作為遊玩偏好分組，分析版本內容滿意度差異（如：排位玩家 vs 休閒玩家）</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>B. 競品感知（Q8–Q10）</h3>
+  <div class="q-flow">
+    <div class="q-item">
+      <div class="q-num">Q8</div>
+      <div class="q-content">
+        <div class="q-title">近一個月競品遊玩狀況 <span class="tag tag-remove">REMOVED Q8原</span></div>
+        <div class="q-desc">原 Q10。原 Q8（是否玩過其他射擊遊戲）已刪除，本題直接問具體競品，資訊更精準。CONNECT 邏輯：選了哪款競品 → 觸發 Q9 頻率矩陣 + Q10 吸引力矩陣</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q9</div>
+      <div class="q-content">
+        <div class="q-title">各競品遊玩頻率矩陣 <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">原 Q11。僅顯示 Q8 選擇的遊戲</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q10</div>
+      <div class="q-content">
+        <div class="q-title">競品吸引力要素矩陣（每款最多選 3 項） <span class="tag tag-merge">MERGE 原Q12-Q15</span></div>
+        <div class="q-desc">原 Q12-Q15 四題合併為一個矩陣題，節省約 30-40 個選項填答。列為競品名稱（動態顯示），欄為吸引力要素。<strong>分析重點：與 Q15 流失原因對照，找出競品的差異化優勢</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>C. 整體遊戲評價（Q11–Q16）</h3>
+  <div class="q-flow">
+    <div class="q-item">
+      <div class="q-num">Q11</div>
+      <div class="q-content">
+        <div class="q-title">各維度整體滿意度矩陣（12 項） <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">版本間追蹤用固定題組。輸出：每個維度的 Top-box（4+5 分）vs Bottom-box（1+2 分）比率</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q12</div>
+      <div class="q-content">
+        <div class="q-title">留存主因（最多選 3 項） <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">對照 Q11 的評分，找出「高滿意 + 高提及」的核心留存因子</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q13–Q14</div>
+      <div class="q-content">
+        <div class="q-title">武器訂製 / Battle Pass 期待（開放題） <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">非必填，用於收集具體功能需求。分析時做關鍵詞歸納</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q15</div>
+      <div class="q-content">
+        <div class="q-title">流失主因（最多選 3 項） <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">選「佔用空間大」→ 自動 CONNECT 至 Q16 深挖。<strong>與 Q10 競品吸引力做交叉分析，判斷流失是「推力」還是「拉力」</strong></div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q16</div>
+      <div class="q-content">
+        <div class="q-title">App 清理工具使用狀況 <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">僅對選了「佔用空間大」的玩家顯示。四個選項可分析：認知率、使用率、效果滿意度</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>D. 版本內容評估（Q17–Q28）</h3>
+  <div class="q-flow">
+    <div class="q-item">
+      <div class="q-num new">Q17</div>
+      <div class="q-content">
+        <div class="q-title">Attention Check 注意力測試 <span class="tag tag-new">NEW</span></div>
+        <div class="q-desc">正確答案為「這是一款手機射擊遊戲」。答錯者在資料清理時 flag，分析時移除或單獨標記</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q18</div>
+      <div class="q-content">
+        <div class="q-title">技術體驗滿意度矩陣（7 項） <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">版本間追蹤固定題。關注：系統穩定度、對戰流暢度的底線達標情況</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q19</div>
+      <div class="q-content">
+        <div class="q-title">版本整體滿意度（1-5 分） <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">核心 KPI 題。Top-box（4+5 分）作為版本滿意度指標，跨版本追蹤</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num new">Q20</div>
+      <div class="q-content">
+        <div class="q-title">版本留存意願追蹤 <span class="tag tag-new">NEW</span></div>
+        <div class="q-desc">「相較於上一個賽季，這個版本是否讓您更想繼續遊玩？」三選項（明顯更想玩 / 差不多 / 更不想玩）。<strong>與 Q6 遊玩頻率交叉分析，驗證版本內容對留存行為的實際影響</strong></div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q21–Q24</div>
+      <div class="q-content">
+        <div class="q-title">36.1 版本活動評估（認知 → 滿意度 → 情感 → 未參與原因） <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">矩陣跳題：僅對「體驗過」的活動顯示滿意度/情感題；僅對「知道但沒嘗試」的活動顯示未參與原因</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q25–Q28</div>
+      <div class="q-content">
+        <div class="q-title">36.2《決勝浪我玩》活動評估（認知 → 滿意度 → 情感 → 未參與原因） <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">同 Q21-Q24 結構。兩版本各自完整評估，可直接比較 36.1 vs 36.2 活動的表現差異</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>E. 商業化（Q29–Q31）</h3>
+  <div class="q-flow">
+    <div class="q-item">
+      <div class="q-num">Q29</div>
+      <div class="q-content">
+        <div class="q-title">7 個轉盤參與狀況矩陣 <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">4 種狀態：已購買 / 想買沒下手 / 知道不想買 / 不知道。計算每個轉盤的認知率 = (1-「不知道」比例)，購買率 = (「已購買」/「認知者」)</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q30</div>
+      <div class="q-content">
+        <div class="q-title">購買後滿意度（僅對購買者） <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">識別高認知 + 高購買率但低滿意度的轉盤，做為下次設計參考</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q31</div>
+      <div class="q-content">
+        <div class="q-title">未購買原因（知道但沒買） <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">重點關注「很想買但沒下手」的阻礙因子，這是最有價值的轉化改善空間</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>F. UI 體驗（Q32–Q34）</h3>
+  <div class="q-flow">
+    <div class="q-item">
+      <div class="q-num">Q32</div>
+      <div class="q-content">
+        <div class="q-title">入口困擾頻率 <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">「經常/偶爾」→ CONNECT Q33 + Q34；「很少」→ 只到 Q34；「從未」→ 跳過 Q33</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num new">Q33</div>
+      <div class="q-content">
+        <div class="q-title">入口困擾根因追問（僅對「經常/偶爾」者） <span class="tag tag-new">NEW</span></div>
+        <div class="q-desc">5 個根因選項（主頁入口太多 / 提示不顯眼 / 入口太深 / 活動太多記不清 / 版本更新後位置改變）。<strong>補充 Q34 的根因，讓介面優化方向更可執行</strong></div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">Q34</div>
+      <div class="q-content">
+        <div class="q-title">介面改善優先序（最多選 3 項） <span class="tag tag-keep">KEEP</span></div>
+        <div class="q-desc">結合 Q33 做雙層分析：根因 + 改善方向，提高結論的可操作性</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================
+       SECTION 3: 用戶分群
+  ============================= -->
+  <h2>3. 用戶分群定義</h2>
+  <p>分析前先依以下維度分群，後續所有交叉分析均以此為基礎。</p>
+
+  <h3>主要分群（分析時的 Primary Segments）</h3>
+  <div class="segment-grid">
+    <div class="segment-card">
+      <h5>🆕 新進玩家</h5>
+      <p>Q3 = 2026/3後<br>重點：初始吸引力來源（Q5），對版本内容是否快速接觸</p>
+    </div>
+    <div class="segment-card">
+      <h5>✅ 活躍玩家</h5>
+      <p>Q3 = 2025/11前 且 Q4 = 否<br>重點：留存主因（Q12）、版本滿意度與頻率相關性</p>
+    </div>
+    <div class="segment-card">
+      <h5>🔄 回流玩家</h5>
+      <p>Q3 = 2025/11前 且 Q4 = 是<br>重點：流失原因（Q15）、本版本拉回原因</p>
+    </div>
+  </div>
+
+  <h3>次要分群（Cross-tab 維度）</h3>
+  <table>
+    <thead><tr><th>維度</th><th>分組方式</th><th>分析用途</th></tr></thead>
+    <tbody>
+      <tr><td>遊玩頻率</td><td>高頻（每週 5-7 天）vs 低頻（0-4 天）</td><td>識別留存風險玩家</td></tr>
+      <tr><td>年齡</td><td>19 歲以下 vs 19-22 歲 vs 23+ 歲</td><td>付費傾向、競品敏感度差異</td></tr>
+      <tr><td>競品重疊</td><td>有競品重疊 vs 無競品重疊</td><td>流失風險 vs CODM 獨佔黏性</td></tr>
+      <tr><td>版本滿意度</td><td>Top-box（4-5）vs Bottom-box（1-2）</td><td>滿意度驅動因子拆解</td></tr>
+      <tr><td>付費行為</td><td>購買過轉盤 vs 未購買</td><td>商業化阻礙 vs 促成要素</td></tr>
+      <tr><td>遊玩模式</td><td>排位 vs 休閒（配對/合作）</td><td>玩家核心需求差異</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ============================
+       SECTION 4: 分析脈絡
+  ============================= -->
+  <h2>4. 分析脈絡與交叉分析設計</h2>
+  <p>以下三條主軸貫穿整份分析，每條軸線對應不同的業務問題。</p>
+
+  <h3>軸線一：版本內容是否真的影響留存？</h3>
+  <div class="analysis-card">
+    <h4>核心假說：高版本滿意度 → 更高留存意願 → 更高遊玩頻率</h4>
+    <div class="axis"><span>Q19</span>（版本滿意度 1-5）× <span>Q20</span>（版本留存意願）× <span>Q6</span>（遊玩頻率）</div>
+    <div class="axis" style="margin-top:6px;">分群維度：玩家類型（新進 / 活躍 / 回流）</div>
+    <blockquote>
+      預期輸出：2x3 矩陣（版本滿意高/低 × 頻率高/中/低），找出「版本滿意度高但頻率下降」的異常群體（可能有其他推力）；以及「版本滿意度低但頻率不變」的群體（核心玩家黏性足夠）
+    </blockquote>
+    <table>
+      <thead><tr><th></th><th>版本滿意 Top-box</th><th>版本滿意 Bottom-box</th></tr></thead>
+      <tbody>
+        <tr><td>頻率高（每週5-7天）</td><td>✅ 健康狀態</td><td>⚠️ 黏性強但對版本不滿 → 找版本問題點</td></tr>
+        <tr><td>頻率低（每週0-4天）</td><td>⚠️ 喜歡版本但不玩 → 找外部推力</td><td>🚨 高流失風險 → 最需深入分析</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>軸線二：玩家流失是推力還是競品拉力？</h3>
+  <div class="analysis-card">
+    <h4>核心假說：流失原因可分為「競品吸走」vs「CODM 自身問題」兩類，需分開應對</h4>
+    <div class="axis"><span>Q15</span>（流失主因）× <span>Q8</span>（競品遊玩狀況）× <span>Q10</span>（競品吸引力要素）</div>
+    <blockquote>
+      分析方法：<br>
+      Step 1：比較「有競品重疊玩家」vs「無競品重疊玩家」的 Q15 流失原因分布差異<br>
+      Step 2：Q10 競品吸引力高頻要素 = CODM 相對弱點，與 Q15 流失原因對齊找重疊點<br>
+      Step 3：流失原因中屬於「CODM 可以改善」的（如：武器平衡、匹配機制）vs「競品提供差異化」的（如：美術風格），優先解決可控問題
+    </blockquote>
+  </div>
+
+  <h3>軸線三：商業化轉化阻礙在哪裡？</h3>
+  <div class="analysis-card">
+    <h4>核心假說：「知道但沒買」的玩家中存在可轉化空間，需識別關鍵阻礙</h4>
+    <div class="axis"><span>Q29</span>（轉盤參與狀況）→ 「很想買但沒下手」者 → <span>Q31</span>（未購買原因）</div>
+    <div class="axis" style="margin-top:6px;">分群維度：年齡、頻率</div>
+    <blockquote>
+      預期輸出：每個轉盤的漏斗（認知率 → 有購買意願比率 → 實際購買率），「認知率高 + 意願率高 + 購買率低」的轉盤 = 設計或定價問題最集中的地方
+    </blockquote>
+    <table>
+      <thead><tr><th>轉盤</th><th>認知率</th><th>有購買意願</th><th>實際購買率</th><th>分析重點</th></tr></thead>
+      <tbody>
+        <tr><td>（資料回收後填入）</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============================
+       SECTION 5: 交叉分析矩陣
+  ============================= -->
+  <h2>5. 推薦交叉分析矩陣</h2>
+  <p>以下為建議執行的交叉分析組合，優先順序以業務影響力排序。</p>
+
+  <div class="cross-matrix">
+    <table>
+      <thead>
+        <tr>
+          <th>分析問題</th>
+          <th>X 軸（分組）</th>
+          <th>Y 軸（指標）</th>
+          <th>優先</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>版本滿意度是否因玩家類型有差異</td>
+          <td>玩家類型（新進/活躍/回流）</td>
+          <td>Q19 版本滿意度 Top-box%</td>
+          <td><span class="priority high"></span>高</td>
+        </tr>
+        <tr>
+          <td>版本滿意度 × 留存意願交叉</td>
+          <td>Q19 滿意度高/低</td>
+          <td>Q20 留存意願分布</td>
+          <td><span class="priority high"></span>高</td>
+        </tr>
+        <tr>
+          <td>競品重疊玩家的流失主因</td>
+          <td>Q8 有無競品重疊</td>
+          <td>Q15 流失原因分布</td>
+          <td><span class="priority high"></span>高</td>
+        </tr>
+        <tr>
+          <td>高頻 vs 低頻玩家的留存/流失因子差異</td>
+          <td>Q6 遊玩頻率高/低</td>
+          <td>Q12 留存主因 / Q15 流失主因</td>
+          <td><span class="priority high"></span>高</td>
+        </tr>
+        <tr>
+          <td>36.1 vs 36.2 活動整體表現對比</td>
+          <td>版本（36.1 vs 36.2）</td>
+          <td>Q22/Q26 滿意度 Top-box%</td>
+          <td><span class="priority high"></span>高</td>
+        </tr>
+        <tr>
+          <td>轉盤認知率 → 意願率 → 購買率漏斗</td>
+          <td>各轉盤</td>
+          <td>Q29 三率計算</td>
+          <td><span class="priority high"></span>高</td>
+        </tr>
+        <tr>
+          <td>年齡與付費行為關係</td>
+          <td>Q2 年齡分組</td>
+          <td>Q29 購買率</td>
+          <td><span class="priority mid"></span>中</td>
+        </tr>
+        <tr>
+          <td>遊玩模式 × 整體滿意度</td>
+          <td>Q7 主要模式</td>
+          <td>Q11 各維度滿意度</td>
+          <td><span class="priority mid"></span>中</td>
+        </tr>
+        <tr>
+          <td>App 清理工具認知 × 佔用空間問題嚴重度</td>
+          <td>Q16 工具認知/使用狀況</td>
+          <td>Q15「佔用空間」選擇比率</td>
+          <td><span class="priority mid"></span>中</td>
+        </tr>
+        <tr>
+          <td>UI 困擾根因 × 改善優先序</td>
+          <td>Q33 根因分類</td>
+          <td>Q34 改善項目選擇分布</td>
+          <td><span class="priority mid"></span>中</td>
+        </tr>
+        <tr>
+          <td>新進玩家的初始吸引渠道 × 留存率</td>
+          <td>Q5 下載原因</td>
+          <td>Q6 遊玩頻率</td>
+          <td><span class="priority low"></span>低</td>
+        </tr>
+        <tr>
+          <td>各地區版本滿意度差異</td>
+          <td>地區（TW/HK/SG/MY/PH/TH/ID 等）</td>
+          <td>Q19 版本滿意度 Top-box%</td>
+          <td><span class="priority low"></span>低</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============================
+       SECTION 6: 資料處理建議
+  ============================= -->
+  <h2>6. 資料清理與分析呈現建議</h2>
+
+  <h3>資料清理步驟</h3>
+  <table>
+    <thead><tr><th>步驟</th><th>操作</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>1. Attention Check 篩選</td><td>Q17 答錯者 → 移除樣本</td><td>提升數據品質，尤其針對多地區發放的問卷</td></tr>
+      <tr><td>2. 完成率確認</td><td>篩除中途放棄（未到 Q19）的樣本</td><td>保留至少填到版本滿意度題的受訪者</td></tr>
+      <tr><td>3. 玩家類型標記</td><td>依 Q3 + Q4 建立「新進/活躍/回流」欄位</td><td>後續所有交叉分析的基礎分組</td></tr>
+      <tr><td>4. Top/Bottom-box 計算</td><td>量表題統一計算 Top-box（4+5）/ Bottom-box（1+2）</td><td>比平均分更直觀，適合 team presentation</td></tr>
+      <tr><td>5. 地區標記</td><td>依 region 參數標記市場</td><td>TH/PH 有 exclusive 題目需單獨處理</td></tr>
+    </tbody>
+  </table>
+
+  <h3>呈現給團隊的建議格式</h3>
+  <div class="section-block highlight">
+    <p><strong>簡報結構（推薦）</strong></p>
+    <p>P1 執行摘要（1 頁）：3-5 個核心結論 + 即時 action items</p>
+    <p>P2-4 版本評估（3 頁）：版本滿意度 KPI + 36.1 vs 36.2 對比 + 留存意願追蹤</p>
+    <p>P5-6 留存/流失深挖（2 頁）：玩家分群分析 + 競品威脅識別</p>
+    <p>P7-8 商業化（2 頁）：轉盤漏斗 + 未購買阻礙分析</p>
+    <p>P9 UI 痛點（1 頁）：困擾程度 + 根因 + 改善優先序</p>
+    <p>P10 下一步（1 頁）：優先處理項目 + owner + 時程</p>
+  </div>
+
+  <blockquote>
+    量表數據使用 <strong>Top-box %（4+5 分）</strong> 作為主要指標呈現，在 Bar Chart 上加灰色顯示 Bottom-box，視覺化對比效果最強。<br>
+    交叉分析建議使用 Heatmap 或分組 Bar，避免大型表格直接 dump 給主管看。
+  </blockquote>
+
+  <!-- ============================
+       SECTION 7: 優化變更摘要
+  ============================= -->
+  <h2>7. v2.0 → v2.1 優化變更摘要</h2>
+  <table>
+    <thead>
+      <tr><th>變更類型</th><th>原版</th><th>優化版</th><th>原因</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tag tag-remove">刪除</span></td>
+        <td>原 Q6（頻率相對變化）</td>
+        <td>移除</td>
+        <td>與原 Q7 資訊重疊，絕對頻率資訊量更高</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-remove">刪除</span></td>
+        <td>原 Q8（是否玩過其他射擊遊戲）</td>
+        <td>移除</td>
+        <td>原 Q10 直接問具體競品，已完全覆蓋</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-merge">合併</span></td>
+        <td>原 Q12-Q15（4 題，各別問每個競品吸引力）</td>
+        <td>Q10 一題矩陣（每款最多選 3 項）</td>
+        <td>壓縮 3 題，降低填答負擔；矩陣更利於跨競品對比</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-new">新增</span></td>
+        <td>無</td>
+        <td>Q17 Attention Check</td>
+        <td>提升多地區問卷數據品質，識別亂答樣本</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-new">新增</span></td>
+        <td>無</td>
+        <td>Q20 版本留存意願</td>
+        <td>補充版本滿意度的行為意圖維度，與 Q6 形成驗證關係</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-new">新增</span></td>
+        <td>無</td>
+        <td>Q33 UI 困擾根因</td>
+        <td>補充 Q32 的根因，讓 Q34 改善方向有因果支撐</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-keep">修正</span></td>
+        <td>Q5 跳題邏輯未明確限定新進玩家</td>
+        <td>Q5 CONNECT 邏輯修正：僅 Q3「2026/3以後」者看到</td>
+        <td>避免老玩家被問下載原因，污染數據</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="color:#999; font-size:12px; margin-top:40px; border-top:1px solid #eee; padding-top:12px;">
+    CODM Garena｜Player Research｜v2.1 優化版分析框架｜2026-03-30
+  </p>
+
+</div>
+</body>
+</html>
