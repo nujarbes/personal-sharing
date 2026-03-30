@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>泰國「限時免費 CP」活動分析：問題診斷與行動建議</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #1a1a1a;
+    background: #fff;
+    line-height: 1.75;
+    padding: 40px 20px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 1.6em; margin-bottom: 0.5em; font-weight: 700; }
+  h2 { font-size: 1.3em; margin-top: 2em; margin-bottom: 0.5em; font-weight: 700; border-bottom: 1px solid #ddd; padding-bottom: 0.3em; }
+  h3 { font-size: 1.1em; margin-top: 1.5em; margin-bottom: 0.4em; font-weight: 600; }
+  p { margin-bottom: 1em; }
+  blockquote {
+    border-left: 3px solid #999;
+    background: #f7f7f7;
+    padding: 12px 16px;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+    font-size: 0.88em;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 6px 10px;
+    text-align: left;
+  }
+  th { background: #f5f5f5; font-weight: 600; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .negative { color: #c0392b; font-weight: 600; }
+  .positive { color: #27ae60; font-weight: 600; }
+  .neutral { color: #7f8c8d; }
+  pre {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    padding: 16px;
+    overflow-x: auto;
+    font-size: 0.82em;
+    line-height: 1.6;
+    margin: 1em 0;
+    white-space: pre;
+    font-family: 'SF Mono', 'Menlo', 'Monaco', monospace;
+  }
+  ul, ol { margin: 0.5em 0 1em 1.5em; }
+  li { margin-bottom: 0.4em; }
+  .footer { margin-top: 3em; padding-top: 1em; border-top: 1px solid #ddd; font-size: 0.85em; color: #888; }
+  .tag {
+    display: inline-block;
+    background: #f0f0f0;
+    color: #555;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 0.82em;
+    margin-right: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>泰國「限時免費 CP」活動分析：問題診斷與行動建議</h1>
+
+<blockquote>
+<strong>結論先行</strong>：泰國 New User 和 Revival 對免費 CP 活動無反應，根本原因不是活動本身設計問題，而是<strong>泰國市場已進入結構性衰退</strong>——可觸及的潛在用戶池（Addressable Pool）持續萎縮，導致「好活動」也拉不到人。核心驅動力是 Delta Force（三角洲行動）自 2025/4 上線後系統性搶奪泰國射擊品類用戶，疊加 CODM 泰國社群觸及效率下降，形成惡性循環。
+</blockquote>
+
+<h2>一、數據摘要：TH vs PH 對比</h2>
+
+<table>
+<thead>
+<tr><th>指標</th><th>TH 2025/3</th><th>TH 2026/3</th><th>YoY</th><th>PH 2025/3</th><th>PH 2026/3</th><th>YoY</th></tr>
+</thead>
+<tbody>
+<tr><td>DAU (A1)</td><td class="num">142,636</td><td class="num">83,529</td><td class="num negative">-41.4%</td><td class="num">1,823,214</td><td class="num">1,785,949</td><td class="num neutral">-2.0%</td></tr>
+<tr><td>New User/日</td><td class="num">2,453</td><td class="num">1,722</td><td class="num negative">-29.8%</td><td class="num">26,671</td><td class="num">25,786</td><td class="num neutral">-3.3%</td></tr>
+<tr><td>Revival (30D)/日</td><td class="num">7,730</td><td class="num">5,331</td><td class="num negative">-31.0%</td><td class="num">51,907</td><td class="num">51,995</td><td class="num positive">+0.2%</td></tr>
+<tr><td>R2 留存</td><td class="num">47.9%</td><td class="num">43.3%</td><td class="num negative">-4.6pp</td><td class="num">53.3%</td><td class="num">50.9%</td><td class="num neutral">-2.4pp</td></tr>
+<tr><td>R7 留存</td><td class="num">18.2%</td><td class="num">14.9%</td><td class="num negative">-3.3pp</td><td class="num">24.9%</td><td class="num">22.6%</td><td class="num neutral">-2.3pp</td></tr>
+<tr><td>C7 流失</td><td class="num">33.3%</td><td class="num">36.6%</td><td class="num negative">+3.3pp</td><td class="num">24.5%</td><td class="num">25.8%</td><td class="num neutral">+1.3pp</td></tr>
+<tr><td>C30 流失</td><td class="num">48.2%</td><td class="num">51.1%</td><td class="num negative">+2.9pp</td><td class="num">35.8%</td><td class="num">36.7%</td><td class="num neutral">+0.9pp</td></tr>
+</tbody>
+</table>
+
+<p><strong>關鍵觀察</strong>：</p>
+<ul>
+<li>TH 的 DAU 衰退幅度是 PH 的 <strong>20 倍</strong>（-41.4% vs -2.0%）</li>
+<li>TH 的 New User 和 Revival 雙雙下跌約 30%，PH 幾乎持平</li>
+<li>TH 的 R2 留存已跌破 44%，R7 僅 14.9%——即使拉進來的新用戶也留不住</li>
+<li>TH 的 C30 超過 51%，每 2 個用戶就有 1 個在 30 天內離開</li>
+</ul>
+
+<h2>二、Issue Tree：為什麼泰國的 New User 和 Revival 沒有起色？</h2>
+
+<pre>
+泰國 New User &amp; Revival 對活動無反應
+├── 1. 觸及問題：活動資訊沒有傳達到目標用戶
+│   ├── 1.1 社群觸及衰退：粉絲基數 200 萬+，但自然觸及率受演算法壓縮
+│   ├── 1.2 付費投放不足或低效：UA 預算是否有配合活動加碼？
+│   └── 1.3 跨平台覆蓋不足：TikTok / YouTube / IG 是否同步推廣？
+│
+├── 2. 吸引力問題：用戶知道了但不想回來
+│   ├── 2.1 競品替代效應：Delta Force 2025/4 上線後搶奪射擊品類用戶 ★
+│   ├── 2.2 品牌疲勞：CODM 在 TH 已運營多年，邊際吸引力遞減
+│   └── 2.3 3,500 CP 價值感知不足：對已離開的玩家不構成回歸理由
+│
+├── 3. 轉化問題：用戶想回來但卡在某個環節
+│   ├── 3.1 更新包太大：長期未登入用戶需大量下載更新
+│   ├── 3.2 活動機制複雜度：需完成任務才能領取，門檻過高
+│   └── 3.3 活動入口可見性：回歸用戶是否第一時間看到活動？
+│
+└── 4. 結構性問題：可觸及用戶池已萎縮（根本原因）★
+    ├── 4.1 累積流失加速：2024 全年 -26%，2025 全年 -30%
+    ├── 4.2 新增用戶池枯竭：New User 從 3,200/日 → 1,722/日（-46%）
+    ├── 4.3 回流池品質惡化：可回流用戶總量持續縮小
+    └── 4.4 Songkran 歷史參照：2025 潑水節 DAU 反而下跌 13%
+</pre>
+
+<h2>三、根因分析</h2>
+
+<h3>根因 #1：Delta Force 的結構性替代效應（最大驅動力）</h3>
+
+<table>
+<thead>
+<tr><th>時間點</th><th>Delta Force 事件</th><th>TH CODM 影響</th></tr>
+</thead>
+<tbody>
+<tr><td>2025/4</td><td>Delta Force Mobile + PC 上線</td><td>TH DAU 開始加速下跌（MoM: -2.5% → -4.6% → -5.7%）</td></tr>
+<tr><td>2025/7</td><td>月活峰值 ~100 萬</td><td>TH DAU 單月 <span class="negative">-11.9%</span>（120K → 106K），全期最大跌幅</td></tr>
+<tr><td>2025/7</td><td>TH 戰隊奪世界冠軍</td><td>TH 射擊品類社群注意力轉移</td></tr>
+<tr><td>2025/8-12</td><td>月活回落但穩定</td><td>TH DAU 持續下探至 95K</td></tr>
+<tr><td>2026/1-3</td><td>持續運營</td><td>TH DAU 進一步跌至 83K</td></tr>
+</tbody>
+</table>
+
+<p>泰國是 Garena 同時發行 CODM 和 Delta Force 的市場。用戶並非「離開射擊遊戲」，而是「換了一個射擊遊戲」——這使得傳統的「用活動拉回用戶」策略失效。</p>
+
+<h3>根因 #2：用戶池結構性萎縮</h3>
+<ul>
+<li><strong>New User 池</strong>：TH 每日新增從 3,200（2024/3）跌至 1,722（2026/3），能被觸及的潛在用戶越來越少</li>
+<li><strong>Revival 池</strong>：每日回流從 9,346 跌至 5,331，很多人已永久離開或轉移至 Delta Force</li>
+<li><strong>留存惡化</strong>：R2 僅 43.3%、R7 僅 14.9%，拉回來也很快再流失</li>
+</ul>
+
+<h3>根因 #3：社群觸及效率不足 <span class="tag">⚠️ 需確認</span></h3>
+<ul>
+<li>TH Facebook 粉絲 200 萬+，但自然觸及率通常僅 2-5%</li>
+<li>PH 已有明確的「COD Points Festival Roadmap」推廣貼文及 KOL 轉發</li>
+<li>TH 是否做了同等力度的推廣？需要跟社群團隊確認</li>
+</ul>
+
+<h3>為什麼 PH 不受影響？</h3>
+<ul>
+<li>PH 是射擊品類第一名，無等量級替代品</li>
+<li>PH DAU 在 2025 年甚至成長（峰值 2.3M），市場仍在擴張</li>
+<li>PH 社群活躍、KOL 生態健全，活動傳播效率高</li>
+<li>PH 的 R2（50.9%）和 R7（22.6%）均顯著高於 TH，用戶黏性更強</li>
+</ul>
+
+<h2>四、行動建議</h2>
+
+<h3>短期（活動期間 3/30 - 5/10）</h3>
+
+<table>
+<thead>
+<tr><th>行動</th><th>具體做法</th><th>預期 Impact</th><th>Owner</th></tr>
+</thead>
+<tbody>
+<tr><td>加大 TH 付費投放</td><td>Facebook / TikTok / YouTube 投放「免費 3,500 CP」素材，鎖定 30-90 天流失用戶 retargeting</td><td>Revival +10-20%</td><td>UA</td></tr>
+<tr><td>KOL 爆量推廣</td><td>3-5 個 TH 本地射擊品類 KOL，發「教你領免費 CP」教學影片</td><td>提升觸及率</td><td>社群</td></tr>
+<tr><td>Push 精準推送</td><td>對 30-90 天未登入 TH 用戶推播：「你有 3,500 CP 等你領取」</td><td>直接觸及流失用戶</td><td>營運-活躍</td></tr>
+<tr><td>降低回歸摩擦</td><td>確認 TH 回歸下載量，考慮 lite 版更新</td><td>減少回流流失</td><td>產品</td></tr>
+</tbody>
+</table>
+
+<h3>中期（Q2 2026）</h3>
+
+<table>
+<thead>
+<tr><th>行動</th><th>具體做法</th><th>預期 Impact</th></tr>
+</thead>
+<tbody>
+<tr><td>重新定義 TH 目標</td><td>接受守量階段，KPI 從「拉新/回流」調整為「延長現有用戶 LTV」</td><td>資源配置更精準</td></tr>
+<tr><td>差異化定位 vs Delta Force</td><td>強調 CODM 差異優勢：IP 品牌力、BR 模式、行動端優化</td><td>與 Delta Force 區隔</td></tr>
+<tr><td>留存優先於拉新</td><td>R2 從 43% → 50% 的 impact 大於多拉 500 個新用戶。投入新手引導、首週體驗優化</td><td>DAU 穩盤</td></tr>
+<tr><td>TH 本地化內容</td><td>潑水節主題活動 + 本地 IP 聯動（泰國明星/網紅）</td><td>社群活躍度</td></tr>
+</tbody>
+</table>
+
+<h3>長期（2026 H2+）</h3>
+
+<table>
+<thead>
+<tr><th>行動</th><th>具體做法</th></tr>
+</thead>
+<tbody>
+<tr><td>評估 TH 市場 ROI</td><td>若 DAU 持續跌破 70K，重新評估資源配置是否 justify</td></tr>
+<tr><td>跨遊戲用戶遷移策略</td><td>Garena 同時發行兩款遊戲，是否可設計跨遊戲用戶橋接機制</td></tr>
+<tr><td>關注 Delta Force 趨勢</td><td>Delta Force 月活已從峰值下降 17%，若持續下降，部分用戶可能回流</td></tr>
+</tbody>
+</table>
+
+<h2>五、下一步</h2>
+
+<ol>
+<li><strong>確認 TH 此次活動的 paid media 預算和投放計畫</strong> → 如果沒有配合投放，這是最快的 quick win</li>
+<li><strong>拉出 TH 30-90 天流失用戶中「曾付費」佔比</strong> → 這群人對免費 CP 回歸動機最強</li>
+<li><strong>對比 TH 和 PH 活動宣傳素材與發佈節奏</strong> → 確認是否存在推廣力度差異</li>
+<li><strong>追蹤 3/30 上線後 7 天的 TH 數據</strong> → 驗證活動是否完全無效，還是啟動慢</li>
+</ol>
+
+<div class="footer">
+<p>分析日期：2026-03-30 ｜ 數據區間：2024-01-01 至 2026-03-29</p>
+</div>
+
+</div>
+</body>
+</html>
