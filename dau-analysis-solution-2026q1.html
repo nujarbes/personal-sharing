@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAU 指標異動分析與活躍活動方案 — 2026 Q1</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    color: #1a1a1a;
+    background: #fff;
+    line-height: 1.75;
+    padding: 40px 20px 80px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 6px; }
+  h2 { font-size: 1.15rem; font-weight: 700; margin: 36px 0 12px; border-bottom: 1.5px solid #e0e0e0; padding-bottom: 6px; }
+  h3 { font-size: 1rem; font-weight: 700; margin: 24px 0 8px; color: #2a2a2a; }
+  h4 { font-size: 0.95rem; font-weight: 700; margin: 18px 0 6px; color: #333; }
+
+  .meta { color: #666; font-size: 0.88rem; margin-bottom: 28px; }
+  .meta span { margin-right: 16px; }
+
+  /* Executive summary box */
+  .exec-summary {
+    background: #f9f9f9;
+    border-left: 4px solid #555;
+    padding: 16px 20px;
+    margin: 20px 0 32px;
+    border-radius: 0 4px 4px 0;
+  }
+  .exec-summary p { margin-bottom: 8px; }
+  .exec-summary p:last-child { margin-bottom: 0; }
+  .exec-summary strong { color: #1a1a1a; }
+
+  /* Alert callout */
+  .callout {
+    background: #f5f5f5;
+    border-left: 3px solid #aaa;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 0.9rem;
+    color: #444;
+  }
+
+  /* Warning */
+  .warn {
+    background: #fff8e1;
+    border-left: 3px solid #f0b429;
+    padding: 10px 14px;
+    margin: 16px 0;
+    font-size: 0.88rem;
+    color: #555;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.88rem;
+  }
+  th {
+    background: #f4f4f4;
+    font-weight: 600;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  td {
+    padding: 7px 10px;
+    border: 1px solid #ddd;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #fafafa; }
+
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .center { text-align: center; }
+  .highlight { font-weight: 700; }
+  .neg { color: #c0392b; }
+  .pos { color: #27ae60; }
+
+  /* Issue tree */
+  .issue-tree {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 16px 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.83rem;
+    line-height: 1.7;
+    margin: 16px 0;
+    white-space: pre-wrap;
+    color: #2a2a2a;
+  }
+
+  /* Priority tag */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .p0 { background: #fde8e8; color: #c0392b; }
+  .p1 { background: #fef3cd; color: #a07800; }
+  .p2 { background: #e8f4e8; color: #276b27; }
+
+  /* Region card */
+  .region-section {
+    border: 1px solid #e8e8e8;
+    border-radius: 6px;
+    padding: 20px 22px;
+    margin: 20px 0;
+  }
+  .region-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .region-name { font-size: 1.05rem; font-weight: 700; }
+  .region-stat { font-size: 0.85rem; color: #666; }
+
+  ul { padding-left: 20px; margin: 8px 0; }
+  li { margin-bottom: 4px; }
+
+  .section-divider {
+    border: none;
+    border-top: 1px solid #ebebeb;
+    margin: 32px 0;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>DAU 指標異動分析與活躍活動方案</h1>
+  <div class="meta">
+    <span>分析期間：2026-01-01 至 2026-03-24</span>
+    <span>輸出日期：2026-03-31</span>
+  </div>
+
+  <div class="exec-summary">
+    <p>整體 DAU 從 1 月均值 248 萬持續下滑至 3 月均值 209 萬，<strong>Q1 累計跌幅 -15.7%</strong>。這不是短期波動，而是跨月線性衰退，核心原因是<strong>留存侵蝕</strong>（活躍次留 Jan 72.7% → Mar 70.7%，-2.0pp）疊加 <strong>Pool E 流失加速</strong>（每週 63.2% 離場率）。</p>
+    <p>菲律賓是主要拉力市場，跌幅同比最大（-17.5%）；印尼是唯一 DAU 正成長市場（+11.5%）。</p>
+    <p><strong>立即優先事項：</strong> (1) Pool D+E 流失攔截（PH/ID 量體最大）；(2) TW/HK/MO 雙週留存修復（唯一下滑市場）；(3) 利用 No-pref 玩家高留存（D1 77.7%）設計模式引導型活動。</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2>Part 1：指標異動分析（WF-02）</h2>
+
+  <h3>1.1 現象確認（Is it true?）</h3>
+
+  <table>
+    <thead>
+      <tr><th>指標</th><th class="num">Jan 均值</th><th class="num">Feb 均值</th><th class="num">Mar 均值</th><th class="num">Jan→Mar 變化</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>總 DAU</td><td class="num">2,478,431</td><td class="num">2,301,302</td><td class="num">2,089,730</td><td class="num neg highlight">-15.7%</td></tr>
+      <tr><td>活躍次留 D1</td><td class="num">72.7%</td><td class="num">72.1%</td><td class="num">70.7%</td><td class="num neg highlight">-2.0pp</td></tr>
+      <tr><td>平均在線時長</td><td class="num">102.5 min</td><td class="num">101.9 min</td><td class="num">96.9 min</td><td class="num neg">-5.6 min</td></tr>
+      <tr><td>BR 參與率</td><td class="num">54.1%</td><td class="num">54.4%</td><td class="num">52.9%</td><td class="num neg">-1.2pp</td></tr>
+      <tr><td>MP 參與率</td><td class="num">62.0%</td><td class="num">59.5%</td><td class="num">61.6%</td><td class="num">-0.4pp</td></tr>
+      <tr><td>WAU（約值）</td><td class="num">460-500萬</td><td class="num">430-460萬</td><td class="num">400-420萬</td><td class="num neg">-13%+</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    DAU 下滑為真，且持續性強（非單一事件）。在線時長縮短顯示黏性也在降低，不只是人數問題。BR 參與率下滑較明顯，進一步確認深度玩法吸引力減弱。
+  </div>
+
+  <h3>1.2 影響評估（So what?）</h3>
+
+  <ul>
+    <li>3 月日均 DAU 較 1 月少約 <strong>38.9 萬人</strong></li>
+    <li>按目前斜率，4 月 DAU 預計跌至 <strong>~190 萬</strong>（趨勢未收斂）</li>
+    <li>Pool E 週流失率 63.2%，每週超過 <strong>58 萬人離場</strong>；D+E 合計週流失量 ~88 萬</li>
+    <li>D1 留存每下跌 1pp ≈ 日損失約 <strong>2 萬玩家</strong>（200萬 DAU × 1%）</li>
+    <li>TW/HK/MO 雙週留存下滑（-0.5pp），是老玩家在流失，不是新進問題</li>
+    <li>新進次留（46-50%）顯著低於活躍留存（72%），新玩家定錨不足</li>
+  </ul>
+
+  <h3>1.3 根因分析（Why so?）— Issue Tree</h3>
+
+  <div class="issue-tree">DAU -15.7% (Q1)
+├── 留存下滑（主要根因）
+│   ├── 活躍 D1 -2.0pp → 隔日回流動力不足
+│   │   ├── 假設 A：每日任務獎勵誘因減弱（需 A/B 測試驗證）
+│   │   └── 假設 B：版本內容進入空窗期（2月初高峰後回落）
+│   └── Pool E 流失週率 63.2% → 非核心玩家留不住
+│       ├── Pool E 人數 Jan ~103萬 → Mar ~93萬（持續流失中）
+│       └── 雙週回流占比上升（+0.8pp）→ 流失後又回來但品質不穩定
+├── BR 參與率下滑（次要根因）
+│   ├── BR 玩家 D1 最高（74.0%），參與率降意味高留存族群在流失
+│   └── PH BR 偏好最強（35.9%），PH DAU 跌最多，具相關性
+└── 在線時長縮短（輔助指標）
+    ├── 96.9 min vs Jan 102.5 min，-5.5%
+    └── 顯示玩家每次互動的投入度也在降低</div>
+
+  <div class="callout">
+    核心根因判斷：主因是<strong>版本內容吸引力遞減</strong>造成的自然衰退，而非突發事件。2 月 17 日出現一波高峰（DAU 238 萬），效果維持不超過 1 週即回落，顯示活動型拉升難以持續，需要機制層面的改善。
+  </div>
+
+  <hr class="section-divider">
+
+  <h2>Part 2：各地區活躍活動方案（WF-01）</h2>
+
+  <h3>地區概覽</h3>
+
+  <table>
+    <thead>
+      <tr><th>地區</th><th class="num">Mar DAU</th><th class="num">DAU 趨勢</th><th class="num">D1 留存</th><th>主導玩法</th><th>核心問題</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>菲律賓 PH</strong></td><td class="num">1,760,505</td><td class="num neg highlight">-17.5%</td><td class="num">71.4%</td><td>BR 36%</td><td>量最大，跌最多</td></tr>
+      <tr><td><strong>印尼 ID</strong></td><td class="num">101,306</td><td class="num pos highlight">+11.5%</td><td class="num neg">67.8%</td><td>MP 53%</td><td>唯一正成長，留存偏低</td></tr>
+      <tr><td><strong>泰國 TH</strong></td><td class="num">82,209</td><td class="num neg">-6.5%</td><td class="num neg">66.2%</td><td>MP 53%</td><td>留存最低，回流最多</td></tr>
+      <tr><td><strong>新馬 SG/MY</strong></td><td class="num">80,772</td><td class="num neg">-6.9%</td><td class="num">66.6%</td><td>MP 51%</td><td>留存中等，回流升</td></tr>
+      <tr><td><strong>港澳台 TW/HK/MO</strong></td><td class="num">57,277</td><td class="num neg highlight">-16.2%</td><td class="num">68.5%</td><td>MP 58%</td><td>雙週留存下滑，老玩家流失</td></tr>
+    </tbody>
+  </table>
+
+  <hr class="section-divider">
+
+  <div class="region-section">
+    <div class="region-header">
+      <span class="region-name">菲律賓（PH）</span>
+      <span class="region-stat">DAU 176萬 | -17.5% | D1 71.4%</span>
+      <span class="tag p0">P0</span>
+    </div>
+
+    <p><strong>問題：</strong> DAU 跌幅最大，BR 玩家佔比 35.9%（最高），BR 參與率下滑直接帶走高留存族群（BR D1 74.4%）。</p>
+    <p><strong>目標：</strong> 穩住 BR 深度玩家黏性；攔截 Pool D→E 流失。</p>
+
+    <h4>方案：BR 挑戰賽季（雙週循環）</h4>
+    <table>
+      <tbody>
+        <tr><td width="130"><strong>機制</strong></td><td>BR 模式專屬積分賽季，雙週一輪；每日完成 BR 對局累積積分，賽季結束按積分發放免費獎勵</td></tr>
+        <tr><td><strong>獎勵結構</strong></td><td>3 個里程碑（低/中/高門檻），確保 Pool B-C 玩家也能達到第 1 里程碑</td></tr>
+        <tr><td><strong>D1 誘因</strong></td><td>每日首局 BR 加成積分 ×1.5，製造「今天一定要打一局」的登入動機</td></tr>
+        <tr><td><strong>Pool D/E 攔截</strong></td><td>雙週回流玩家進入賽季時，給予「追趕加速器」，前 3 天積分 ×2</td></tr>
+        <tr><td><strong>成功指標</strong></td><td>BR 參與率回升至 54%+；活躍 D1 回升至 72%+</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.88rem; color:#555; margin-top:8px;">執行時程：下個 minor update 前 7 天預熱，更新日上線正式賽季。</p>
+  </div>
+
+  <div class="region-section">
+    <div class="region-header">
+      <span class="region-name">印尼（ID）</span>
+      <span class="region-stat">DAU 10.1萬 | +11.5% | D1 67.8%</span>
+      <span class="tag p1">P1</span>
+    </div>
+
+    <p><strong>問題：</strong> DAU 唯一正成長，但 D1 留存僅 67.8%（全市場最低之一）。MP 偏好佔比 52.5% 最高，成長動能來自新玩家，但新玩家留不住。</p>
+    <p><strong>目標：</strong> 固化新玩家習慣，提升 D1→D7 留存，避免成長泡沫化。</p>
+
+    <h4>方案：MP 新手定錨任務（首週留存強化）</h4>
+    <table>
+      <tbody>
+        <tr><td width="130"><strong>機制</strong></td><td>D1-D7 新進玩家觸發「首週 MP 挑戰路線圖」：每天解鎖一個 MP 子模式任務（排位/匹配/特定圖）</td></tr>
+        <tr><td><strong>獎勵設計</strong></td><td>每日任務完成給即時小獎勵；集齊 7 天發完整大獎；以完成率（非對局數）為門檻</td></tr>
+        <tr><td><strong>No-pref 策略</strong></td><td>No-pref 玩家 D1 留存 77.4%，高於 MP（70.1%）；路線圖設計讓玩家接觸多種模式，維持 No-pref 狀態比強迫轉換留存更高</td></tr>
+        <tr><td><strong>社群綁定</strong></td><td>與 ID 本地 KOL 合作「陪你打完第一週 MP」直播引導</td></tr>
+        <tr><td><strong>成功指標</strong></td><td>新進次留 50%+（目前 49%）；D7 留存 21%+（目前 19%）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="region-section">
+    <div class="region-header">
+      <span class="region-name">泰國（TH）</span>
+      <span class="region-stat">DAU 8.2萬 | -6.5% | D1 66.2%（最低）</span>
+      <span class="tag p0">P0</span>
+    </div>
+
+    <p><strong>問題：</strong> D1 留存全市場最低（66.2%），但雙週回流佔比最高（8.3%）——玩家有意願回來，但回來後留不住。</p>
+    <p><strong>目標：</strong> 拉長回流玩家的活躍週期，從回流 1-2 天延長至 7 天+。</p>
+
+    <h4>方案：回流再出發任務包（限時 7 天）</h4>
+    <table>
+      <tbody>
+        <tr><td width="130"><strong>觸發機制</strong></td><td>偵測雙週未登入玩家，回流當天自動發放「回來了！7 天任務包」</td></tr>
+        <tr><td><strong>任務設計</strong></td><td>每日 1 個低門檻任務（完成 1 局任意模式），完成解鎖當日獎勵；不完成不累積</td></tr>
+        <tr><td><strong>緊迫感設計</strong></td><td>任務包 7 天到期，未完成獎勵消失，製造每日登入動機</td></tr>
+        <tr><td><strong>地區專屬</strong></td><td>第 5 天解鎖「TH 限定獎勵」（地區專屬外觀），強化歸屬感</td></tr>
+        <tr><td><strong>Pool E 加碼</strong></td><td>Pool E 玩家第 7 天完成全任務可解鎖「隱藏獎勵」，提高完成率</td></tr>
+        <tr><td><strong>成功指標</strong></td><td>回流玩家 7 日留存從 ~30% 提升至 45%+；整體 D1 回升至 67.5%+</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="region-section">
+    <div class="region-header">
+      <span class="region-name">新馬（SG/MY）</span>
+      <span class="region-stat">DAU 8.1萬 | -6.9% | D1 66.6%</span>
+      <span class="tag p2">P2</span>
+    </div>
+
+    <p><strong>問題：</strong> D1 留存中等偏低，雙週回流佔比升至 6.6%（+1.0pp），流失逐漸加速。</p>
+    <p><strong>目標：</strong> 強化 Pool B-C 玩家黏性（最有機會升至 A 池的族群）。</p>
+
+    <h4>方案：MP 排位賽道激勵（雙週賽季）</h4>
+    <table>
+      <tbody>
+        <tr><td width="130"><strong>機制</strong></td><td>雙週 MP 排位積分挑戰：根據排位段位進步速度（非絕對排名）達標即得獎</td></tr>
+        <tr><td><strong>差異化設計</strong></td><td>Pool A：Hard 難度，稀有獎勵；Pool B-C：Normal 難度，實用獎勵；確保中間層不被排擠</td></tr>
+        <tr><td><strong>社群激勵</strong></td><td>小隊任務（3 人組隊完成 MP 對局數），鼓勵邀請流失朋友回來組隊</td></tr>
+        <tr><td><strong>成功指標</strong></td><td>Pool C→B 遷移率提升 3pp+；活躍 D1 回升至 68%+</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="region-section">
+    <div class="region-header">
+      <span class="region-name">港澳台（TW/HK/MO）</span>
+      <span class="region-stat">DAU 5.7萬 | -16.2% | 雙週留存唯一下滑</span>
+      <span class="tag p1">P1</span>
+    </div>
+
+    <p><strong>問題：</strong> 雙週留存 4.2% → 3.7%（-0.5pp），是全市場唯一下滑市場，且回流佔比未上升——這是「無聲流失」，老玩家在悄悄離開。</p>
+    <p><strong>目標：</strong> 喚醒 D14+ 老玩家，修復雙週留存。</p>
+
+    <h4>方案：老玩家歷程回顧 + DMZ 深度解鎖</h4>
+    <table>
+      <tbody>
+        <tr><td width="130"><strong>機制</strong></td><td>「你的 CODM 歷程」：統計老玩家累積對局數、擊殺、遊玩時長，以里程碑頒獎</td></tr>
+        <tr><td><strong>獎勵設計</strong></td><td>根據歷程里程碑發放「老玩家專屬」稱號或頭像框（不可購買，只有達成才有）</td></tr>
+        <tr><td><strong>DMZ 深化</strong></td><td>TW/HK/MO DMZ 玩家 D1 留存最高（79.4%）；設計 DMZ 限定週挑戰，推動 MP 主玩家嘗試 DMZ</td></tr>
+        <tr><td><strong>社交觸發</strong></td><td>雙週未登入者推送「你的舊隊友在等你」通知（社交觸發回流）</td></tr>
+        <tr><td><strong>成功指標</strong></td><td>雙週留存率回升至 4.0%+；Pool A 留存率維持 65%+</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2>Part 3：跨市場執行建議</h2>
+
+  <h3>優先序矩陣</h3>
+  <table>
+    <thead>
+      <tr><th>方案</th><th>市場</th><th>影響量體</th><th>執行難度</th><th class="center">優先級</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>BR 挑戰賽季</td><td>PH</td><td>最高（176萬 DAU）</td><td>中</td><td class="center"><span class="tag p0">P0</span></td></tr>
+      <tr><td>回流任務包</td><td>TH</td><td>中（8.3% 回流最高）</td><td>低</td><td class="center"><span class="tag p0">P0</span></td></tr>
+      <tr><td>老玩家回顧活動</td><td>TW/HK/MO</td><td>中（雙週留存唯一下滑）</td><td>低</td><td class="center"><span class="tag p1">P1</span></td></tr>
+      <tr><td>MP 新手定錨</td><td>ID</td><td>中（成長期，基礎建設）</td><td>中</td><td class="center"><span class="tag p1">P1</span></td></tr>
+      <tr><td>MP 排位賽道</td><td>SG/MY</td><td>中</td><td>中</td><td class="center"><span class="tag p2">P2</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>共用機制（可複用至多市場）</h3>
+  <ul>
+    <li><strong>Pool D/E 追趕加速器</strong>：回流玩家前 3 天加成，適用 PH/TH/SG</li>
+    <li><strong>每日首局加成</strong>：所有市場通用，成本低但效果直接</li>
+    <li><strong>隊友邀請機制</strong>：SG/MY 首發驗證，成功後複製到 PH/ID</li>
+  </ul>
+
+  <h3>時程建議</h3>
+  <table>
+    <thead>
+      <tr><th>週次</th><th>行動</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>W1（下週）</td><td>PH BR 賽季預熱上線；TH 回流任務包啟動</td></tr>
+      <tr><td>W2</td><td>ID 首週定錨任務上線；TW/HK/MO 老玩家回顧活動</td></tr>
+      <tr><td>W3</td><td>SG/MY MP 排位賽道；各市場中期數據 review</td></tr>
+      <tr><td>W4</td><td>根據 D7 留存數據決定是否延長或調整方案</td></tr>
+    </tbody>
+  </table>
+
+  <hr class="section-divider">
+
+  <h2>附錄：主要數據依據</h2>
+
+  <h3>Pool 分佈（2026-03-24 汇总）</h3>
+  <table>
+    <thead>
+      <tr><th>Pool</th><th class="num">上週人數</th><th class="num">佔比</th><th class="num">週流失率</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>A（最活躍）</td><td class="num">731,673</td><td class="num">17.8%</td><td class="num pos">2.6%</td></tr>
+      <tr><td>B</td><td class="num">959,884</td><td class="num">23.3%</td><td class="num">9.5%</td></tr>
+      <tr><td>C</td><td class="num">803,965</td><td class="num">19.5%</td><td class="num">24.3%</td></tr>
+      <tr><td>D</td><td class="num">696,158</td><td class="num">16.9%</td><td class="num neg">43.5%</td></tr>
+      <tr><td>E（流失風險）</td><td class="num">925,404</td><td class="num">22.5%</td><td class="num neg highlight">63.2%</td></tr>
+    </tbody>
+  </table>
+
+  <h3>玩法偏好與留存（Mar 均值，全體）</h3>
+  <table>
+    <thead>
+      <tr><th>玩法</th><th class="num">玩家佔比</th><th class="num">D1 留存</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>BR</td><td class="num">33.6%</td><td class="num">74.0%</td></tr>
+      <tr><td>MP</td><td class="num">35.5%</td><td class="num">70.3%</td></tr>
+      <tr><td>DMZ</td><td class="num">0.6%</td><td class="num">76.4%</td></tr>
+      <tr><td>No-pref（無明顯偏好）</td><td class="num">22.4%</td><td class="num pos highlight">77.7%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn">
+    ⚠️ 需確認：在線時長檔案（(1)~(7)）未包含地區標籤，無法對應各市場個別在線時長，上述分析以整體數據為準。若後續能取得各市場在線時長，可補強 ID/TH 方案的細節設計。
+  </div>
+
+</div>
+</body>
+</html>
