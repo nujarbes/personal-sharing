@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>CODM 活躍營運分析與活動規劃方案 v2（2026 Q1）</title>
+<style>
+  :root {
+    --c-red: #c0392b; --c-green: #27ae60; --c-orange: #e67e22;
+    --c-blue: #2980b9; --c-gray: #7f8c8d; --c-bg: #fff;
+    --c-border: #e0e0e0; --c-bg-alt: #f8f9fa;
+  }
+  body {
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #1a1a1a; background: var(--c-bg);
+    max-width: 760px; margin: 0 auto; padding: 2rem 1rem;
+    line-height: 1.75; font-size: 15px;
+  }
+  h1 { font-size: 1.5rem; border-bottom: 2px solid #333; padding-bottom: .3rem; margin: 2.5rem 0 .5rem; }
+  h2 { font-size: 1.25rem; margin: 2rem 0 .5rem; }
+  h3 { font-size: 1.05rem; margin: 1.5rem 0 .3rem; }
+  h4 { font-size: 1rem; margin: 1.2rem 0 .3rem; }
+  p { margin: .5rem 0; }
+  table { border-collapse: collapse; width: 100%; margin: .8rem 0; font-size: 13.5px; }
+  th, td { border: 1px solid #ddd; padding: 5px 8px; text-align: left; }
+  th { background: #f0f0f0; font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) { background: #fafafa; }
+  .num-neg { color: var(--c-red); font-weight: 600; }
+  .num-pos { color: var(--c-green); font-weight: 600; }
+  .num-flat { color: var(--c-gray); }
+  .tag { display: inline-block; padding: 1px 7px; border-radius: 3px; font-size: 12px; font-weight: 600; }
+  .tag-danger { background: #f8d7da; color: #721c24; }
+  .tag-warn { background: #fff3cd; color: #856404; }
+  .tag-ok { background: #d4edda; color: #155724; }
+  .tag-info { background: #d1ecf1; color: #0c5460; }
+  .summary-box { background: var(--c-bg-alt); border-left: 4px solid #333; padding: .8rem 1rem; margin: 1rem 0; }
+  .insight-box { background: #fffbf0; border-left: 4px solid var(--c-orange); padding: .6rem 1rem; margin: .8rem 0; font-size: 14px; }
+  .callout { background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; padding: .6rem 1rem; margin: .8rem 0; }
+  hr { border: none; border-top: 1px solid var(--c-border); margin: 2rem 0; }
+  pre { background: #f5f5f5; padding: 1rem; overflow-x: auto; border-radius: 4px; white-space: pre-wrap; font-size: 13px; line-height: 1.5; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+  .card { border: 1px solid var(--c-border); border-radius: 6px; padding: .8rem; background: var(--c-bg-alt); }
+  .card h4 { margin-top: 0; }
+  .progress-bar { height: 6px; background: #eee; border-radius: 3px; overflow: hidden; margin: 4px 0; }
+  .progress-fill { height: 100%; border-radius: 3px; }
+  .legend { font-size: 12px; color: var(--c-gray); }
+  .activity-card { border: 2px solid var(--c-border); border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+  .activity-card h4 { margin-top: 0; font-size: 1.1rem; }
+  .activity-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: .5rem; }
+  .token-check { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 4px; padding: .5rem .8rem; margin: .5rem 0; font-size: 13px; }
+  .token-warn { background: #fffbeb; border: 1px solid #fde68a; border-radius: 4px; padding: .5rem .8rem; margin: .5rem 0; font-size: 13px; }
+  .post-card { border-left: 3px solid var(--c-blue); background: #f8fafc; padding: .6rem 1rem; margin: .5rem 0; font-size: 14px; }
+  .meta { font-size: 12px; color: var(--c-gray); }
+  .glossary-table td:first-child { font-weight: 600; white-space: nowrap; width: 120px; }
+  blockquote { border-left: 3px solid #ccc; background: #f9f9f9; margin: .8rem 0; padding: .6rem 1rem; font-size: 14px; }
+  .section-nav { background: var(--c-bg-alt); border: 1px solid var(--c-border); border-radius: 6px; padding: .8rem 1.2rem; margin: 1rem 0; font-size: 14px; }
+  .section-nav a { text-decoration: none; color: var(--c-blue); }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<h1>CODM 活躍營運分析與活動規劃方案 v2</h1>
+<p class="meta">分析日期：2026-03-31 | 數據截止：2026-03-30 | 框架：M-02 + M-07 + M-14 | 數據來源：test-game-data/ 12 份 CSV</p>
+
+<div class="summary-box">
+<strong>結論：</strong>Q1 整體 DAU MoM -9%，PH（-8.7%）與 TWHKMO（-19.5%）跌幅最重，ID 是唯一正成長市場（+6.2%）。下行主因為 S2→S3 內容空窗期（~2.5 週）疊加 Ramadan 自然回落，同期 MLBB Naruto 聯名 + PUBG 9 週年 + Delta Force Morphosis 新賽季多線競品分流。建議 5 市場針對 4 月各自節點（PH 暑假、TH Songkran、TWHKMO 清明、ID 後 Eid、SGMY 新模式推廣）設計差異化活動。
+</div>
+
+<!-- ===== 名詞定義 ===== -->
+<h2 id="glossary">名詞定義</h2>
+<p>本報告統一使用以下名詞，避免混淆：</p>
+<table class="glossary-table">
+<tr><th>術語</th><th>定義</th><th>來源欄位</th></tr>
+<tr><td>DAU</td><td>每日活躍用戶數（當天有登入即計算）</td><td>运营总况.活跃用户数 / 活跃用户构成.DAU</td></tr>
+<tr><td>新進用戶</td><td>當日新註冊且完成首次登入的玩家</td><td>活跃用户构成.日新进玩家数</td></tr>
+<tr><td>留存用戶</td><td>上一週有登入且本週仍活躍的既有玩家（非新進、非回流）</td><td>活跃用户构成.单周留存玩家数</td></tr>
+<tr><td>回流用戶</td><td>本週重新登入，但上一週未登入的歷史玩家</td><td>活跃用户构成.单周历史回流玩家数</td></tr>
+<tr><td>D1 / D3 / D7</td><td>次日 / 三日 / 七日留存率（以該群體為分母）</td><td>各檔案.次留 / 3留 / 7留</td></tr>
+<tr><td>活躍分池</td><td>依月登入頻率分為 A（最活躍）→ E（最不活躍）五級</td><td>分池活跃.活跃分池 / 月固定分池活跃总况.月固定分池</td></tr>
+<tr><td>模式偏好</td><td>以 7 級以上玩家最近期主要遊玩模式分類（BR / MP / DMZ / 無偏好）</td><td>活跃玩家偏好.偏好xx玩家数</td></tr>
+<tr><td>WAU</td><td>每週活躍用戶數</td><td>周活跃构成.周活跃</td></tr>
+<tr><td>MoM</td><td>Month-over-Month，月環比（本月 vs 上月）</td><td>—</td></tr>
+</table>
+
+<!-- ===== 目錄 ===== -->
+<div class="section-nav">
+<strong>目錄</strong><br>
+<a href="#part1">Part 1：DAU 現況診斷</a>（三維度交叉分析）<br>
+<a href="#part2">Part 2：外部因素掃描</a>（假日 + 競品）<br>
+<a href="#part3">Part 3：根因 Issue Tree</a><br>
+<a href="#part4">Part 4：各地區活動規劃</a>（含 Token 經濟視覺化）<br>
+<a href="#part5">Part 5：社群推廣排程與文案</a><br>
+<a href="#part6">Part 6：下一步行動</a>
+</div>
+
+<hr>
+
+<!-- ===== PART 1 ===== -->
+<h1 id="part1">Part 1：DAU 現況診斷</h1>
+
+<h2>1.1 維度一：業務指標（DAU / 留存 / 在線時長）</h2>
+
+<table>
+<tr><th>市場</th><th>1月均DAU</th><th>2月均DAU</th><th>3月均DAU</th><th>MoM<br>(2→3)</th><th>QoQ<br>(1→3)</th><th>日均在線<br>(3月)</th></tr>
+<tr><td><strong>PH</strong></td><td>2,134K</td><td>1,959K</td><td>1,789K</td><td class="num-neg">-8.7%</td><td class="num-neg">-16.2%</td><td>103 min</td></tr>
+<tr><td><strong>ID</strong></td><td>91K</td><td>94K</td><td>100K</td><td class="num-pos">+6.2%</td><td class="num-pos">+9.6%</td><td>94 min</td></tr>
+<tr><td><strong>TH</strong></td><td>88K</td><td>84K</td><td>82K</td><td class="num-flat">-1.5%</td><td class="num-neg">-6.3%</td><td>91 min</td></tr>
+<tr><td><strong>SGMY</strong></td><td>87K</td><td>84K</td><td>80K</td><td class="num-neg">-4.5%</td><td class="num-neg">-7.3%</td><td>82 min</td></tr>
+<tr><td><strong>TWHKMO</strong></td><td>68K</td><td>71K</td><td>57K</td><td class="num-neg">-19.5%</td><td class="num-neg">-16.0%</td><td>77 min</td></tr>
+</table>
+
+<div class="insight-box">
+<strong>So What：</strong>TWHKMO 2 月出現反常回升（68K→71K），但 3 月急跌至 57K（-19.5%）。2 月回升推測與農曆新年假期（2/16-19）+ 寒假尾聲有關，3 月回落反映假期紅利結束後的 structural decline。PH 持續下行但 W13-14（3/18 S3 上線後）出現反彈至 223 萬。ID 是唯一持續正成長市場（1→2→3 月均上升），B-E 池均在擴張。
+</div>
+
+<h3>週趨勢速覽（近 8 週）</h3>
+<table>
+<tr><th>週次</th><th>PH</th><th>ID</th><th>TH</th><th>SGMY</th><th>TWHKMO</th><th>事件</th></tr>
+<tr><td>W06 (2/1)</td><td>2,059K</td><td>86K</td><td>84K</td><td>80K</td><td>72K</td><td></td></tr>
+<tr><td>W07 (2/8)</td><td>1,960K</td><td>90K</td><td>84K</td><td>81K</td><td>74K</td><td>CNY 除夕(2/16)</td></tr>
+<tr><td>W08 (2/15)</td><td>1,938K</td><td>101K</td><td>83K</td><td>94K↑</td><td>76K</td><td>CNY + Ramadan 開始(2/19)</td></tr>
+<tr><td>W09 (2/22)</td><td>1,841K</td><td>100K</td><td>83K</td><td>82K</td><td>62K↓</td><td>TWHKMO 斷崖</td></tr>
+<tr><td>W10 (3/1)</td><td>1,764K</td><td>99K</td><td>81K</td><td>80K</td><td>58K</td><td>S2→S3 空窗期開始</td></tr>
+<tr><td>W11 (3/8)</td><td>1,773K</td><td>104K</td><td>83K</td><td>80K</td><td>57K</td><td>PUBG 9 週年; BS 新賽季</td></tr>
+<tr><td>W12 (3/15)</td><td>1,731K</td><td>103K</td><td>82K</td><td>82K</td><td>56K</td><td><strong>S3 Paranoia 上線(3/18)</strong></td></tr>
+<tr><td>W13 (3/22)</td><td>1,812K↑</td><td>94K↓</td><td>83K</td><td>80K</td><td>57K</td><td>Eid al-Fitr(3/21); MLBB×Naruto(3/27)</td></tr>
+<tr><td>W14 (3/29)</td><td>2,232K↑</td><td>90K</td><td>87K</td><td>75K↓</td><td>52K</td><td>CODM Summer Fest 預告(3/30)</td></tr>
+</table>
+
+<h2>1.2 維度二：用戶分群（新進 / 留存 / 回流）</h2>
+
+<p>DAU 由三群用戶組成，各自的留存表現差異極大：</p>
+
+<table>
+<tr><th rowspan="2">市場</th><th colspan="3">3月 DAU 結構</th><th colspan="3">留存用戶</th><th colspan="3">回流用戶</th></tr>
+<tr><th>新進</th><th>留存</th><th>回流</th><th>D1</th><th>D3</th><th>D7</th><th>D1</th><th>D3</th><th>D7</th></tr>
+<tr>
+<td><strong>PH</strong></td>
+<td>25.8K<br><span class="meta">1.5%</span></td>
+<td>1,625K<br><span class="meta">91.6%</span></td>
+<td>126K<br><span class="meta">7.1%</span></td>
+<td>74.5%</td><td>70.8%</td><td>64.8%</td>
+<td class="num-neg">40.6%</td><td class="num-neg">33.0%</td><td class="num-neg">25.7%</td>
+</tr>
+<tr>
+<td><strong>ID</strong></td>
+<td>4.0K<br><span class="meta">4.0%</span></td>
+<td>87K<br><span class="meta">87.4%</span></td>
+<td>8.8K<br><span class="meta">8.8%</span></td>
+<td>71.3%</td><td>66.8%</td><td>57.6%</td>
+<td class="num-neg">41.2%</td><td class="num-neg">32.2%</td><td class="num-neg">22.0%</td>
+</tr>
+<tr>
+<td><strong>TH</strong></td>
+<td>1.7K<br><span class="meta">2.1%</span></td>
+<td>71K<br><span class="meta">86.9%</span></td>
+<td>9.3K<br><span class="meta">11.3%</span></td>
+<td>70.8%</td><td>66.7%</td><td>59.5%</td>
+<td class="num-neg">36.3%</td><td class="num-neg">27.9%</td><td class="num-neg">19.1%</td>
+</tr>
+<tr>
+<td><strong>SGMY</strong></td>
+<td>2.0K<br><span class="meta">2.5%</span></td>
+<td>71K<br><span class="meta">88.0%</span></td>
+<td>7.8K<br><span class="meta">9.6%</span></td>
+<td>70.8%</td><td>66.6%</td><td>59.8%</td>
+<td class="num-neg">33.6%</td><td class="num-neg">26.2%</td><td class="num-neg">19.3%</td>
+</tr>
+<tr>
+<td><strong>TWHKMO</strong></td>
+<td>0.9K<br><span class="meta">1.6%</span></td>
+<td>51K<br><span class="meta">89.2%</span></td>
+<td>5.5K<br><span class="meta">9.5%</span></td>
+<td>72.8%</td><td>68.7%</td><td>64.8%</td>
+<td class="num-neg">32.3%</td><td class="num-neg">24.8%</td><td class="num-neg">19.4%</td>
+</tr>
+</table>
+
+<div class="insight-box">
+<strong>So What：</strong>
+<br>1. <strong>回流用戶是全市場最大痛點</strong> — D1 僅 32-41%，D7 跌至 19-26%，代表回來的人「看一眼就走」，缺乏 hook。
+<br>2. <strong>留存用戶的 D7 也在滑落</strong> — PH 從 1月 66.2% → 3月 64.8%（-1.4pp），ID 從 60.3% → 57.6%（-2.7pp），核心黏性在鬆動。
+<br>3. <strong>新進用戶佔比極低</strong>（1.5-4%），PH 日新進從 1月 2.98 萬降至 3月 2.58 萬，新血補充不足。
+<br>4. <strong>ID 的成長來自回流+新進雙升</strong>：新進 2.8K→4.0K（+43%）、回流 7.2K→8.8K（+22%），但留存 D7 同步下降，成長可能不穩定。
+</div>
+
+<h3>MoM 趨勢：三群留存變化</h3>
+<table>
+<tr><th>市場</th><th colspan="3">留存用戶 D7</th><th colspan="3">回流用戶 D1</th></tr>
+<tr><th></th><th>1月</th><th>2月</th><th>3月</th><th>1月</th><th>2月</th><th>3月</th></tr>
+<tr><td>PH</td><td>66.2%</td><td>65.1%</td><td class="num-neg">64.8%↓</td><td>41.0%</td><td>38.8%</td><td>40.6%↑</td></tr>
+<tr><td>ID</td><td>60.3%</td><td>61.1%</td><td class="num-neg">57.6%↓</td><td>39.9%</td><td>40.4%</td><td>41.2%↑</td></tr>
+<tr><td>TH</td><td>58.9%</td><td>59.7%</td><td class="num-flat">59.5%</td><td>36.1%</td><td>35.0%</td><td>36.3%↑</td></tr>
+<tr><td>SGMY</td><td>61.5%</td><td>61.3%</td><td class="num-neg">59.8%↓</td><td>33.4%</td><td>33.3%</td><td>33.6%</td></tr>
+<tr><td>TWHKMO</td><td>63.8%</td><td>60.8%</td><td>64.8%↑</td><td>35.9%</td><td>35.4%</td><td class="num-neg">32.3%↓</td></tr>
+</table>
+
+<div class="insight-box">
+<strong>So What：</strong>TWHKMO 留存用戶 D7 反升（60.8→64.8），但 DAU 反而大跌。解讀：人走了很多（量縮），留下來的反而是鐵粉（質升）。這是典型 structural decline 的中後期特徵——「剩下的人很忠誠，但盤子在縮」。同時回流 D1 跌到 32.3%（全市場最低），代表回流策略完全失效。
+</div>
+
+<h2>1.3 維度三：遊戲內行為（模式偏好 × 分池 × 參與深度）</h2>
+
+<h3>各市場模式偏好（7 級以上玩家，3 月均值）</h3>
+<table>
+<tr><th>市場</th><th>BR</th><th>MP</th><th>DMZ</th><th>無偏好</th><th>主導模式</th></tr>
+<tr><td>PH</td><td>35.8%<br><span class="meta">D1=74.9%</span></td><td>33.0%<br><span class="meta">D1=71.1%</span></td><td>0.3%<br><span class="meta">D1=75.5%</span></td><td>23.1%<br><span class="meta">D1=78.3%</span></td><td><span class="tag tag-info">BR 主導</span></td></tr>
+<tr><td>ID</td><td>24.2%<br><span class="meta">D1=71.1%</span></td><td>52.5%<br><span class="meta">D1=70.0%</span></td><td>1.5%<br><span class="meta">D1=78.0%</span></td><td>13.1%<br><span class="meta">D1=77.3%</span></td><td><span class="tag tag-info">MP 主導</span></td></tr>
+<tr><td>TH</td><td>21.2%<br><span class="meta">D1=70.6%</span></td><td>53.0%<br><span class="meta">D1=68.4%</span></td><td>2.4%<br><span class="meta">D1=76.8%</span></td><td>13.9%<br><span class="meta">D1=73.1%</span></td><td><span class="tag tag-info">MP 主導</span></td></tr>
+<tr><td>SGMY</td><td>23.1%<br><span class="meta">D1=69.7%</span></td><td>51.2%<br><span class="meta">D1=67.7%</span></td><td>1.7%<br><span class="meta">D1=77.0%</span></td><td>15.4%<br><span class="meta">D1=74.8%</span></td><td><span class="tag tag-info">MP 主導</span></td></tr>
+<tr><td>TWHKMO</td><td>11.2%<br><span class="meta">D1=70.2%</span></td><td>58.1%<br><span class="meta">D1=70.8%</span></td><td>2.9%<br><span class="meta">D1=79.5%</span></td><td>18.2%<br><span class="meta">D1=73.9%</span></td><td><span class="tag tag-info">MP 強主導</span></td></tr>
+</table>
+
+<div class="insight-box">
+<strong>So What：</strong>
+<br>1. <strong>無偏好玩家留存最高</strong>（全市場 D1 73-78%），但佔比 13-23%。這群人可能是多模式輪玩者，反而是最黏的用戶——活動設計不該只綁單一模式。
+<br>2. <strong>DMZ 玩家 D1 全市場最高</strong>（76-80%），但佔比極低（0.3-2.9%）。S3 新推 DMZ: Recon 有潛力，但需要引導機制讓更多人嘗試。
+<br>3. <strong>PH 是唯一 BR 主導市場</strong>，其餘均為 MP 主導。活動任務設計必須按市場差異化。
+</div>
+
+<h3>分池健康度（全服不分區，3 月均值）</h3>
+<table>
+<tr><th>分池</th><th>月均人數</th><th>MoM</th><th>D1</th><th>人均登入</th><th>MP 參與率</th><th>人均 MP 局數</th></tr>
+<tr><td><strong>A 池</strong></td><td>210K</td><td class="num-neg">-8.7%</td><td>94.6%</td><td>10.3 次</td><td>72.3%</td><td>11.8 局</td></tr>
+<tr><td><strong>B 池</strong></td><td>420K</td><td class="num-neg">-8.7%</td><td>87.9%</td><td>6.1 次</td><td>69.1%</td><td>6.3 局</td></tr>
+<tr><td><strong>C 池</strong></td><td>420K</td><td class="num-neg">-8.7%</td><td>78.0%</td><td>3.9 次</td><td>65.8%</td><td>3.6 局</td></tr>
+<tr><td><strong>D 池</strong></td><td>420K</td><td class="num-neg">-8.7%</td><td>66.8%</td><td>2.5 次</td><td>63.9%</td><td>2.2 局</td></tr>
+<tr><td><strong>E 池</strong></td><td>630K</td><td class="num-neg">-8.7%</td><td>50.2%</td><td>1.5 次</td><td>50.4%</td><td>0.9 局</td></tr>
+</table>
+
+<p class="meta">註：BR 參與率在全服不分區數據中記為 0%，推測為數據源欄位定義差異。地區版分池數據有完整 BR 參與資料，見下方。</p>
+
+<h3>地區分池：核心池（A+B）流失率 + 模式深度（Feb→Mar）</h3>
+<table>
+<tr><th>市場</th><th>A 池 MoM</th><th>B 池 MoM</th><th>A 池遊戲時長</th><th>A 池 BR 參與</th><th>A 池 MP 參與</th><th>D/E 池膨脹</th></tr>
+<tr>
+<td><strong>PH</strong></td>
+<td class="num-neg">-19.8%</td><td class="num-neg">-12.0%</td>
+<td>119→119 min（持平）</td><td>74.2→70.9%↓</td><td>22.2→21.9%</td>
+<td>D 持平 / E +1.4%</td>
+</tr>
+<tr>
+<td><strong>ID</strong></td>
+<td class="num-neg">-6.1%</td><td class="num-pos">+8.2%</td>
+<td>120→119 min</td><td>49.8→48.9%</td><td>36.0→36.0%</td>
+<td>C +13% / D +13% / E +12%</td>
+</tr>
+<tr>
+<td><strong>TH</strong></td>
+<td class="num-neg">-3.1%</td><td class="num-flat">+0.1%</td>
+<td>123→125 min↑</td><td>40.7→41.2%</td><td>36.3→35.5%</td>
+<td>C +2% / D +2% / E +1%</td>
+</tr>
+<tr>
+<td><strong>SGMY</strong></td>
+<td class="num-neg">-15.6%</td><td class="num-neg">-8.4%</td>
+<td>115→112 min↓</td><td>53.4→51.8%</td><td>39.9→41.3%</td>
+<td>D +1% / E +1%</td>
+</tr>
+<tr>
+<td><strong>TWHKMO</strong></td>
+<td class="num-neg">-32.6%</td><td class="num-neg">-21.4%</td>
+<td>117→110 min↓</td><td>26.2→29.4%↑</td><td>50.6→47.5%↓</td>
+<td>D -22% / E -19%（全面萎縮）</td>
+</tr>
+</table>
+
+<div class="callout">
+<strong>TWHKMO 紅色警報：</strong>A 池 -32.6% 是全市場最大核心流失。但注意 TWHKMO 連 D/E 池都在縮（-19~-22%），不是「核心流向邊緣」，而是「所有分池都在流失」。留下來的 A 池玩家遊戲時長略降（117→110 min），且 MP 參與率從 50.6% 降至 47.5%——核心玩家也在減少投入。BR 參與反升（26→29%）可能是 S3 Paranoia 新 BR 內容吸引。
+</div>
+
+<div class="insight-box">
+<strong>ID 的成長結構解讀：</strong>A 池 -6.1% 但 B-E 池全面膨脹（+8~13%），代表 ID 的成長來自中低頻玩家的注入（新進+回流進入 C-E 池），而非核心投入加深。Eid 假期帶來的回流潮正在填充中低池，但核心池同樣在縮——需要活動設計推動 C→B、B→A 的向上遷移。
+</div>
+
+<hr>
+
+<!-- ===== PART 2 ===== -->
+<h1 id="part2">Part 2：外部因素掃描（M-14）</h1>
+
+<h3>2.1 假日與季節因素</h3>
+<table>
+<tr><th>因素</th><th>影響市場</th><th>時間</th><th>影響判定</th><th>說明</th></tr>
+<tr>
+<td><strong>農曆新年</strong></td><td>TWHKMO, SGMY</td><td>2/16-19</td>
+<td><span class="tag tag-ok">正面（已結束）</span></td>
+<td>TWHKMO W07-08 回升（72K→76K）+ SGMY W08 spike（94K）的主因。假期結束後兩市場均急跌。</td>
+</tr>
+<tr>
+<td><strong>寒假</strong></td><td>TWHKMO</td><td>~1月中-2月底</td>
+<td><span class="tag tag-ok">正面（已結束）</span></td>
+<td>TWHKMO 2 月均 DAU 71K 高於 1 月 68K，寒假 + CNY 雙重紅利。3 月開學後急跌至 57K。</td>
+</tr>
+<tr>
+<td><strong>Ramadan</strong></td><td>ID, MY(SGMY)</td><td>2/19–3/20</td>
+<td><span class="tag tag-warn">部分相關</span></td>
+<td>穆斯林玩家日間遊戲時間減少，但 ID 仍逆勢成長（新進用戶補充）。</td>
+</tr>
+<tr>
+<td><strong>Eid al-Fitr</strong></td><td>ID, MY</td><td>3/21</td>
+<td><span class="tag tag-ok">正面</span></td>
+<td>ID W08 高峰（101K）及 W13 回流潮吻合 Eid 假期。但假期後 W14 回落（90K）。</td>
+</tr>
+<tr style="background:#fffde7;">
+<td><strong>清明節</strong></td><td>TWHKMO</td><td>4/4-6</td>
+<td><span class="tag tag-info">預期正面</span></td>
+<td>3 天連假，回升窗口。搭配活動可拉回流。</td>
+</tr>
+<tr style="background:#fffde7;">
+<td><strong>Songkran</strong></td><td>TH</td><td>4/13-15</td>
+<td><span class="tag tag-info">預期強正面</span></td>
+<td>泰國最大假期，遊戲時間預期顯著增長。</td>
+</tr>
+<tr style="background:#fffde7;">
+<td><strong>PH 暑假</strong></td><td>PH</td><td>4月起</td>
+<td><span class="tag tag-info">預期正面</span></td>
+<td>學生族群時間釋放，全年最大回流窗口。</td>
+</tr>
+<tr style="background:#fffde7;">
+<td><strong>Good Friday</strong></td><td>PH, ID</td><td>4/3</td>
+<td><span class="tag tag-info">預期正面</span></td>
+<td>公眾假期，短期登入提升。</td>
+</tr>
+<tr style="background:#fffde7;">
+<td><strong>Eid al-Adha</strong></td><td>ID, MY</td><td>5月底(TBD)</td>
+<td><span class="tag tag-info">預期正面</span></td>
+<td>第二波假期紅利。</td>
+</tr>
+</table>
+
+<h3>2.2 競品活動掃描</h3>
+
+<table>
+<tr><th>競品</th><th>主影響市場</th><th>Q1 關鍵動態</th><th>對 CODM 的影響</th></tr>
+<tr>
+<td><strong>PUBG Mobile</strong></td>
+<td>全市場（尤 ID/TH/SGMY BR 群）</td>
+<td>9 週年慶（3月）免費 Event Pass；Global Open S1 SEA Finals（3月 Jakarta）；亞運資格賽啟動</td>
+<td><span class="tag tag-warn">中度</span> 分流 BR 偏好玩家，尤其 ID（同城 Jakarta 辦賽）</td>
+</tr>
+<tr>
+<td><strong>MLBB</strong></td>
+<td>PH, ID, SGMY, TH</td>
+<td>Naruto 2.0 聯名（3/27-5/10）——IP 大事件；Pro League Spring 開打（3月底）；準備亞運</td>
+<td><span class="tag tag-danger">高度</span> Naruto IP 聯名是 MLBB 年度最大事件之一，直接搶奪 SEA 玩家注意力</td>
+</tr>
+<tr>
+<td><strong>傳說對決 (AOV)</strong></td>
+<td>TWHKMO, TH, ID</td>
+<td>「創新紀元」版本更新（1月）；KWC at EWC 2026 公布（$3M 獎金池，7-8月）</td>
+<td><span class="tag tag-warn">中度</span> 主要影響 TWHKMO（台灣 MOBA 市場直接競爭）</td>
+</tr>
+<tr>
+<td><strong>Delta Force (Garena)</strong></td>
+<td>全 SEA + TWHKMO</td>
+<td>Morphosis 新賽季（1月）+ 新模式 Flashpoint；4/21 Eclipse Vigil 新賽季即將上線</td>
+<td><span class="tag tag-danger">高度</span> 同為 Garena 代理的射擊手遊，直接分流 FPS 玩家；4 月新賽季將再度搶關注</td>
+</tr>
+<tr>
+<td><strong>Free Fire</strong></td>
+<td>PH, ID, TH</td>
+<td>Clash Squad 獨立賽事（3月起）；FFWS SEA Spring（4/24-5/31）</td>
+<td><span class="tag tag-warn">中度</span> 與 CODM 用戶重疊度較低，但在 PH/ID 低端設備市場有分流</td>
+</tr>
+<tr>
+<td><strong>Blood Strike</strong></td>
+<td>PH, ID, TH</td>
+<td>2nd Ascendant 新賽季（3/12）+ BLEACH 聯名（2月）+ 新武器/載具</td>
+<td><span class="tag tag-warn">中度</span> 同為 FPS Battle Royale，直接競爭 BR 群</td>
+</tr>
+<tr>
+<td><strong>暗區突圍 (Arena Breakout)</strong></td>
+<td>TWHKMO, SGMY</td>
+<td>PC 版 Infinite 已上線 Steam；手機版持續更新中</td>
+<td><span class="tag tag-warn">中低度</span> extraction shooter 與 DMZ 模式直接競爭，影響小但精準</td>
+</tr>
+</table>
+
+<div class="callout">
+<strong>競品疊加效應（3月）：</strong>PUBG 9 週年 + MLBB Naruto 聯名 + Blood Strike 新賽季 + Delta Force Morphosis 四線齊發，恰好撞上 CODM S2→S3 空窗期。這是 Q1 全市場 DAU 下行的重要外部推手。4 月 Delta Force Eclipse Vigil（4/21）+ Free Fire FFWS SEA（4/24）又將是新一波競品攻勢——CODM 4 月活動需在 4/20 前完成主要曝光。
+</div>
+
+<hr>
+
+<!-- ===== PART 3 ===== -->
+<h1 id="part3">Part 3：根因 Issue Tree（M-07）</h1>
+
+<pre>
+DAU Q1 下行（MoM -9%，其中 PH -8.7%、TWHKMO -19.5%）
+│
+├─ 供給側（內部可控）
+│  ├─ 內容節奏
+│  │  ├─ S2→S3 過渡期空窗 ~2.5 週（3/1-3/17）
+│  │  │  └─ 證據：W10-W12 全市場觸底；S3 上線後 PH 即反彈
+│  │  ├─ DMZ: Recon 新模式推廣不足（偏好佔比僅 0.3-2.9%）
+│  │  │  └─ 但 DMZ 玩家 D1 最高（76-80%），潛力未釋放
+│  │  └─ Summer Festival CP 送活動（3/30 起）延遲效應
+│  │
+│  ├─ 活動 / 任務設計缺口
+│  │  ├─ Ramadan 期間無穆斯林友善活動（錯過 ID/MY 機會）
+│  │  ├─ CNY 期間無 TWHKMO/SGMY 定向活動（假期紅利未承接）
+│  │  ├─ D/E 池缺乏專屬回流任務路線
+│  │  │  └─ 回流 D1 全市場 32-41%，D7 僅 19-26%
+│  │  └─ 無偏好玩家（D1 最高）缺乏轉化為核心的引導
+│  │
+│  └─ 獎勵 / 留存機制
+│     ├─ 回流玩家回來後無持續 hook → D3 急跌（D1→D3 drop 7-8pp）
+│     └─ 中低池（C/D）MP 參與率 63-66% 但人均僅 2-4 局 → 投入淺
+│
+├─ 需求側（外部環境）
+│  ├─ 假日效應
+│  │  ├─ CNY 結束（2月底）→ TWHKMO 斷崖式下跌（76K→62K）
+│  │  ├─ Ramadan（2/19-3/20）→ 穆斯林地區遊戲時間自然收縮
+│  │  └─ 開學季（3月）→ 學生族群時間壓縮
+│  │
+│  └─ 競品分流
+│     ├─ MLBB × Naruto 2.0（3/27 起）→ SEA MOBA 玩家大量關注
+│     ├─ PUBG 9 週年 + SEA Finals（3月）→ BR 群直接分流
+│     ├─ Delta Force Morphosis（1月起）→ FPS 群持續分流
+│     └─ Blood Strike 新賽季 + BLEACH 聯名 → BR 群疊加分流
+│
+└─ 結構性因素
+   ├─ TWHKMO 人口基數小 + 市場成熟 → 自然衰退壓力大
+   │  └─ 全分池萎縮（A-E 均為負成長），非結構遷移
+   ├─ PH 新註冊趨勢下行（2.98 萬→2.58 萬/日）→ 新血補充不足
+   └─ 全市場 A 池持續萎縮（PH -20%、SGMY -16%、TWHKMO -33%）
+      └─ 核心玩家在流出，但未被有效攔截
+</pre>
+
+<hr>
+
+<!-- ===== PART 4 ===== -->
+<h1 id="part4">Part 4：各地區活動規劃</h1>
+
+<!-- PH -->
+<div class="activity-card" style="border-color: #3498db;">
+<div class="activity-header">
+<h4>🇵🇭 PH — Summer Blitz（暑假狂歡）</h4>
+<span class="tag tag-info">4/7–4/20 | 14天</span>
+</div>
+
+<p><strong>設計邏輯：</strong>PH 是 DAU 基數最大市場，4 月暑假啟動是全年最大回流窗口。W14 已見反彈跡象（223 萬），活動要趁勢拉高並鎖住回流玩家。PH 唯一 BR 主導市場（35.8%），但無偏好群留存最高（78.3%），因此以 BR 為主線、MP 為副線，同時設計跨模式任務引導無偏好群。</p>
+<p><strong>目標：</strong>DAU 回升至 200 萬 | 回流 D1 > 45% | D/E 池回流率提升 20%</p>
+
+<table>
+<tr><th style="width:120px;">任務層</th><th>內容</th><th style="width:70px;">Token</th></tr>
+<tr><td><strong>Daily Mission</strong><br>(每日 3 項)</td>
+<td>
+① 登入遊戲<br>
+② BR 完成 2 局（不限名次）<br>
+③ 任意模式擊殺 10 人
+</td><td>1T<br>2T<br>2T<br><strong>=5T/天</strong></td></tr>
+<tr><td><strong>Period Mission</strong><br>(累積里程碑)</td>
+<td>
+BR 累積勝場：5 場(Uncommon 武器 skin) → 10 場(Rare) → 20 場(Epic 角色碎片×3) → 35 場(Epic 武器 skin)
+</td><td>—<br>(直發獎勵)</td></tr>
+<tr><td><strong>Weekly Mission</strong></td>
+<td>
+週累積 BR 3 局 + MP 3 局（跨模式引導）
+</td><td>10T/週</td></tr>
+<tr><td><strong>D/E 池加速器</strong><br>(回流專屬)</td>
+<td>
+7天+ 未登入玩家前 3 天 Daily Token ×2
+</td><td>+5T/天×3天<br>=15T bonus</td></tr>
+<tr style="background:#f0f9ff;"><td><strong>Exchange Store</strong></td>
+<td>
+Epic 武器 skin (30T) | 角色皮膚碎片×5 (20T) | Battle Pass XP 卡 (15T)
+</td><td>核心需求<br><strong>65T</strong></td></tr>
+</table>
+
+<div class="token-warn">
+<strong>Token 經濟驗算</strong><br>
+<table style="margin:0; border:none;">
+<tr><td style="border:none; width:50%;">
+<strong>留存玩家（保守/僅 Daily）</strong><br>
+5T × 14天 = <strong>70T</strong><br>
+Overflow: 70 / 65 = 7.7%<br>
+<span class="num-neg">⚠ 低於 15% 目標</span>
+</td><td style="border:none;">
+<strong>留存玩家（積極/Daily+Weekly）</strong><br>
+5T × 14 + 10T × 2 = <strong>90T</strong><br>
+Overflow: 90 / 65 = 38.5% ✅
+</td></tr>
+<tr><td style="border:none;">
+<strong>回流玩家（保守/Daily+加速）</strong><br>
+10T × 3 + 5T × 11 = <strong>85T</strong><br>
+Overflow: 85 / 65 = 30.8% ✅
+</td><td style="border:none;">
+<strong>建議：</strong>Daily Token 調為 6T 或增加 Period Mission 5T bonus，使保守留存路線 overflow ≥ 15%
+</td></tr>
+</table>
+</div>
+
+<p><strong>獎勵選擇邏輯：</strong></p>
+<p>Daily 以 Token 為主（不直接發 skin）→ 引導進 Exchange Store 自選。Period Mission 用 Uncommon→Epic 遞進激勵長線投入。Exchange Store 放 Epic 級道具作為高價值錨點。D/E 池 ×2 加速讓回流玩家 3 天內多 15T，足以額外兌換一個中價位道具——製造「回來就賺到」的感受。</p>
+</div>
+
+<!-- ID -->
+<div class="activity-card" style="border-color: #27ae60;">
+<div class="activity-header">
+<h4>🇮🇩 ID — Lebaran Warrior（Eid 戰士歸來）</h4>
+<span class="tag tag-ok">4/1–4/10 | 10天</span>
+</div>
+
+<p><strong>設計邏輯：</strong>ID 唯一正成長市場（+6.2%），但成長結構偏弱——A 池 -6.1%、留存 D7 從 60.3% 跌至 57.6%。B-E 池膨脹（+8~13%）代表大量中低頻玩家湧入，需要活動引導向上遷移。MP 偏好 52.5% 為主，BR 24.2% 為輔，雙線並行。10 天短週期高節奏，在 Eid 紅利消退前鎖住新進/回流。</p>
+<p><strong>目標：</strong>維持 DAU ≥ 100K | D1 提升至 74% | C→B 池遷移率 +5%</p>
+
+<table>
+<tr><th style="width:120px;">任務層</th><th>內容</th><th style="width:70px;">Token</th></tr>
+<tr><td><strong>Daily Mission</strong></td>
+<td>① 登入(1T) ② MP 完成 2 局(2T) ③ BR 完成 1 局(2T)</td><td><strong>5T/天</strong></td></tr>
+<tr><td><strong>Period Mission</strong></td><td>累積登入 3/5/7/10 天 → 階梯獎勵</td><td>—（直發）</td></tr>
+<tr><td><strong>Milestone</strong></td><td>擊殺 50(Rare) / 100(Rare+) / 200(Epic) → 用擊殺非勝場，降低休閒門檻</td><td>—（直發）</td></tr>
+<tr style="background:#f0fdf4;"><td><strong>Exchange Store</strong></td>
+<td>Epic 武器 skin(25T) | XP 加倍卡×3(15T) | <strong>印尼語角色語音包(20T)</strong></td><td>核心 <strong>40T</strong></td></tr>
+</table>
+
+<div class="token-check">
+<strong>Token 經濟：</strong>保守 5T × 10 = 50T / 核心需求 40T / overflow 25% ✅<br>
+<strong>獎勵亮點：</strong>印尼語語音包作為在地化獎勵強化歸屬感；Milestone 用擊殺累積（非勝場），對休閒/回流玩家更友善。
+</div>
+</div>
+
+<!-- TH -->
+<div class="activity-card" style="border-color: #e67e22;">
+<div class="activity-header">
+<h4>🇹🇭 TH — Songkran Showdown（潑水節大亂鬥）</h4>
+<span class="tag tag-warn">4/10–4/19 | 10天</span>
+</div>
+
+<p><strong>設計邏輯：</strong>Songkran（4/13-15）是泰國最大假期。TH MP 偏好 53% 為主導，但 A 池玩家 BR 參與率從 40.7→41.2% 微升——核心群 BR 興趣上揚，活動可 MP 為主、BR 為副。DAU 近 3 月穩定在 82K 但缺成長動能，Songkran 是打破僵局的最佳時機。TH 回流 D1 僅 36.3%，需要節日限定任務製造 urgency。</p>
+<p><strong>目標：</strong>DAU 衝上 88K+ | 回流 D1 > 40% | MP 天梯參與率提升</p>
+
+<table>
+<tr><th style="width:120px;">任務層</th><th>內容</th><th style="width:70px;">Token</th></tr>
+<tr><td><strong>Daily Mission</strong></td>
+<td>① 登入(1T) ② MP 完成 3 局(2T) ③ 指定武器擊殺 5 人(2T)</td><td><strong>5T/天</strong></td></tr>
+<tr><td><strong>Period Mission</strong></td><td>MP 天梯積分累積 100/300/600</td><td>—（直發階梯）</td></tr>
+<tr><td><strong>Songkran 限定</strong><br>(僅 4/13-15)</td><td>完成 5 局任意模式 → 節日限定噴漆 + 10T bonus<br><em>3 天限定製造「必須在假期玩」的 urgency</em></td><td><strong>+10T</strong></td></tr>
+<tr style="background:#fff7ed;"><td><strong>Exchange Store</strong></td>
+<td>Songkran 限定角色 skin(30T) | 武器掛飾(15T) | 天梯入場券×5(10T)</td><td>核心 <strong>45T</strong></td></tr>
+</table>
+
+<div class="token-check">
+<strong>Token 經濟：</strong>保守 5T × 10 + 10T(節日) = 60T / 核心 45T / overflow 33% ✅<br>
+<strong>設計重點：</strong>Songkran 限定 skin 30T 定價確保需 6 天以上投入。天梯入場券降低 competitive 門檻。
+</div>
+</div>
+
+<!-- SGMY -->
+<div class="activity-card" style="border-color: #9b59b6;">
+<div class="activity-header">
+<h4>🇸🇬🇲🇾 SGMY — Recon Challenge（偵察挑戰賽）</h4>
+<span class="tag tag-info">4/7–4/18 | 12天</span>
+</div>
+
+<p><strong>設計邏輯：</strong>SGMY WAU 微升（+0.5%），DAU 跌幅可控（-4.5%），但 A 池流失嚴重（-15.6%）。機會在於 S3 新推 DMZ: Recon——DMZ 目前佔比僅 1.7%，但 D1 達 77%（全模式最高），是留存品質最好的模式。SGMY MP 偏好 51%，設計「MP 或 DMZ」二選一門檻引導嘗試新模式但不強制。暗區突圍（Arena Breakout）是 extraction shooter 直接競品，Recon 限定獎勵可形成差異化。</p>
+<p><strong>目標：</strong>穩定 80K DAU | DMZ 參與率從 1.7% 提升至 5%+ | MP 參與率維持</p>
+
+<table>
+<tr><th style="width:120px;">任務層</th><th>內容</th><th style="width:70px;">Token</th></tr>
+<tr><td><strong>Daily Mission</strong></td>
+<td>① 登入(1T) ② MP 或 DMZ 完成 2 局(2T) ③ DMZ: Recon 完成 1 局(2T)</td><td><strong>5T/天</strong></td></tr>
+<tr><td><strong>Period Mission</strong></td><td>DMZ: Recon 累積 3/7/12 局 → 含 Recon 限定裝飾</td><td>—（直發）</td></tr>
+<tr><td><strong>Weekly Mission</strong></td><td>MP 5 局 + DMZ 5 局</td><td><strong>10T/週</strong></td></tr>
+<tr style="background:#faf5ff;"><td><strong>Exchange Store</strong></td>
+<td>Recon 限定武器 skin(25T) | Calling Card(15T) | XP 加倍卡×5(10T)</td><td>核心 <strong>50T</strong></td></tr>
+</table>
+
+<div class="token-check">
+<strong>Token 經濟：</strong>保守 5T × 12 = 60T / 核心 50T / overflow 20% ✅<br>
+<strong>設計重點：</strong>Daily ② 設「MP 或 DMZ」不強制改變習慣；③ DMZ 1 局輕度嘗試門檻。Recon 限定獎勵製造 FOMO。
+</div>
+</div>
+
+<!-- TWHKMO -->
+<div class="activity-card" style="border-color: #c0392b;">
+<div class="activity-header">
+<h4>🇹🇼🇭🇰🇲🇴 TWHKMO — 春回戰場（Spring Comeback）</h4>
+<span class="tag tag-danger">4/3–4/16 | 14天 | 最高優先</span>
+</div>
+
+<p><strong>設計邏輯：</strong>TWHKMO 全分池萎縮（A -33%、D -22%、E -19%），不是遷移問題而是全面流失。MP 強主導（58.1%），但連 MP 參與率也在滑落（50.6→47.5%）。回流 D1 僅 32.3%（全市場最低），代表過去回流策略完全失效。必須雙軌並行：(1) 止血——用 MP 天梯段位綁定降低核心流失；(2) 回流——超額回歸獎勵 + 清明假期窗口。競品威脅：傳說對決 + Delta Force 4/21 新賽季 + 暗區突圍持續分流。</p>
+<p><strong>目標：</strong>止跌回穩 60K DAU | A 池流失率收窄至 < -15% | 回流 D1 > 38%</p>
+
+<table>
+<tr><th style="width:120px;">任務層</th><th>內容</th><th style="width:70px;">Token</th></tr>
+<tr><td><strong>Daily Mission</strong></td>
+<td>① 登入(1T) ② MP 完成 3 局(2T) ③ 天梯 MP 完成 1 局(2T)<br><em>天梯任務推動 competitive 留存——有段位就不想掉</em></td><td><strong>5T/天</strong></td></tr>
+<tr><td><strong>Period Mission</strong></td><td>MP 天梯升段 → 每升 1 段位 10T（上限 3 段 = 30T）</td><td>最高 <strong>30T</strong></td></tr>
+<tr><td><strong>回流專屬路線</strong><br>(7天+ 未登入)</td><td>前 7 天 Daily Token ×2 + 一次性回歸禮包（Epic MP skin）<br><em>超額獎勵製造「回來就賺到」</em></td><td>+5T/天×7<br>= <strong>35T bonus</strong></td></tr>
+<tr style="background:#fef2f2;"><td><strong>Exchange Store</strong></td>
+<td>Epic 角色 skin(35T) | MP 天梯專屬框(20T) | 戰令 XP 卡(10T)</td><td>核心 <strong>55T</strong></td></tr>
+</table>
+
+<div class="token-check">
+<strong>Token 經濟驗算</strong><br>
+<table style="margin:0; border:none;">
+<tr><td style="border:none; width:50%;">
+<strong>留存玩家（保守/Daily only）</strong><br>
+5T × 14 = 70T → overflow 27% ✅<br>
+<strong>留存玩家（積極/Daily+Period）</strong><br>
+70 + 30 = 100T → overflow 82%
+</td><td style="border:none;">
+<strong>回流玩家</strong><br>
+10T × 7 + 5T × 7 = 105T + 回歸禮包<br>
+overflow 91% → 豐厚感拉回流意願<br>
+<em>刻意高於留存路線，「回歸者紅利」</em>
+</td></tr>
+</table>
+</div>
+</div>
+
+<hr>
+
+<!-- ===== PART 5 ===== -->
+<h1 id="part5">Part 5：社群推廣排程與文案</h1>
+
+<h3>5.1 排程設計邏輯</h3>
+<p>排程基於三個原則：(1) 預熱→上線→攻略→互動→倒數的節奏，每階段有明確目的；(2) 配合各市場節日時點（清明、Songkran、Eid 後）；(3) 避開競品高峰——MLBB Naruto 3/27 起、Delta Force Eclipse Vigil 4/21，CODM 活動主要曝光需在 4/7-18 完成。</p>
+
+<table>
+<tr><th>日期</th><th>階段</th><th>平台</th><th>市場</th><th>內容</th><th>目的</th></tr>
+<tr><td>4/1 (Tue)</td><td>上線</td><td>FB + IG</td><td>ID</td><td>Lebaran Warrior 活動公告</td><td>搶佔 Eid 後第一波注意力</td></tr>
+<tr><td>4/3 (Thu)</td><td>預熱</td><td>FB + IG Story</td><td>PH</td><td>暑假倒數 + S3 精華 gameplay clip</td><td>以 S3 Paranoia 新內容製造期待</td></tr>
+<tr><td>4/3 (Thu)</td><td>上線</td><td>FB + YT</td><td>TWHKMO</td><td>「春回戰場」活動公告 + 回歸禮包揭露</td><td>清明假期前一天曝光，趁假期拉回流</td></tr>
+<tr><td>4/5 (Sat)</td><td>攻略</td><td>FB + TikTok</td><td>ID</td><td>「5 天內拿齊 Epic 獎勵」路線圖</td><td>降低決策成本，推動行動</td></tr>
+<tr><td>4/6 (Sun)</td><td>公告</td><td>FB + Twitter</td><td>PH, SGMY</td><td>Summer Blitz / Recon Challenge 正式公告</td><td>48 小時預告建立期待</td></tr>
+<tr><td>4/7 (Mon)</td><td>上線</td><td>全平台</td><td>PH, SGMY, TWHKMO</td><td>活動上線日：活動指南 infographic</td><td>啟動日最大曝光</td></tr>
+<tr><td>4/9 (Wed)</td><td>攻略</td><td>FB + YT Short</td><td>PH</td><td>「回流玩家 3 天 Double Token 怎麼花最划算」</td><td>針對回流群精準觸達，降低回歸心理門檻</td></tr>
+<tr><td>4/10 (Thu)</td><td>上線</td><td>全平台</td><td>TH</td><td>Songkran Showdown 活動公告</td><td>Songkran 前 3 天預熱</td></tr>
+<tr><td>4/13 (Sun)</td><td>節日</td><td>FB + IG Reel + TikTok</td><td>TH</td><td>Songkran 限定任務上線！節日氛圍 short video</td><td>利用假期高活躍度推送，Reel/TikTok 傳播力強</td></tr>
+<tr><td>4/14 (Mon)</td><td>互動</td><td>IG Story Poll + Twitter</td><td>全市場</td><td>「你累積多少 Token 了？」+ 「你最想兌換哪個獎勵？」</td><td>UGC 互動 + 推動觀望者行動</td></tr>
+<tr><td>4/16 (Wed)</td><td>提醒</td><td>FB</td><td>PH, TWHKMO</td><td>活動進度 check：Exchange Store 即將關閉倒數</td><td>Loss aversion — 已賺的 Token 不用就浪費</td></tr>
+<tr><td>4/18 (Fri)</td><td>倒數</td><td>全平台</td><td>SGMY, TH</td><td>最後 2 天！限定獎勵不再回歸</td><td>FOMO 推動最後一波參與</td></tr>
+<tr><td>4/19 (Sat)</td><td>收尾</td><td>FB + IG</td><td>TH</td><td>Songkran Showdown 戰績回顧 + 社群曬圖</td><td>收尾 UGC + 品牌好感</td></tr>
+<tr><td>4/20 (Sun)</td><td>收尾</td><td>FB + IG</td><td>PH</td><td>Summer Blitz 結束：曬出你的 Exchange 戰利品</td><td>UGC + 為下一波活動鋪墊</td></tr>
+</table>
+
+<h3>5.2 文案範本</h3>
+
+<div class="post-card">
+<p><strong>🇵🇭 PH — Summer Blitz 預熱 (4/3) | FB Post</strong></p>
+<p>School's out. Season 3 Paranoia is in. And something BIG is coming. 🎯</p>
+<p>Summer Blitz drops April 7 — 14 days of BR-focused missions, exclusive Epic skins you can't get anywhere else, and an Exchange Store stacked with YOUR picks.</p>
+<p>Balik-loob ka ba? Returning soldiers get DOUBLE tokens for the first 3 days. That's a head start your squad will envy.</p>
+<p>📅 April 7–20 | Tag your MIA squadmate.<br>
+#CODMSummerBlitz #CODMobile #LakasNgLoob</p>
+<p class="meta">文案邏輯：英文為主（PH 遊戲社群主語言），插入 Tagalog 口語（Balik-loob = 回歸、Lakas ng loob = 勇氣）增加 local resonance。「Tag your MIA squadmate」推動社交擴散。核心訊息：回流有 Double Token 紅利。</p>
+</div>
+
+<div class="post-card">
+<p><strong>🇵🇭 PH — 回流玩家攻略 (4/9) | FB + YT Short</strong></p>
+<p>Just got back? Here's how to MAX your Double Tokens in 3 days 👇</p>
+<p>Day 1: Grab Daily + Weekly missions → 15 Tokens<br>
+Day 2-3: Stack BR wins for Period milestones → unlock Uncommon + Rare<br>
+Day 4+: You're already ahead. Exchange Store opens up.</p>
+<p>The math: 85 Tokens in 14 days (returning path) vs 65 needed for the best loot. You'll have plenty to spare. 💰</p>
+<p>Start now 👉 [link]<br>
+#CODMSummerBlitz #ReturningStrong</p>
+<p class="meta">文案邏輯：針對回流玩家的精準攻略，用數字拆解降低「不知從何開始」的心理門檻。Token 經濟透明化增強信任感。</p>
+</div>
+
+<div class="post-card">
+<p><strong>🇹🇭 TH — Songkran Showdown (4/13) | FB + IG Reel（泰文）</strong></p>
+<p>สงกรานต์นี้ สนามรบร้อนกว่าแดด! 💦🔫</p>
+<p>Songkran Showdown เริ่มแล้ว — ทำภารกิจ 3 วันนี้เท่านั้น!</p>
+<p>✅ เล่น 5 แมตช์ → สเปรย์สงกรานต์ลิมิเต็ดเอดิชัน + 10 Token โบนัส<br>
+✅ Exchange Store — Skin สงกรานต์สุดพิเศษ (30 Token)<br>
+✅ ไต่แรงค์ MP → รับ Token เพิ่ม</p>
+<p>3 วันเท่านั้น อย่าปล่อยผ่าน!<br>
+#CODMSongkran #ศึกสงกรานต์ #CODMobile</p>
+<p class="meta">文案邏輯：泰文為主、強調「3 天限定」urgency。「สนามรบร้อนกว่าแดด」（戰場比太陽還熱）呼應 Songkran 潑水節意象。Hashtag 用泰文增加本地搜尋能見度。</p>
+</div>
+
+<div class="post-card">
+<p><strong>🇹🇼🇭🇰🇲🇴 TWHKMO — 春回戰場 (4/3) | FB Post</strong></p>
+<p>清明連假，是重返戰場的最好時機 🎯</p>
+<p>「春回戰場」活動 4/3 開跑——</p>
+<p>🔹 老兵回歸禮：Epic MP skin 直接拿 + 前 7 天 Token 雙倍<br>
+🔹 天梯升段就送 Token — 打越高賺越多<br>
+🔹 Exchange Store：限定角色 skin、天梯專屬框，14 天限時</p>
+<p>去年的段位還在，你的手感呢？</p>
+<p>👉 回來打一場就知道。<br>
+#CODM春回戰場 #重返巔峰 #CODMobile</p>
+<p class="meta">文案邏輯：「去年的段位還在，你的手感呢？」挑動競爭心理，比「歡迎回來」更有行動力。回歸禮包先亮（降低心理門檻），天梯機制後推（hook 留存）。繁中口語風格，不過度正式。</p>
+</div>
+
+<div class="post-card">
+<p><strong>🇮🇩 ID — Lebaran Warrior (4/1) | FB Post（印尼語）</strong></p>
+<p>Lebaran udah, tapi perang baru aja mulai! 🔥⚔️</p>
+<p>Event Lebaran Warrior — 10 hari, misi spesial, hadiah eksklusif:</p>
+<p>✅ Daily Mission: login + main MP + BR = 5 Token/hari<br>
+✅ Milestone Kill: 50 → 100 → 200 eliminasi, dari Rare sampai Epic<br>
+✅ Exchange Store: Epic weapon skin + <strong>voice pack Bahasa Indonesia!</strong></p>
+<p>Yak, sekarang karakter lu bisa ngomong bahasa sendiri. 🗣️🇮🇩</p>
+<p>📅 1–10 April | Langsung masuk!<br>
+#CODMLebaran #LebaranWarrior #CODMobileID</p>
+<p class="meta">文案邏輯：口語化印尼語（"lu" = informal 你）貼近 Gen-Z 玩家語感。voice pack 作為在地化亮點突出——「karakter lu bisa ngomong bahasa sendiri」（你的角色會說自己的語言）製造情感 hook。</p>
+</div>
+
+<div class="post-card">
+<p><strong>🇸🇬🇲🇾 SGMY — Recon Challenge (4/7) | FB Post</strong></p>
+<p>DMZ: Recon just dropped in Season 3. This is your reason to try it. 🕵️</p>
+<p>Recon Challenge | April 7–18</p>
+<p>🔹 Daily: Play MP or DMZ — your choice, your tokens<br>
+🔹 Play DMZ: Recon → unlock exclusive Recon-only skins you can't get any other way<br>
+🔹 Exchange Store: Recon weapon skin, Calling Card, XP boosters</p>
+<p>MP mains: just one DMZ match a day. You might discover something.</p>
+<p>Ready to scout? 👉 [link]<br>
+#CODMReconChallenge #DMZRecon #CODMobileSG</p>
+<p class="meta">文案邏輯：直接對 MP 主力群喊話（「MP mains: just one DMZ match a day」），降低嘗試門檻。「You might discover something」用好奇心而非壓力推動行動。Recon-only exclusivity 製造 FOMO。</p>
+</div>
+
+<hr>
+
+<!-- ===== PART 6 ===== -->
+<h1 id="part6">Part 6：下一步行動</h1>
+
+<table>
+<tr><th>優先序</th><th>行動</th><th>Owner</th><th>Deadline</th></tr>
+<tr><td><span class="tag tag-danger">P0</span></td><td>確認 5 市場活動方案（本文件）</td><td>Jarvis</td><td>4/1</td></tr>
+<tr><td><span class="tag tag-danger">P0</span></td><td>確認後產出 5 份 xlsx 配置表（含 Token 經濟驗算）</td><td>Claude</td><td>確認後 1 天內</td></tr>
+<tr><td><span class="tag tag-warn">P1</span></td><td>社群文案在地化校對（TH 泰文、ID 印尼文由在地 native speaker 確認）</td><td>在地營運</td><td>4/3</td></tr>
+<tr><td><span class="tag tag-warn">P1</span></td><td>獎勵道具 Item ID + Multi-lan ID 填入配置表</td><td>Jarvis / 企劃</td><td>4/4</td></tr>
+<tr><td><span class="tag tag-warn">P1</span></td><td>確認 PH Summer Blitz Token 經濟調整方案（Daily 5→6T 或增加 Period Token）</td><td>Jarvis</td><td>4/2</td></tr>
+<tr><td><span class="tag tag-info">P2</span></td><td>Exchange Store 美術素材準備（各市場 3 項核心道具）</td><td>美術組</td><td>4/5</td></tr>
+<tr><td><span class="tag tag-info">P2</span></td><td>活動 QA checklist 走查（WF-04）</td><td>QA</td><td>4/5</td></tr>
+<tr><td><span class="tag tag-info">P2</span></td><td>SGMY W08 spike 根因確認（是否有 UA campaign 或版本事件）</td><td>Jarvis / UA 團隊</td><td>4/3</td></tr>
+</table>
+
+<hr>
+<p class="meta">
+分析日期：2026-03-31 | 數據截止：2026-03-30<br>
+分析框架：M-02 三步法 × M-07 Issue Tree × M-14 外部因素掃描<br>
+分析維度：業務指標 × 用戶分群（新進/留存/回流）× 遊戲內行為（模式偏好/分池/參與深度）<br>
+競品覆蓋：PUBG Mobile、MLBB、傳說對決、Delta Force、Free Fire、Blood Strike、暗區突圍
+</p>
+
+</body>
+</html>
