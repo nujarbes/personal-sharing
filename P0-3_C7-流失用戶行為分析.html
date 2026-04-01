@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P0-3：C7 流失用戶行為分析 — 2026 年 3 月</title>
+<style>
+body {
+  font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background: #fff;
+  color: #1a1a1a;
+  line-height: 1.75;
+}
+h1 { font-size: 1.6rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; margin-top: 2rem; }
+h2 { font-size: 1.3rem; border-bottom: 1px solid #ccc; padding-bottom: 0.3rem; margin-top: 2rem; }
+h3 { font-size: 1.1rem; margin-top: 1.5rem; }
+blockquote {
+  border-left: 3px solid #bbb;
+  background: #f9f9f9;
+  padding: 0.8rem 1rem;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 0.88rem;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 6px 8px;
+  text-align: left;
+}
+th { background: #f5f5f5; font-weight: 600; }
+tr:nth-child(even) { background: #fafafa; }
+.meta { color: #666; font-size: 0.9rem; }
+.governing-thought {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.8;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  margin: 1rem 0;
+}
+pre {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  background: #f9f9f9;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  overflow-x: auto;
+}
+.warn { color: #c00; }
+.ok { color: #080; }
+.label-fact { font-weight: 600; }
+.label-imp { font-weight: 600; }
+.label-act { font-weight: 600; }
+</style>
+</head>
+<body>
+
+<h1>P0-3：C7 流失用戶行為分析 — 2026 年 3 月</h1>
+
+<p class="meta">
+<strong>報告類型</strong>：異動分析（scenario = 異動分析）<br>
+<strong>觸發來源</strong>：月報 P0——ALL C7 27.4%（+1.3pp MoM），距警報線 29.7% 僅 2.3pp<br>
+<strong>時間範圍</strong>：2026-03-01 ~ 2026-03-31<br>
+<strong>涵蓋市場</strong>：ALL、PH、TWHKMO、TH、ID、SG、MY<br>
+<strong>分析限制</strong>：缺用戶級流失行為數據（最後登入行為 / 最後遊玩模式 / 最後觸達活動），本分析以聚合層面的分池 × 模式 × 市場交叉為主
+</p>
+
+<blockquote>⚠️ <strong>匯總數據解讀注意</strong>：PH DAU 佔全市場 85%。ALL C7 的變化幾乎等同 PH 表現。以下分析以各市場拆分為論述依據，匯總數據僅作總覽。</blockquote>
+
+<h2>外部語境摘要</h2>
+
+<table>
+<tr><th>市場</th><th>3 月 C7 均值</th><th>2 月 C7 均值</th><th>Δ</th><th>月內峰值</th><th>是否超過 30%</th><th>外部語境</th></tr>
+<tr><td>ALL</td><td>27.4%</td><td>26.1%</td><td>+1.3pp</td><td>29.1%（3/23）</td><td>否（距警報 0.6pp）</td><td>—</td></tr>
+<tr><td><strong>PH</strong></td><td>~26.5%</td><td>~25.5%</td><td>+1.0pp</td><td>27.6%</td><td><span class="ok">否，安全</span></td><td>學期末，應穩定</td></tr>
+<tr><td><strong>TWHKMO</strong></td><td>~37.8%</td><td>~37.1%</td><td>+0.8pp</td><td>41.3%（3/1）</td><td><span class="warn">每天都超過 30%</span></td><td>開學回落 + 結構衰退</td></tr>
+<tr><td><strong>TH</strong></td><td>36.6%</td><td>35.5%</td><td>+1.1pp</td><td>38.3%</td><td><span class="warn">每天都超過 30%</span></td><td>暑假應降但反升</td></tr>
+<tr><td><strong>ID</strong></td><td>37.2%</td><td>34.2%</td><td><span class="warn">+2.9pp</span></td><td><span class="warn">40.2%（3/31）</span></td><td><span class="warn">每天都超過 30%，月末加速</span></td><td>Ramadan→Lebaran 結構性變化</td></tr>
+<tr><td><strong>SG</strong></td><td>~34.5%</td><td>~33.2%</td><td>+1.3pp</td><td>37.3%</td><td><span class="warn">每天都超過 30%</span></td><td>正常</td></tr>
+<tr><td><strong>MY</strong></td><td>35.0%</td><td>32.0%</td><td><span class="warn">+3.0pp</span></td><td>39.9%</td><td><span class="warn">每天都超過 30%，加速中</span></td><td>Ramadan + Hari Raya</td></tr>
+</table>
+
+<blockquote><strong>關鍵發現</strong>：只有 PH 的 C7 安全（< 30%）。其他 5 個市場的 C7 <strong>每天都超過 30%</strong>——TWHKMO、TH、ID、SG、MY 的 7 日流失率持續高於警報線。ALL C7 被 PH 的量體拉低，掩蓋了其他市場的嚴重流失。</blockquote>
+
+<h2>Governing Thought</h2>
+<div class="governing-thought">
+ALL C7 27.4% 距警報線 2.3pp 只是表面——拆分市場後發現 5 個非 PH 市場的 C7 已全線超過 30%（每天），被 PH 的量體掩蓋。最危險的是 ID（+2.9pp，月末加速至 40.2%）和 MY（+3.0pp），兩者均與 Ramadan/Lebaran 期間行為結構性變化有關但仍需觀察 4 月是否回落。BR 偏好玩家的 D1 留存降幅最大（-2.1pp），加上 A+B 池全線萎縮，形成「核心玩家降池 → 匹配品質下降 → 中層加速流出」的負循環。4 月需分市場啟動流失干預，而非僅依賴匯總警報線。
+</div>
+
+<h2>分析架構：階層式議題樹</h2>
+
+<pre>
+C7 上升（ALL +1.3pp → 27.4%，距警報線 2.3pp）
+ │
+ ├─ 匯總數據是否反映真實風險？
+ │    └─ ⚠️ 否——PH（85% DAU）安全，但其他 5 市場 C7 已全線 > 30%
+ │         → ALL C7 被 PH 拉低，真實風險被掩蓋
+ │
+ ├─ 哪些市場最危險？
+ │    ├─ ID：+2.9pp → 37.2%，月末加速至 40.2%（W5 均值 39.8%）
+ │    ├─ MY：+3.0pp → 35.0%，月末峰值 39.9%
+ │    ├─ TWHKMO：37.8%（絕對值最高之一，但 Δ 僅 +0.8pp = 已在高位穩定惡化）
+ │    └─ TH：36.6%（暑假語境下應降但反升）
+ │
+ ├─ 什麼類型的玩家在流失？
+ │    ├─ 分池維度：A+B 池 -19.2% / -11.1%，核心玩家離場
+ │    │    → A→B→C 降池，C/D 池承壓後加速流向 E→F→G
+ │    │    → E+F+G 佔比 48.5%（+1.4pp），底部膨脹
+ │    │
+ │    ├─ 模式維度：BR 偏好玩家 D1 降幅最大（-2.1pp）
+ │    │    → BR 玩家佔比從 36.0% 降至 33.5%（-2.5pp）
+ │    │    → 可能被 PUBG JJK / Delta Force 分流
+ │    │
+ │    └─ 留存維度：活躍 R7 60.5%（基準 62.9%，-2.4pp）
+ │         → 7 天內流失比例擴大 = C7 上升的直接原因
+ │
+ └─ 為什麼 C7 在加速？
+      ├─ 內部：A+B 池萎縮 → 匹配品質下降 → 中層體驗劣化 → 加速流出
+      ├─ 外部：PUBG JJK + MLBB Naruto 雙 IP 夾擊（3 月底開始）
+      └─ 結構：非 PH 市場 C7 已常態 > 30%，不是突發而是慢性惡化
+</pre>
+
+<h2>Supporting Argument 1：ALL C7 被 PH 量體掩蓋——5 個市場已全線超過警報線</h2>
+
+<p><span class="label-fact">Fact：</span>ALL C7 27.4% 距警報線 29.7% 尚有 2.3pp 緩衝。但拆分市場：PH C7 ~26.5%（安全），TWHKMO 37.8%、TH 36.6%、ID 37.2%、SG 34.5%、MY 35.0%——5 個市場 3 月每天的 C7 都超過 30%。PH DAU 佔 85%，將 ALL C7 從真實的加權均值拉低了約 7-8pp。</p>
+<p><span class="label-imp">Implication：</span>如果只監控 ALL C7 警報線（29.7%），在 PH 穩定的情況下，其他 5 個市場的流失危機永遠不會觸發全局警報——即使這些市場已經處於「C7 > 35% 的嚴重流失」狀態。<strong>現有的單一全局警報線設計存在結構性盲點。</strong></p>
+<p><span class="label-act">Action：</span>⛔ 建議立即調整監控機制：(1) 新增<strong>各市場獨立 C7 警報線</strong>（基於各市場歷史基準值的 mean + 2σ）；(2) 觸發規則改為「任一市場 C7 超過該市場警報線」即觸發異動分析，不再依賴 ALL 匯總。Owner：活躍組 + 數據，Timeline：4 月第 1 週完成警報線設定。</p>
+
+<h2>Supporting Argument 2：ID C7 月末加速至 40.2% 是最緊急的單一市場風險</h2>
+
+<p><span class="label-fact">Fact：</span>ID 3 月 C7 均值 37.2%（MoM +2.9pp），月內持續加速——W1 均值 ~35%、W3 ~37%、W5 39.8%，3/31 峰值 40.2%。C14 同步惡化。ID 是 3 月唯一 DAU MoM 正成長的市場（+6.2%），但其活躍 R7 僅 52.8%（基準 57.7%，-4.9pp），為所有市場最大降幅。3 月正值 Ramadan 結束 + Lebaran 假期（3/21-24）+ Mudik 返鄉潮。</p>
+<p><span class="label-imp">Implication：</span>ID 的 DAU 正成長和 C7 加速是矛盾但可解釋的：Lebaran 後大量回流用戶（Revival +9.1%）推高了 DAU，但這些用戶是低品質回流（R7 拉低至 52.8%），7 天內大量再流失推高了 C7。Mudik 返鄉潮期間的行為數據可能失真（設備切換、網路劣化）。<strong>關鍵問題：4 月 Ramadan 完全結束後，C7 是否會自然回落？</strong>如果不回落，代表不只是假期效應。</p>
+<p><span class="label-act">Action：</span>4 月第 1 週觀察 ID C7 是否回落至 35% 以下。如果 4/7 前仍 > 37%，確認非假期效應，需啟動 ID 專項流失分析。同步追蹤 3 月 Lebaran 回流用戶的 R7/R14——如果這批回流的 R14 < 10%，代表回流品質極差，需重新評估 ID 的回流策略。Owner：活躍組 + 數據，Timeline：4/7 為判斷節點。</p>
+
+<h2>Supporting Argument 3：BR 偏好玩家流失最快——競品 IP 聯名的直接影響</h2>
+
+<p><span class="label-fact">Fact：</span>跨市場 BR 偏好玩家 D1 留存降幅最大：ALL -2.1pp（76.6% → 74.5%），PH -2.1pp，ID -2.3pp。BR 玩家佔比從 36.0% 降至 33.5%（-2.5pp），代表 BR 玩家正在離開。同期 PUBG Mobile JJK 聯名（3/13 起）同為 BR 品類直接競爭。MP 留存相對穩定（ALL -0.6pp），但 TWHKMO 的 MP D1 崩潰 -11.3pp 是例外。</p>
+<p><span class="label-imp">Implication：</span>BR 玩家的流失與 PUBG JJK 的時間高度吻合。BR 群是對 IP 聯名最敏感的族群——同品類的高品質 IP 活動會直接拉走 BR 核心玩家。C7 上升中的 BR 貢獻度可能高於其佔比——BR 玩家通常是 A/B 池的主力（A 池 BR% 68.0%），他們的流失同時壓低了 A 池人數和整體匹配品質。</p>
+<p><span class="label-act">Action：</span>設計針對 BR 玩家的留池機制：(1) 4 月排位賽季獎勵加強（段位獎勵升級，避免 BR 玩家轉場 PUBG）；(2) 追蹤 BR 偏好 × A 池交叉的人數趨勢，確認 BR 流失是否是 A 池萎縮的主要驅動力。Owner：活躍組，Timeline：4 月第 1 週。</p>
+
+<h2>Supporting Argument 4：A+B 池萎縮 → C7 上升的因果鏈——負循環已啟動</h2>
+
+<p><span class="label-fact">Fact：</span>A 池 MoM -19.2%（699K → 565K），B 池 -11.1%（591K → 526K）。D 池持平（1,837K），E+F+G 佔比從 47.1% 升至 48.5%。A 池日均遊戲 119 分鐘、日均 12.8 局，是維持匹配品質的核心。A 池 BR 偏好 68%——A 池流失 = BR 匹配池縮小。</p>
+<p><span class="label-imp">Implication：</span>因果鏈已形成：<strong>A/B 池玩家流失 → BR/MP 匹配池縮小 → 匹配等待時長增加 + Bot 比例上升 → 中層玩家（C/D 池）體驗劣化 → C/D 池加速流向 E/F/G → C7 上升</strong>。這是一個自我強化的負循環——人越少、體驗越差、走得越快。D 池持平但未升池代表升池動力已不足以對抗降池壓力。</p>
+<p><span class="label-act">Action：</span>打斷負循環的關鍵是穩住 A/B 池人數。月報已建議的 7 天連續登入遞進獎勵需加速上線（原定 4 月第 2 週，建議提前至第 1 週）。同時評估匹配演算法是否可針對低人口市場優化（如 TWHKMO/TH 的跨池匹配）。Owner：活躍組 + 產品，Timeline：4 月第 1 週。</p>
+
+<h2>C7 風險分級與市場行動矩陣</h2>
+
+<table>
+<tr><th>市場</th><th>C7 風險等級</th><th>趨勢</th><th>主要驅動因素</th><th>4 月預期</th><th>優先行動</th></tr>
+<tr><td><strong>ID</strong></td><td style="color:#c00"><strong>極高</strong></td><td>加速中（W5 39.8%）</td><td>Lebaran 低品質回流 + 結構性</td><td>⚠️ 需觀察是否回落</td><td>4/7 前判斷：回落→監控；未回落→專項分析</td></tr>
+<tr><td><strong>MY</strong></td><td style="color:#c00"><strong>高</strong></td><td>加速中（+3.0pp）</td><td>Hari Raya + Delta Force 分流</td><td>⚠️ 假期結束應改善</td><td>追蹤 Hari Raya 後是否回落</td></tr>
+<tr><td><strong>TWHKMO</strong></td><td style="color:#c00"><strong>高</strong></td><td>高位穩定（37.8%）</td><td>結構性衰退（見 P0-1 報告）</td><td>清明連假或有短暫改善</td><td>併入 P0-1 異動分析處理</td></tr>
+<tr><td><strong>TH</strong></td><td style="color:#c00"><strong>高</strong></td><td>穩定偏高（36.6%）</td><td>暑假紅利失效（見 P0-2 報告）</td><td>暑假持續，但 PUBG JJK 仍在</td><td>併入 P0-2 暑假分析處理</td></tr>
+<tr><td><strong>SG</strong></td><td style="color:#e80">中高</td><td>穩定（+1.3pp）</td><td>市場小 + Delta Force 分流</td><td>→ 持平</td><td>監控，關注 Delta Force 動態</td></tr>
+<tr><td><strong>PH</strong></td><td style="color:#080">正常</td><td>穩定（~26.5%）</td><td>基本盤穩固</td><td>暑假 4/1 起，預期改善</td><td>維持現狀，D1 +5pp 窗口善加利用</td></tr>
+</table>
+
+<h2>建議：調整 C7 監控機制</h2>
+
+<p>現有全局警報線（ALL C7 > 29.7%）的設計有結構性盲點。建議調整為：</p>
+
+<table>
+<tr><th>層級</th><th>當前機制</th><th>建議機制</th></tr>
+<tr><td>全局</td><td>ALL C7 > 29.7% 觸發警報</td><td>保留，但降為輔助指標</td></tr>
+<tr><td><strong>市場級（新增）</strong></td><td>無</td><td><strong>各市場獨立警報線</strong>（基於該市場 mean + 2σ）。任一市場觸發即啟動異動分析</td></tr>
+<tr><td><strong>分池級（新增）</strong></td><td>無</td><td>追蹤 C/D 池的 C7——這是負循環的樞紐層。C/D 池 C7 上升代表降池壓力正在傳導</td></tr>
+</table>
+
+<blockquote>市場級警報線的具體數值需由數據團隊基於各市場歷史 C7 計算 mean ± 2σ。初步估算：PH ~29%、TWHKMO ~42%、TH ~39%、ID ~40%、SG ~37%、MY ~38%。</blockquote>
+
+<h2>Next Steps</h2>
+
+<table>
+<tr><th>優先序</th><th>行動項目</th><th>Owner</th><th>Timeline</th></tr>
+<tr><td><strong>P0</strong></td><td>4/7 前判斷 ID C7 是否回落至 35% 以下——如未回落，啟動 ID 專項流失分析</td><td>活躍組 + 數據</td><td>4/7 為判斷節點</td></tr>
+<tr><td><strong>P0</strong></td><td>A/B 池留池活動提前至 4 月第 1 週上線（原定第 2 週），打斷負循環</td><td>活躍組</td><td>本週內</td></tr>
+<tr><td><strong>P0</strong></td><td>建立各市場獨立 C7 警報線，替代單一全局警報</td><td>活躍組 + 數據</td><td>4 月第 1 週</td></tr>
+<tr><td><strong>P1</strong></td><td>追蹤 Lebaran 回流用戶（ID）R7/R14，評估回流品質</td><td>數據</td><td>4 月第 1 週</td></tr>
+<tr><td><strong>P1</strong></td><td>BR 偏好 × A 池交叉人數趨勢分析——確認 BR 流失是否驅動 A 池萎縮</td><td>數據</td><td>4 月第 1 週</td></tr>
+<tr><td>P2</td><td>評估低人口市場（TWHKMO/TH）匹配演算法優化可行性</td><td>活躍組 + 產品</td><td>4 月第 2 週</td></tr>
+</table>
+
+</body>
+</html>
