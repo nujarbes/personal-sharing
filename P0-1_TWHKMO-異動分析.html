@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P0-1：TWHKMO 專項異動分析 — 2026 年 3 月</title>
+<style>
+body {
+  font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background: #fff;
+  color: #1a1a1a;
+  line-height: 1.75;
+}
+h1 { font-size: 1.6rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; margin-top: 2rem; }
+h2 { font-size: 1.3rem; border-bottom: 1px solid #ccc; padding-bottom: 0.3rem; margin-top: 2rem; }
+h3 { font-size: 1.1rem; margin-top: 1.5rem; }
+blockquote {
+  border-left: 3px solid #bbb;
+  background: #f9f9f9;
+  padding: 0.8rem 1rem;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 0.88rem;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 6px 8px;
+  text-align: left;
+}
+th { background: #f5f5f5; font-weight: 600; }
+tr:nth-child(even) { background: #fafafa; }
+.meta { color: #666; font-size: 0.9rem; }
+.governing-thought {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.8;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  margin: 1rem 0;
+}
+pre {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  background: #f9f9f9;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  overflow-x: auto;
+}
+.warn { color: #c00; }
+.ok { color: #080; }
+.label-fact { font-weight: 600; }
+.label-imp { font-weight: 600; }
+.label-act { font-weight: 600; }
+</style>
+</head>
+<body>
+
+<h1>P0-1：TWHKMO 專項異動分析 — 2026 年 3 月</h1>
+
+<p class="meta">
+<strong>報告類型</strong>：異動分析（scenario = 異動分析）<br>
+<strong>觸發來源</strong>：月報 P0 行動項——TWHKMO YoY -43.2%，超出季節性解釋範圍<br>
+<strong>時間範圍</strong>：2026-03-01 ~ 2026-03-31<br>
+<strong>對標基準</strong>：2026 年 2 月（MoM）、2025 年 3 月（YoY）<br>
+<strong>分析限制</strong>：缺 UA 投放量與花費數據、缺傳說對決/Delta Force 用戶重疊數據
+</p>
+
+<h2>外部語境摘要</h2>
+
+<table>
+<tr><th>因素</th><th>事件</th><th>日期</th><th>影響方向</th><th>相關性判斷</th></tr>
+<tr><td>學校日曆</td><td>寒假 + CNY 雙紅利結束；2 月中開學，3 月為正常上課月</td><td>3 月全月</td><td>DAU ↓（預期 -10~-20%）</td><td>直接相關（解釋 MoM 約一半）</td></tr>
+<tr><td>競品：傳說對決</td><td>聖經章節活動、千度火鍋聯名、GCS 春季賽進行中、EWC 2026 跨 IP 宣布</td><td>3 月全月</td><td>DAU ↓ 分流</td><td><span class="warn">可能相關——持續的活動密度搶走 MOBA/MP 群注意力</span></td></tr>
+<tr><td>競品：Delta Force</td><td><strong>新幹員「蝴蝶」上線、免費皮膚活動、Doritos 聯名、匹配系統優化</strong></td><td>3 月全月</td><td>DAU ↓ 分流</td><td><span class="warn">高度相關——同 Garena 生態系 FPS，攻擊性推廣搶奪 FPS 群</span></td></tr>
+<tr><td>CODM 版本</td><td>S2 → S3「Paranoia」賽季轉換（3/18）；冬季錦標賽 3/7 結束</td><td>3/7, 3/18</td><td>3/7-3/18 為空窗期</td><td>部分相關——賽季空窗加劇流失</td></tr>
+<tr><td>市場結構</td><td>TW UA 成本 YoY +12%、創意素材密度全球最高（122 素材/廣告主/月）</td><td>長期趨勢</td><td>獲客成本升高</td><td>結構性因素</td></tr>
+</table>
+
+<blockquote><strong>語境結論</strong>：外部因素「部分相關」——開學季回落解釋 MoM -19.7% 中的約 -10~-15%，但 <strong>YoY -43.2% 無法用季節性解釋</strong>（去年 3 月同為開學月，DAU 仍有 10.2 萬）。Delta Force 在 Garena 同生態系的攻擊性推廣 + 傳說對決持續活動密度是外部壓力的主因。</blockquote>
+
+<h2>Governing Thought</h2>
+<div class="governing-thought">
+TWHKMO 3 月 YoY -43.2% 的衰退中，季節性（開學回落）僅能解釋約 1/3（~-15pp），剩餘 2/3（~-28pp）是結構性衰退——直接證據是三重斷裂：(1) NU MoM -38.6% 代表獲客斷流；(2) MP D1 留存 -11.3pp 代表核心體驗流失；(3) A 池 -33% 代表硬核玩家加速離場。Delta Force 同生態系的攻擊性推廣是外部催化劑，但內部問題（版本空窗 + MP 體驗劣化）才是主因。清明連假（4/4-6）是 Q2 首個回升窗口，需在此之前完成介入方案。
+</div>
+
+<h2>分析架構：階層式議題樹</h2>
+
+<pre>
+TWHKMO YoY -43.2%（DAU 57.7K vs 去年 101.5K）
+ │
+ ├─ 季節性 vs 結構性拆解
+ │    ├─ 季節性（~-15pp）：開學回落，去年 3 月也有類似模式
+ │    └─ 結構性（~-28pp）：去年同月 DAU 101.5K → 今年 57.7K
+ │
+ ├─ 獲客端：NU MoM -38.6%（879 人/日 vs 1,432）
+ │    ├─ UA 投放：數據缺失，但 TW UA 成本 +12% YoY
+ │    └─ 自然流量：市場注意力被 Delta Force / 傳說對決分走
+ │
+ ├─ 留存端：MP D1 -11.3pp（70.6% → 59.3%）
+ │    ├─ 版本空窗：S2→S3 賽季轉換（3/7 冬賽結束 → 3/18 S3 上線）
+ │    ├─ 競品分流：Delta Force 新幹員 + 匹配優化直接對標 FPS 群
+ │    └─ BR D1 -4.8pp（相對較小，TWHKMO 本就以 MP 為主 58.1%）
+ │
+ ├─ 核心流失：A 池 -33%（16,506 → 11,122）
+ │    ├─ 硬核玩家日均在線 188 分 → 遊戲時長未顯著下降，但人數驟減
+ │    └─ E+F+G 佔比 57.7%（底部膨脹）
+ │
+ └─ 結論：內部問題（版本空窗 + MP 體驗）為主因，競品分流為催化劑
+</pre>
+
+<h2>Supporting Argument 1：季節性僅解釋約 1/3 衰退，YoY 缺口確認結構性問題</h2>
+
+<p><span class="label-fact">Fact：</span>TWHKMO 3 月日均 DAU 57,674，MoM -19.7%（2 月 71,860），YoY -43.2%（去年 3 月 101,513）。MoM -19.7% 在開學回落的預期範圍邊緣（-10~-20%）。但去年 3 月同樣是開學月，DAU 仍有 10.2 萬——今年 5.8 萬，YoY 缺口達 4.4 萬人/日。週內趨勢：W10 58,692 → W14 52,854，月內持續下行。</p>
+<p><span class="label-imp">Implication：</span>如果衰退純為季節性，YoY 應趨近持平（去年同月也是開學月）。YoY -43.2% 中，假設開學季回落貢獻約 -15pp（基於 MoM 與去年同期 MoM 的差異估算），則剩餘 ~-28pp 為結構性衰退。這意味著 TWHKMO 在過去一年流失了接近一半的基本盤，且非單一事件所致——是持續 12 個月的漸進衰退。</p>
+<p><span class="label-act">Action：</span>拉取 TWHKMO 過去 12 個月的月均 DAU 趨勢，確認衰退是線性還是加速。如果是加速（近 3 個月斜率變陡），需立即介入；如果是線性，代表是長期結構問題，需中期策略。Owner：活躍組 + 數據，Timeline：本週內。</p>
+
+<h2>Supporting Argument 2：NU 斷流是量體衰退的直接推手——獲客幾近停止</h2>
+
+<p><span class="label-fact">Fact：</span>3 月日均 NU 僅 879 人（MoM -38.6%，2 月 1,432），去年 3 月為 1,489。新進 R2 約 40.3%（基準 41.6%，略低但非崩潰）。週末 R2 更低（28-31%），平日約 39-45%。無 14 天以上留存數據可供判斷長期品質。</p>
+<p><span class="label-imp">Implication：</span>NU -38.6% 不是留存品質的問題（R2 僅略低），而是<strong>量的斷崖式下降</strong>。兩個可能原因：(1) UA 投放縮量/停投——TW UA 成本 YoY +12%，ROI 下降可能導致預算削減；(2) 自然流量被競品截取——Delta Force 3 月攻擊性推廣（免費皮膚 + Doritos 聯名）可能搶走 App Store/Google Play 的 FPS 類搜尋流量。日均 879 人的新進量無法支撐任何回升——即使留存率完美，也無法對抗現有用戶的自然流失。</p>
+<p><span class="label-act">Action：</span>⛔ <strong>緊急確認 UA 現狀</strong>：(1) 3 月 TWHKMO UA 投放量/花費是否有縮減？(2) 與 UA 團隊確認 4 月清明連假前是否有投放計畫。如果 UA 已停投，需立即評估恢復投放的 ROI。Owner：活躍組 + UA，Timeline：本週內。</p>
+
+<h2>Supporting Argument 3：MP D1 留存崩潰是行為面的核心證據——體驗端出了問題</h2>
+
+<p><span class="label-fact">Fact：</span>TWHKMO 以 MP 為主（58.1% 玩家偏好 MP），MP D1 留存從 2 月 70.6% 暴跌至 3 月 59.3%（-11.3pp）。無偏好玩家 D1 同步崩潰 -12.7pp（74.6% → 61.9%）。BR D1 亦降但幅度較小（-4.8pp）。去年 3 月 MP D1 為 72.3%，今年 59.3% 代表 YoY 也惡化了 -13pp。週內趨勢：MP D1 全月無明顯回升，非短期事件所致。</p>
+<p><span class="label-imp">Implication：</span>MP D1 -11.3pp 是「體驗端出問題」的直接證據——如果只是競品分流，應看到玩家人數減少但留下來的人留存率不變。留存率本身暴跌代表<strong>玩的人也留不住</strong>，可能原因：(1) S2→S3 賽季轉換期間 MP 匹配品質下降（Bot 比例升高、匹配等待時長增加）；(2) 3/7 冬賽結束至 3/18 S3 上線之間 11 天的版本空窗；(3) 傳說對決 GCS 春季賽持續中搶走了 MOBA/MP 競技群的注意力。</p>
+<p><span class="label-act">Action：</span>排查 3 月 TWHKMO MP 匹配品質數據：(1) 平均匹配等待時長 MoM 變化；(2) Bot 比例 MoM 變化；(3) 高段位（大師以上）匹配池縮小程度。如果匹配品質惡化得到驗證，代表「人少 → 匹配差 → 更多人走」的負循環已啟動。Owner：活躍組 + 產品，Timeline：本週內。</p>
+
+<h2>Supporting Argument 4：A 池 -33% 代表硬核玩家加速離場，6 個月內 DAU 可能跌破 3 萬</h2>
+
+<p><span class="label-fact">Fact：</span>月固定分池 A 池從 2 月 16,506 人降至 3 月 11,122 人（-33%），A+B 佔比從 11.2% 降至 10.1%（-1.1pp）。E+F+G 佔比升至 57.7%（2 月 55.7%，+2.0pp），總活躍人數從 28.5 萬降至 23.1 萬（-19.1%）。A 池玩家日均在線 188 分鐘、日均遊戲 119 分鐘，是遊戲生態的核心支柱。A30 僅 25.6 萬且持續收縮。</p>
+<p><span class="label-imp">Implication：</span>A 池 -33% 遠超 DAU -19.7% 的降幅，代表核心玩家的流失速度快於整體——「先走的是最投入的人」。結合 MP D1 崩潰，高段位 MP 玩家正在離開，直接惡化匹配池品質。趨勢外推：如果 A 池每月再降 20%，3 個月後 A 池將僅剩 ~5,700 人，不足以維持健康的競技匹配。A30 若繼續收縮，6 個月內 DAU 可能跌破 3 萬。</p>
+<p><span class="label-act">Action：</span>清明連假（4/4-6）是 Q2 首個回升窗口。建議：(1) 清明連假前 3 天啟動 TWHKMO 專屬回歸活動（定向推播 30 天內流失的 A/B 池玩家）；(2) 連假期間上線 7 天連續登入遞進獎勵；(3) 4 月第 2 週評估效果。目標：4 月 A 池降幅收窄至 -10% 以內。Owner：活躍組，Timeline：4/2 前完成方案，4/4 上線。</p>
+
+<h2>根因假設樹（MECE）</h2>
+
+<table>
+<tr><th>假設</th><th>方向</th><th>可驗證指標</th><th>當前判斷</th><th>驗證狀態</th></tr>
+<tr><td><strong>H1：UA 投放縮量/停投</strong></td><td>內部</td><td>3 月 TWHKMO UA 花費、曝光量、安裝量</td><td>NU -38.6% 強烈暗示 UA 縮量</td><td><span class="warn">⚠️ 待驗證（缺 UA 數據）</span></td></tr>
+<tr><td><strong>H2：MP 體驗劣化（匹配品質/版本空窗）</strong></td><td>內部</td><td>MP 匹配等待時長、Bot 比例、高段位匹配池</td><td>MP D1 -11.3pp 強烈暗示體驗問題</td><td><span class="warn">⚠️ 待驗證（缺匹配品質數據）</span></td></tr>
+<tr><td><strong>H3：Delta Force 同生態系搶奪 FPS 群</strong></td><td>外部</td><td>Delta Force TW DAU/下載量、CODM vs DF 用戶重疊</td><td>3 月攻擊性推廣得到驗證</td><td>✅ 已確認活動存在，影響程度待量化</td></tr>
+<tr><td><strong>H4：傳說對決搶走 MP 競技群注意力</strong></td><td>外部</td><td>AOV TW 3 月活躍度、GCS 觀看數</td><td>GCS + EWC 宣布確認活動密度高</td><td>✅ 已確認活動存在，影響程度待量化</td></tr>
+<tr><td><strong>H5：自然生命週期衰退</strong></td><td>結構性</td><td>過去 12 個月 DAU 月均趨勢斜率</td><td>YoY -43.2% 暗示長期趨勢</td><td><span class="warn">⚠️ 需拉取 12 個月趨勢確認</span></td></tr>
+</table>
+
+<blockquote><strong>判斷：</strong>H1（UA 縮量）和 H2（MP 體驗）為最高可能性的內部因素，H3（Delta Force）為外部催化劑。H5（自然衰退）是背景因素但不解釋 3 月的加速。優先驗證 H1 和 H2。</blockquote>
+
+<h2>Next Steps</h2>
+
+<table>
+<tr><th>優先序</th><th>行動項目</th><th>Owner</th><th>Timeline</th></tr>
+<tr><td><strong>P0</strong></td><td>確認 3 月 UA 投放現狀（花費、曝光量、安裝量）——NU -38.6% 需要解釋</td><td>活躍組 + UA</td><td>本週內</td></tr>
+<tr><td><strong>P0</strong></td><td>排查 MP 匹配品質（等待時長、Bot 比例、高段位匹配池）——MP D1 -11.3pp 需要解釋</td><td>活躍組 + 產品</td><td>本週內</td></tr>
+<tr><td><strong>P0</strong></td><td>清明連假（4/4-6）回歸活動方案：定向推播 A/B 池流失玩家 + 7 天連續登入獎勵</td><td>活躍組</td><td>4/2 前完成方案</td></tr>
+<tr><td><strong>P1</strong></td><td>拉取 12 個月 TWHKMO 月均 DAU 趨勢，確認衰退是線性還是加速</td><td>數據</td><td>4 月第 1 週</td></tr>
+<tr><td><strong>P1</strong></td><td>評估 Delta Force 用戶重疊度——是否搶走了 CODM FPS 群</td><td>活躍組 + UA</td><td>4 月第 1 週</td></tr>
+<tr><td>P2</td><td>中期策略：如 H5（自然衰退）確認，評估 TWHKMO 是否需要重新定位產品方向</td><td>活躍組 + 產品</td><td>4 月第 2 週</td></tr>
+</table>
+
+</body>
+</html>
