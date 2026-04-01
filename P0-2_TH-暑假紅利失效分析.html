@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P0-2：TH 暑假紅利失效分析 — 2026 年 3 月</title>
+<style>
+body {
+  font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background: #fff;
+  color: #1a1a1a;
+  line-height: 1.75;
+}
+h1 { font-size: 1.6rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; margin-top: 2rem; }
+h2 { font-size: 1.3rem; border-bottom: 1px solid #ccc; padding-bottom: 0.3rem; margin-top: 2rem; }
+h3 { font-size: 1.1rem; margin-top: 1.5rem; }
+blockquote {
+  border-left: 3px solid #bbb;
+  background: #f9f9f9;
+  padding: 0.8rem 1rem;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 0.88rem;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 6px 8px;
+  text-align: left;
+}
+th { background: #f5f5f5; font-weight: 600; }
+tr:nth-child(even) { background: #fafafa; }
+.meta { color: #666; font-size: 0.9rem; }
+.governing-thought {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.8;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  margin: 1rem 0;
+}
+pre {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  background: #f9f9f9;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  overflow-x: auto;
+}
+.warn { color: #c00; }
+.ok { color: #080; }
+.label-fact { font-weight: 600; }
+.label-imp { font-weight: 600; }
+.label-act { font-weight: 600; }
+</style>
+</head>
+<body>
+
+<h1>P0-2：TH 暑假紅利失效分析 — 2026 年 3 月</h1>
+
+<p class="meta">
+<strong>報告類型</strong>：異動分析（scenario = 異動分析）<br>
+<strong>觸發來源</strong>：月報 P0——⚠️ 語境反面訊號：TH 暑假已開始，但 DAU MoM -1.4%（預期 +15-30%）<br>
+<strong>時間範圍</strong>：2026-03-01 ~ 2026-03-31<br>
+<strong>對標基準</strong>：2026 年 2 月（MoM）、2025 年 3-5 月（YoY + 暑假歷史）<br>
+<strong>分析限制</strong>：缺活動參與率數據、缺 PUBG Mobile TH 市場 DAU 對標數據
+</p>
+
+<h2>外部語境摘要</h2>
+
+<table>
+<tr><th>因素</th><th>事件</th><th>日期</th><th>預期影響</th><th>實際 vs 預期</th></tr>
+<tr><td><strong>學校日曆</strong></td><td><strong>暑假（ปิดเทอมฤดูร้อน）3 月中開始</strong>，持續至 5 月初</td><td>~3/15 - 5/5</td><td><strong>↑ 強升（+15-30%）</strong></td><td><span class="warn">⚠️ 嚴重未如預期：MoM -1.4%</span></td></tr>
+<tr><td>競品：PUBG Mobile</td><td><strong>x 呪術迴戰（JJK）IP 聯名 + 八週年</strong>：免費 Todo 皮膚、超自然主題活動、Mythic Forge</td><td><strong>3/13 - 4/12</strong></td><td>↓ 大幅分流</td><td><span class="warn">⚠️ 高度相關——動漫 IP 在 TH 影響力極強</span></td></tr>
+<tr><td>CODM 版本</td><td>S3「Paranoia」3/18 上線：Pop Team Epic + NieR:Automata 回歸聯名</td><td>3/18</td><td>→ 持平</td><td><span class="warn">IP 文化共鳴力遠弱於 JJK</span></td></tr>
+<tr><td>競品：Delta Force</td><td>Garena 代理，活躍運營中（Season 8，2/3 上線）</td><td>3 月全月</td><td>↓ 分流（FPS 群）</td><td>中等相關</td></tr>
+<tr><td>市場特性</td><td>TH 為 SEA 第二大遊戲市場、49% 付費滲透率、KOL 直播驅動</td><td>結構性</td><td>玩家注意力易被導向高話題 IP 聯名</td><td>背景因素</td></tr>
+</table>
+
+<blockquote><strong>⚠️ 語境反面訊號</strong>：外部語境預期為「↑強升」但實際 MoM 為負。根據 WF-02 異常偵測規則，此為「語境反面訊號」——自動升級，代表<strong>內部問題已壓過外部利好</strong>。</blockquote>
+
+<h2>Governing Thought</h2>
+<div class="governing-thought">
+TH 暑假紅利失效的根因是「注意力被截流」——PUBG Mobile 3/13 上線的 JJK 聯名精準卡位暑假開始時間，以 TH 高度偏好的動漫 IP 搶走了暑假釋放的增量遊戲時間；而 CODM S3 的 Pop Team Epic + NieR 回歸在 TH 文化共鳴度遠低於 JJK，無法搶回注意力。暑假窗口仍有 2 個月（至 5 月初），需以 TH 文化偏好的 IP/活動搶回暑假後段紅利。
+</div>
+
+<h2>分析架構：階層式議題樹</h2>
+
+<pre>
+TH 暑假紅利失效：DAU MoM -1.4%（預期 +15-30%）
+ │
+ ├─ 暑假真的開始了嗎？
+ │    └─ ✅ 是：泰國公立學校 3 月中結束學期，暑假覆蓋至 5 月初
+ │
+ ├─ 去年暑假有紅利嗎？
+ │    └─ 部分：2025 年 3 月 DAU 142.6K → 4 月 139.0K → 5 月 132.6K
+ │         → 去年也沒有顯著升幅，但至少「持平」而非下滑
+ │         → YoY -41.3% 確認是長期結構衰退，非僅暑假問題
+ │
+ ├─ 為什麼增量時間沒進 CODM？
+ │    ├─ PUBG JJK 聯名（3/13）精準卡位暑假開始
+ │    │    → JJK 在 TH 文化滲透率極高（動漫 IP 偏好 #1 tier）
+ │    │    → 免費 Todo 皮膚降低了參與門檻
+ │    │    → 同為射擊+BR 品類，直接競爭 TH 的 BR 群（21.5%）
+ │    │
+ │    ├─ CODM S3 IP 共鳴度不足
+ │    │    → Pop Team Epic：日系小眾搞笑 IP，TH 知名度有限
+ │    │    → NieR:Automata：回歸活動（非首次），吸引力遞減
+ │    │    → 上線日期 3/18，比 PUBG JJK 晚 5 天，已錯失先機
+ │    │
+ │    └─ Delta Force 同生態系分流（中等影響）
+ │
+ ├─ 數據佐證
+ │    ├─ DAU 週內持平（82-86K），無月內崩潰 → 不是單一事件造成
+ │    ├─ 各模式 D1 僅持平（暑假語境下應提升）
+ │    ├─ 新進 R2 43.0% vs 去年 47.8%（YoY -4.8pp）→ 新進品質下降
+ │    ├─ 活躍 R7 54.1% vs 去年 57.2%（YoY -3.1pp）→ 活躍留存走弱
+ │    └─ C7 36.6%（+1.1pp MoM），遠超 ALL 的 27.4%
+ │
+ └─ 結論：暑假時間紅利存在，但被 PUBG JJK 截流；CODM 內容力不足以搶回
+</pre>
+
+<h2>Supporting Argument 1：PUBG JJK 精準卡位暑假開始，截流了增量遊戲時間</h2>
+
+<p><span class="label-fact">Fact：</span>TH 暑假約 3 月中開始。PUBG Mobile JJK 聯名 3/13 上線（比 CODM S3 早 5 天），內容包含免費 Todo 皮膚（任務領取，零門檻）、五角色造型（悟、宿儺、虎杖、伏黑、野薔薇）、超自然主題地圖活動，同步搭配八週年慶 + Mythic Forge。活動期 3/13-4/12，覆蓋整個暑假前段。相比之下，CODM S3「Paranoia」3/18 上線，聯名 IP 為 Pop Team Epic（日系小眾搞笑漫畫）+ NieR:Automata（回歸，非首次）。</p>
+<p><span class="label-imp">Implication：</span>TH 市場 70%+ 的遊戲玩家透過 KOL 直播發現新內容，動漫 IP 聯名是 TH 市場最強的注意力引擎。JJK 在 TH 的文化滲透率遠高於 Pop Team Epic——PUBG 用一線動漫 IP + 免費內容 + 先發 5 天的時機優勢，精準搶走了暑假釋放的增量遊戲時間。暑假紅利可能確實存在（TH 整體遊戲時長上升），但流向了 PUBG Mobile。</p>
+<p><span class="label-act">Action：</span>4 月仍在暑假期間（至 5 月初），PUBG JJK 活動 4/12 結束後有窗口。建議：(1) 4 月中旬設計一波 TH 專屬活動，優先使用在 TH 有文化共鳴的 IP 或主題；(2) 如果無法安排 IP 聯名，至少設計一個 14 天的暑假主題活動（遞進獎勵 + 組隊加成），搶佔 PUBG JJK 活動結束後的注意力真空。Owner：活躍組 + 行銷，Timeline：4 月第 2 週上線。</p>
+
+<h2>Supporting Argument 2：DAU 穩定持平但留存走弱——「人沒離開但投入度在降」</h2>
+
+<p><span class="label-fact">Fact：</span>TH 3 月日均 DAU 83,732，MoM 僅 -1.4%，週內趨勢穩定（82-86K）。但留存全面走弱：新進 R2 43.0%（去年 47.8%，YoY -4.8pp）；活躍 R2 66.3%、R7 54.1%、R14 47.8%（去年 R7 57.2%，YoY -3.1pp）。各模式 D1 僅持平：BR 69.8%（+1.5pp MoM）、MP 67.5%（+0.5pp）、無偏好 73.1%（+0.1pp）——暑假語境下應有更明顯的提升。</p>
+<p><span class="label-imp">Implication：</span>DAU 持平但留存走弱是一個「先行指標」——當前登入的人可能只是慣性登入，但參與度在降低。暑假語境下，學生玩家有更多時間，D1 留存理應因遊玩頻次增加而提升，但實際僅持平。這代表<strong>暑假的增量時間沒有被 CODM 的內容有效承接</strong>。如果留存持續走弱而 DAU 暫時持平，預計 4 月中旬 DAU 將開始下行。</p>
+<p><span class="label-act">Action：</span>追蹤 TH 4 月第 1-2 週 DAU 趨勢。如果 DAU 開始下行，確認留存走弱假設成立。同步分析 TH 玩家的 Session 時長和日均局數 MoM 變化——如果 DAU 持平但 Session 時長下降，則「參與度下降」的假設進一步得到驗證。Owner：活躍組 + 數據，Timeline：4 月持續監控。</p>
+
+<h2>Supporting Argument 3：YoY -41.3% 確認長期結構性衰退——暑假紅利失效只是症狀</h2>
+
+<p><span class="label-fact">Fact：</span>TH 3 月 DAU 83.7K，YoY -41.3%（去年 142.6K）。去年暑假期間（2025 年 3-5 月）DAU 為 142.6K → 139.0K → 132.6K，降幅僅 -7%，代表去年暑假也沒有帶來顯著紅利，但至少維持了穩定。A+B 佔比僅 9.1%（低於 ALL 的 15.1%），E+F+G 佔比 59.7%，底部佔比接近 6 成。C7 36.6%，遠高於 ALL 的 27.4%。</p>
+<p><span class="label-imp">Implication：</span>TH 的問題不僅是「暑假紅利失效」——而是過去 12 個月流失了 41% 的用戶基礎。暑假紅利在去年就已經不明顯（持平而非上升），今年更是完全無效。A+B 僅 9.1% 代表硬核玩家已非常稀少；C7 36.6% 代表超過 1/3 的活躍用戶在 7 天內流失——TH 正處於「低質量平衡」狀態。</p>
+<p><span class="label-act">Action：</span>TH 需要不同於「搶暑假紅利」的中期策略。短期（4 月）：暑假活動搶回注意力；中期（Q2-Q3）：評估 TH 是否需要本地化內容升級（泰語 KOL 合作、泰國特色活動主題）。拉取 TH 過去 12 個月的 DAU 趨勢 + 留存趨勢，確認衰退節奏。Owner：活躍組，Timeline：4 月第 2 週產出中期策略。</p>
+
+<h2>暑假剩餘窗口時間軸</h2>
+
+<table>
+<tr><th>時間</th><th>外部事件</th><th>建議動作</th></tr>
+<tr><td>4/1-4/12</td><td>PUBG JJK 活動最後 12 天；Songkran 前</td><td>⚠️ 高壓期，避免正面對撞。以低成本日常活動維持</td></tr>
+<tr><td><strong>4/13-4/15</strong></td><td><strong>Songkran（潑水節）</strong>+ 暑假疊加</td><td><strong>重點窗口</strong>：Songkran 3 天 + PUBG JJK 剛結束，設計 10-14 天活動覆蓋整個 Songkran + 暑假後段</td></tr>
+<tr><td>4/16-5/5</td><td>暑假尾段；MLBB Naruto 2.0 持續中</td><td>持續活動保持 DAU，準備開學前的留存承接</td></tr>
+<tr><td>~5/5</td><td>開學，暑假結束</td><td>提前部署開學後留存活動，避免斷崖</td></tr>
+</table>
+
+<h2>Next Steps</h2>
+
+<table>
+<tr><th>優先序</th><th>行動項目</th><th>Owner</th><th>Timeline</th></tr>
+<tr><td><strong>P0</strong></td><td>設計 Songkran + 暑假後段活動（10-14 天，4/13 起），搶佔 PUBG JJK 結束後的注意力真空</td><td>活躍組 + 行銷</td><td>4/10 前完成方案</td></tr>
+<tr><td><strong>P0</strong></td><td>追蹤 4 月前 2 週 DAU + Session 時長趨勢，驗證「參與度下降」假設</td><td>活躍組 + 數據</td><td>4 月持續</td></tr>
+<tr><td><strong>P1</strong></td><td>拉取 TH 12 個月 DAU + 留存趨勢，量化結構性衰退速度</td><td>數據</td><td>4 月第 1 週</td></tr>
+<tr><td><strong>P1</strong></td><td>評估 TH 本地化內容策略（KOL 合作、泰國主題活動）可行性</td><td>活躍組 + 行銷</td><td>4 月第 2 週</td></tr>
+<tr><td>P2</td><td>PUBG JJK 結束後（4/12），監測 TH DAU 是否有自然回流</td><td>活躍組</td><td>4/12-4/19</td></tr>
+<tr><td>P2</td><td>建立 TH 競品活動預警機制——避免再次被競品精準卡位</td><td>活躍組</td><td>4 月持續</td></tr>
+</table>
+
+</body>
+</html>
