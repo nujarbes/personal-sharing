@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CODM 活躍營運月報 — 2026 年 3 月</title>
+<style>
+body {
+  font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background: #fff;
+  color: #1a1a1a;
+  line-height: 1.75;
+}
+h1 { font-size: 1.6rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; margin-top: 2rem; }
+h2 { font-size: 1.3rem; border-bottom: 1px solid #ccc; padding-bottom: 0.3rem; margin-top: 2rem; }
+h3 { font-size: 1.1rem; margin-top: 1.5rem; }
+blockquote {
+  border-left: 3px solid #bbb;
+  background: #f9f9f9;
+  padding: 0.8rem 1rem;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 0.88rem;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 6px 8px;
+  text-align: left;
+}
+th { background: #f5f5f5; font-weight: 600; }
+tr:nth-child(even) { background: #fafafa; }
+.meta { color: #666; font-size: 0.9rem; }
+.governing-thought {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.8;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  margin: 1rem 0;
+}
+.argument-title { font-weight: 600; }
+.label-fact { font-weight: 600; }
+.label-imp { font-weight: 600; }
+.label-act { font-weight: 600; }
+.warn { color: #c00; }
+.ok { color: #080; }
+</style>
+</head>
+<body>
+
+<h1>CODM 活躍營運月報 — 2026 年 3 月</h1>
+
+<p class="meta">
+<strong>報告類型</strong>：月報（scenario = 月報）<br>
+<strong>時間範圍</strong>：2026-03-01 ~ 2026-03-31<br>
+<strong>涵蓋市場</strong>：匯總（ALL）、PH、TWHKMO、TH、ID、SG、MY<br>
+<strong>對標基準</strong>：2026 年 2 月（MoM）、2025 年 3 月（YoY）<br>
+<strong>分析限制</strong>：缺活動參與數據，L3 以模式偏好為主；活動期 DAU Lift 歷史未接入
+</p>
+
+<h2>名詞定義</h2>
+<table>
+<tr><th>術語</th><th>定義</th></tr>
+<tr><td>DAU (A1)</td><td>每日活躍用戶數，當天至少登入一次</td></tr>
+<tr><td>A7 / A30</td><td>7 日 / 30 日活躍用戶（滾動窗口去重）</td></tr>
+<tr><td>NU</td><td>新進用戶（New User），當日首次註冊並登入</td></tr>
+<tr><td>Revival 30D</td><td>30 日以上未登入後重新回歸的回流用戶</td></tr>
+<tr><td>C7 / C14 / C30</td><td>7 / 14 / 30 日流失率（流失窗口內未再登入佔比）</td></tr>
+<tr><td>新進 R2 / R7</td><td>新註冊用戶次日 / 第 7 日留存率</td></tr>
+<tr><td>活躍 R2 / R7 / R30</td><td>全體 DAU 次日 / 第 7 日 / 第 30 日仍登入比例</td></tr>
+<tr><td>回流 R2</td><td>雙週回流用戶（流失 14 天以上回歸者）次日留存率</td></tr>
+<tr><td>月固定分池 A-G</td><td>按滾動月內活躍天數分 7 級（A &gt;25 天 ~ G 0-1 天）</td></tr>
+<tr><td>Sticky Factor</td><td>DAU / A30，衡量用戶粘性</td></tr>
+<tr><td>MoM / YoY</td><td>月環比 / 年同期比</td></tr>
+</table>
+
+<h2>外部語境摘要（分析期間：2026-03-01 ~ 2026-03-31）</h2>
+<blockquote>M-14 語境模式執行。以下語境基於 WebSearch 查詢 2026 年實際日期建立。</blockquote>
+
+<table>
+<tr><th>市場</th><th>已知外部事件</th><th>預期 DAU 影響</th><th>實際是否符合預期</th></tr>
+<tr><td><strong>PH</strong></td><td>學年 3/31 結束，暑假 4/1 起；月內無重大假日</td><td>→持平至↑微升</td><td><span class="warn">⚠️ 未如預期：MoM -8.2%</span></td></tr>
+<tr><td><strong>TWHKMO</strong></td><td>寒假+CNY 雙紅利已結束；2 月中開學，3 月為正常上課月</td><td>↓降（-10~-20% 為預期行為）</td><td><span class="warn">⚠️ MoM 在預期邊緣，YoY -43.2% 超出季節性</span></td></tr>
+<tr><td><strong>TH</strong></td><td><strong>暑假 3 月初開始</strong>，覆蓋整月至 5 月</td><td><strong>↑強升（+15-30%）</strong></td><td><span class="warn">⚠️ 嚴重未如預期：MoM -1.4%</span></td></tr>
+<tr><td><strong>ID</strong></td><td>Ramadan 2/19-3/20；Eid al-Fitr 3/21 + 延長假期至~3/24</td><td>↓日間降 + Lebaran 短降後反彈</td><td><span class="ok">✅ 部分符合：MoM +6.2%</span></td></tr>
+<tr><td><strong>MY</strong></td><td>Ramadan + Hari Raya Aidilfitri 3/21-22 + 學校 Cuti Penggal 1</td><td>↓微降 + 假期後反彈</td><td><span class="ok">✅ 基本符合：MoM -4.5%</span></td></tr>
+<tr><td><strong>SG</strong></td><td>Hari Raya Aidilfitri 3/21 公假</td><td>→持平</td><td><span class="ok">✅ 符合：MoM -3.5%</span></td></tr>
+</table>
+
+<h3>競品重大活動掃描</h3>
+<table>
+<tr><th>競品</th><th>事件</th><th>日期</th><th>影響市場</th><th>規模</th></tr>
+<tr><td><strong>MLBB</strong></td><td><strong>x Naruto 2.0（IP 聯名第二波）</strong></td><td><strong>3/27 - 5/10</strong></td><td>ALL SEA</td><td style="color:#c00">🔴 極大</td></tr>
+<tr><td><strong>PUBG Mobile</strong></td><td>Version 4.3 八週年 + JJK 聯名</td><td>3/12 - 5/10</td><td>ALL</td><td style="color:#c00">🔴 大</td></tr>
+<tr><td>Delta Force</td><td>Season Morphosis + MY Ramadan 活動</td><td>2026 年初持續</td><td>ALL（MY 加重）</td><td>🟡 中</td></tr>
+<tr><td>Free Fire</td><td>OB53 + Supermarket 活動</td><td>3 月全月</td><td>PH/ID</td><td>🟡 中</td></tr>
+</table>
+
+<blockquote><strong>語境判斷總結</strong>：3 月外部環境對 CODM 構成雙重壓力——(1) 競品 IP 聯名密度極高（MLBB Naruto + PUBG JJK 同月疊加）；(2) TH 暑假紅利未能兌現代表內部問題壓過了季節性利好。TWHKMO 的下滑有約一半可歸因於季節性，但 YoY -43.2% 確認另一半為結構性衰退。</blockquote>
+
+<h2>Governing Thought</h2>
+<div class="governing-thought">
+3 月 DAU MoM -7.6% 至 213 萬，核心問題不僅是量體收縮，而是「季節紅利失效」——TH 暑假期間 DAU 未升反平、PH 學期結束卻 MoM -8.2%，代表內部活躍機制已無法放大外部利好；月固定分池 A 池 MoM -19.2% 加速萎縮是最大結構風險；MLBB Naruto 2.0 + PUBG Mobile 八週年雙重 IP 衝擊進一步壓縮外部空間，4 月需以核心玩家留池 + TH/TWHKMO 專項介入作為優先行動。
+</div>
+
+<h2>分析架構：階層式議題樹</h2>
+<blockquote>以下為本次月報的分析框架，由上往下逐層拆解，每一層回答上一層的「Why」。</blockquote>
+<pre style="font-size:0.85rem; line-height:1.6; background:#f9f9f9; padding:1rem; border:1px solid #ddd; overflow-x:auto;">
+3 月 DAU MoM -7.6%（213 萬）— 季節紅利失效 + A 池加速萎縮
+ │
+ ├─ L0：Business KPI 總覽
+ │    → DAU / A7 / A30 / Sticky 全線下滑；C7 逼近警報線
+ │
+ ├─ L1：用戶狀態拆解 — 誰在流失？誰有改善？
+ │    ├─ 新進：NU +1.8%（穩定），但 TWHKMO NU -38.6%（斷流）
+ │    ├─ 回流：Revival +9.1%（正面），回流 R2 改善
+ │    └─ 流失：C7 +1.3pp、C14 +1.8pp（短週期加速）
+ │
+ ├─ L2：活動池健康度 — 結構怎麼變？
+ │    ├─ A 池 -19.2%（核心流失）→ 全市場同步惡化
+ │    ├─ D 池持平（升池動力不足）
+ │    └─ E+F+G 48.5%（底部膨脹）
+ │
+ ├─ L3：遊戲模式 / 行為 — 玩什麼？留不留？
+ │    ├─ PH 各模式 D1 +5~6pp（最大正面訊號）
+ │    ├─ TWHKMO MP D1 -11.3pp（崩潰）
+ │    └─ TH 各模式 D1 持平（暑假未兌現）
+ │
+ └─ 交叉摘要：各市場一行綜合診斷 + 外部語境對照
+</pre>
+
+<h2>Supporting Argument 1：DAU 量體收縮，外部語境放大了「季節紅利失效」的嚴重性</h2>
+<p><span class="label-fact">Fact：</span>3 月日均 DAU 213 萬，MoM -7.6%（2 月 231 萬）、YoY -9.3%（去年 3 月 235 萬）。PH 日均 181 萬（佔 85%），MoM -8.2% 但 YoY 僅 -0.7%；<strong>TH 日均 8.4 萬，MoM 僅 -1.4%，但在暑假已開始的語境下，應 +15-30% 才符合預期</strong>；TWHKMO 日均 5.8 萬，MoM -19.7% 部分符合開學後回落（預期 -10~-20%），但 YoY -43.2% 遠超季節因素；ID MoM +6.2% 正成長，受 Lebaran 後反彈帶動。</p>
+<p><span class="label-imp">Implication：</span>PH 的 YoY 趨近持平代表核心市場基本盤仍在。但 TH 的暑假紅利完全未兌現是最反直覺的發現——過去暑假期間 TH DAU 通常可提升 15-30%，今年卻持平，意味著有強力內部因素或競品壓制正在抵消季節性利好。TWHKMO MoM -19.7% 有約一半可歸因於季節性，但 YoY -43.2% 的缺口是結構性的。</p>
+<p><span class="label-act">Action：</span>TH 需啟動專項分析——排查暑假期間 DAU 為何未升（假設方向：Delta Force Morphosis 分流 + PUBG JJK 搶奪 BR 群 + 內部版本內容不足）。TWHKMO 啟動異動分析，拆解 YoY -43.2% 中季節性 vs 結構性比例。Owner：活躍組，Timeline：4 月第 1 週。</p>
+
+<h2>Supporting Argument 2：月固定分池 A+B 加速萎縮，頂部流失與競品 IP 衝擊形成共振風險</h2>
+<p><span class="label-fact">Fact：</span>匯總月固定分池 A+B 佔比從 2 月 17.3% 降至 3 月 15.1%（-2.2pp）。A 池人數 MoM -19.2%（56.5 萬 vs 69.9 萬），B 池 -11.1%。E+F+G 佔比從 47.1% 升至 48.5%。各市場同步惡化——PH A+B -2.4pp，TWHKMO -1.1pp，SGMY -1.1pp。</p>
+<p><span class="label-imp">Implication：</span>A 池 -19.2% 遠超正常波動，意味著「每月登入 25 天以上」的硬核玩家正在減少登入頻次。結合 3 月底 MLBB Naruto 2.0 啟動 + PUBG 八週年持續中，4 月的 A 池將面臨更大壓力——硬核玩家是最容易被高品質 IP 聯名吸引的族群。如果趨勢持續 2 個月，A+B 佔比將跌破 13%。</p>
+<p><span class="label-act">Action：</span>4 月第 2 週前設計 A/B 池留池活動——7 天連續登入遞進獎勵機制，目標 4 月 A 池降幅收窄至 -5% 以內。同步檢視 3 月有無版本內容斷檔或賽季空窗。Owner：活躍組，Timeline：4 月第 2 週上線。</p>
+
+<h2>Supporting Argument 3：新進與回流端改善，但被短週期流失加速所抵消</h2>
+<p><span class="label-fact">Fact：</span>新進端：日均 NU 35,491（MoM +1.8%），新進 R2 約 49.4%。流失端：C7 27.4%（+1.3pp，距警報線 29.7% 僅 2.3pp），C14 32.3%（+1.8pp），C30 38.7%（-2.1pp 改善）。回流端：日均 Revival 71,095（MoM +9.1%），回流 R2 約 41.5%。</p>
+<p><span class="label-imp">Implication：</span>NU 與回流量的改善被 C7/C14 加速所抵消。C7 +1.3pp 代表活躍 7 天內就流失的比例在擴大——與 A+B 池萎縮形成「頂部降池 → 中部增壓 → 底部加速流出」的連鎖效應。</p>
+<p><span class="label-act">Action：</span>C7 已接近警報線，啟動 C7 流失用戶行為分析，識別可干預的流失節點。同步加強 E→D 池升池推播策略。Owner：活躍組 + 數據，Timeline：本週內。</p>
+
+<h2>Supporting Argument 4：TWHKMO 全面衰退疊加競品壓力，需視為獨立問題</h2>
+<p><span class="label-fact">Fact：</span>TWHKMO 日均 DAU 5.8 萬（MoM -19.7%，YoY -43.2%），NU 879（MoM -38.6%），A+B 10.1%，E+F+G 57.7%。MP 偏好 D1 留存 59.3%（2 月 70.6%，-11.3pp）。C14 40.5%（+5.8pp，逼近警報線 40.1%）。外部語境：開學回落為預期行為，但 YoY -43.2% 確認結構性衰退。</p>
+<p><span class="label-imp">Implication：</span>TWHKMO 的衰退有約一半可用季節性解釋，但 YoY -43.2% 無法用季節性解釋——去年 3 月同樣是開學月，DAU 仍有 10.2 萬。NU -38.6% 代表獲客斷流；MP D1 -11pp 是行為面直接證據。A30 僅 25.6 萬，如果不介入，6 個月內 DAU 可能跌破 3 萬。</p>
+<p><span class="label-act">Action：</span>TWHKMO 需獨立出一份異動分析，排查 UA 投放、傳說對決/Delta Force 搶奪、MP 版本體驗。清明連假（4 月初）可作為回升窗口。Owner：活躍組 + UA，Timeline：本週內啟動。</p>
+
+<h2>L0：Business KPI 總覽</h2>
+<table>
+<tr><th>指標</th><th>3 月</th><th>2 月</th><th>MoM</th><th>去年 3 月</th><th>YoY</th><th>基準值</th><th>狀態</th></tr>
+<tr><td>日均 DAU</td><td>2,131K</td><td>2,306K</td><td>-7.6%</td><td>2,348K</td><td>-9.3%</td><td>2,450K</td><td><span class="warn">⚠️</span></td></tr>
+<tr><td>日均 A7</td><td>4,134K</td><td>4,273K</td><td>-3.3%</td><td>—</td><td>—</td><td>4,549K</td><td><span class="warn">⚠️</span></td></tr>
+<tr><td>日均 A30</td><td>7,239K</td><td>7,394K</td><td>-2.1%</td><td>—</td><td>—</td><td>7,751K</td><td><span class="warn">⚠️</span></td></tr>
+<tr><td>Sticky Factor</td><td>29.4%</td><td>31.2%</td><td>-1.8pp</td><td>—</td><td>—</td><td>31.6%</td><td><span class="warn">⚠️ 近 28%</span></td></tr>
+<tr><td>日均 NU</td><td>35,491</td><td>34,877</td><td>+1.8%</td><td>—</td><td>—</td><td>39,147</td><td>正常</td></tr>
+<tr><td>日均 Revival</td><td>71,095</td><td>65,159</td><td>+9.1%</td><td>—</td><td>—</td><td>71,819</td><td><span class="ok">✅</span></td></tr>
+<tr><td>C7</td><td>27.4%</td><td>26.1%</td><td>+1.3pp</td><td>—</td><td>—</td><td>26.2% (警報&gt;29.7%)</td><td><span class="warn">⚠️ 上升</span></td></tr>
+<tr><td>C14</td><td>32.3%</td><td>30.5%</td><td>+1.8pp</td><td>—</td><td>—</td><td>31.1% (警報&gt;35.0%)</td><td><span class="warn">⚠️ 上升</span></td></tr>
+<tr><td>C30</td><td>38.7%</td><td>40.8%</td><td>-2.1pp</td><td>—</td><td>—</td><td>38.1% (警報&gt;42.4%)</td><td><span class="ok">✅ 改善</span></td></tr>
+</table>
+
+<h2>L1：用戶狀態拆解</h2>
+
+<h3>各市場 DAU 概覽</h3>
+<table>
+<tr><th>市場</th><th>3 月日均 DAU</th><th>MoM</th><th>YoY</th><th>Sticky</th><th>外部語境判定</th></tr>
+<tr><td><strong>ALL</strong></td><td>2,131K</td><td>-7.6%</td><td>-9.3%</td><td>29.4%</td><td>—</td></tr>
+<tr><td><strong>PH</strong></td><td>1,811K</td><td>-8.2%</td><td>-0.7%</td><td>31.1%</td><td><span class="warn">⚠️ 學期末應穩定</span></td></tr>
+<tr><td><strong>TWHKMO</strong></td><td>57.7K</td><td>-19.7%</td><td>-43.2%</td><td>22.5%</td><td><span class="warn">⚠️ YoY 超出季節性</span></td></tr>
+<tr><td><strong>TH</strong></td><td>83.7K</td><td>-1.4%</td><td>-41.3%</td><td>22.4%</td><td><span class="warn">⚠️ 暑假紅利未兌現</span></td></tr>
+<tr><td><strong>ID</strong></td><td>100.1K</td><td>+6.2%</td><td>-38.6%</td><td>22.7%</td><td><span class="ok">✅ Lebaran 反彈</span></td></tr>
+<tr><td><strong>SG</strong></td><td>21.0K</td><td>-3.5%</td><td>-27.7%</td><td>24.3%</td><td><span class="ok">✅ 正常</span></td></tr>
+<tr><td><strong>MY</strong></td><td>57.1K</td><td>-4.5%</td><td>-35.6%</td><td>22.8%</td><td><span class="ok">✅ Hari Raya 符合預期</span></td></tr>
+</table>
+
+<h3>新進用戶</h3>
+<table>
+<tr><th>市場</th><th>日均 NU</th><th>MoM</th><th>新進 R2</th><th>vs 基準</th></tr>
+<tr><td>ALL</td><td>35,491</td><td>+1.8%</td><td>~49.4%</td><td>50.4%（略低）</td></tr>
+<tr><td>PH</td><td>26,970</td><td>+2.2%</td><td>~51.0%</td><td>52.2%（正常）</td></tr>
+<tr><td>TWHKMO</td><td>879</td><td><span class="warn">-38.6%</span></td><td>~40.3%</td><td>41.6%（略低）</td></tr>
+<tr><td>TH</td><td>1,739</td><td>+8.6%</td><td>~43.0%</td><td>43.8%（正常）</td></tr>
+<tr><td>ID</td><td>3,900</td><td>+11.2%</td><td>~46.6%</td><td>47.0%（正常）</td></tr>
+</table>
+
+<h3>回流用戶</h3>
+<table>
+<tr><th>指標</th><th>3 月</th><th>2 月</th><th>MoM</th></tr>
+<tr><td>日均 Revival 30D（流失 30 天以上回歸）</td><td>71,095</td><td>65,159</td><td>+9.1%</td></tr>
+<tr><td>Revival 30D 佔 DAU %</td><td>5.1%</td><td>4.4%</td><td>+0.7pp</td></tr>
+<tr><td>雙週回流 R2（流失 14 天以上回歸者次日留存）</td><td>~41.5%</td><td>~39.5%</td><td>+2.0pp</td></tr>
+</table>
+<blockquote>⚠️ <strong>數據口徑說明</strong>：Revival 30D 為「流失 30 天以上」回歸用戶量（Keystats）；雙週回流 R2 為「流失 14 天以上」回歸用戶的次日留存率（iData）。兩者母體不完全相同——30D 回流是 14D+ 回流的子集。</blockquote>
+
+<h2>L2：活動池健康度（月固定分池）</h2>
+
+<h3>匯總 — 3 月末 vs 2 月末</h3>
+<table>
+<tr><th>池</th><th>3 月人數</th><th>2 月人數</th><th>MoM</th><th>3 月佔比</th><th>日在線(分)</th><th>日遊戲(分)</th><th>BR%</th><th>MP%</th></tr>
+<tr><td>A</td><td>565K</td><td>699K</td><td><span class="warn"><strong>-19.2%</strong></span></td><td>7.8%</td><td>191.8</td><td>119.0</td><td>68.0%</td><td>23.8%</td></tr>
+<tr><td>B</td><td>526K</td><td>591K</td><td><span class="warn"><strong>-11.1%</strong></span></td><td>7.3%</td><td>106.7</td><td>63.7</td><td>57.8%</td><td>20.1%</td></tr>
+<tr><td>C</td><td>797K</td><td>831K</td><td>-4.0%</td><td>11.0%</td><td>79.3</td><td>45.8</td><td>51.5%</td><td>18.3%</td></tr>
+<tr><td>D</td><td>1,837K</td><td>1,837K</td><td>±0.0%</td><td>25.4%</td><td>56.6</td><td>30.4</td><td>41.9%</td><td>18.0%</td></tr>
+<tr><td>E</td><td>1,493K</td><td>1,477K</td><td>+1.1%</td><td>20.6%</td><td>35.9</td><td>16.9</td><td>29.9%</td><td>22.3%</td></tr>
+<tr><td>F</td><td>736K</td><td>735K</td><td>+0.1%</td><td>10.2%</td><td>24.2</td><td>10.0</td><td>21.0%</td><td>28.0%</td></tr>
+<tr><td>G</td><td>1,277K</td><td>1,310K</td><td>-2.5%</td><td>17.7%</td><td>12.2</td><td>3.4</td><td>6.8%</td><td>26.1%</td></tr>
+</table>
+<p><strong>結構判定</strong>：A+B 佔比 15.1%（2 月 17.3%，基準 18.1%）→ 加速萎縮。E+F+G 佔比 48.5%（2 月 47.1%）→ 底部膨脹。</p>
+
+<h3>各市場分池健康度</h3>
+<table>
+<tr><th>市場</th><th>3 月 A+B%</th><th>2 月 A+B%</th><th>Δ</th><th>3 月 E+F+G%</th><th>2 月 E+F+G%</th><th>Δ</th><th>總人數 MoM</th></tr>
+<tr><td>PH</td><td>16.5%</td><td>18.9%</td><td>-2.4pp</td><td>46.2%</td><td>44.7%</td><td>+1.5pp</td><td>-3.8%</td></tr>
+<tr><td>TWHKMO</td><td>10.1%</td><td>11.2%</td><td>-1.1pp</td><td>57.7%</td><td>55.7%</td><td>+2.0pp</td><td>-19.1%</td></tr>
+<tr><td>TH</td><td>9.1%</td><td>9.3%</td><td>-0.2pp</td><td>59.7%</td><td>59.8%</td><td>-0.1pp</td><td>+0.9%</td></tr>
+<tr><td>ID</td><td>9.5%</td><td>10.2%</td><td>-0.7pp</td><td>56.4%</td><td>56.8%</td><td>-0.4pp</td><td>+9.1%</td></tr>
+<tr><td>SGMY</td><td>9.0%</td><td>10.1%</td><td>-1.1pp</td><td>57.6%</td><td>56.9%</td><td>+0.7pp</td><td>-0.5%</td></tr>
+</table>
+
+<h2>L3：遊戲模式偏好與行為</h2>
+<blockquote>⚠️ <strong>匯總數據解讀注意</strong>：PH DAU 佔全市場 85%，匯總（ALL）的模式偏好與行為數據幾乎等同 PH 表現。分析遊戲模式偏好與行為時，應以各市場數據為主，匯總數據僅作業務指標總覽參考，避免其他市場的問題被 PH 的量體掩蓋。</blockquote>
+
+<h3>模式偏好分佈（7 級以上活躍玩家，3 月 29 日快照）</h3>
+<table>
+<tr><th>市場</th><th>BR%</th><th>MP%</th><th>DMZ%</th><th>無偏好%</th><th>7 級+總人數</th><th>MoM</th></tr>
+<tr><td>ALL</td><td>32.9%</td><td>37.8%</td><td>0.6%</td><td>19.2%</td><td>2,220K</td><td>-0.3%</td></tr>
+<tr><td>PH</td><td>34.9%</td><td>35.3%</td><td>0.3%</td><td>19.9%</td><td>1,901K</td><td>+1.0%</td></tr>
+<tr><td>TWHKMO</td><td>11.1%</td><td>58.1%</td><td>3.1%</td><td>18.9%</td><td>64K</td><td>-8.9%</td></tr>
+<tr><td>TH</td><td>21.5%</td><td>52.9%</td><td>2.6%</td><td>13.6%</td><td>81K</td><td>+0.4%</td></tr>
+<tr><td>ID</td><td>24.8%</td><td>51.7%</td><td>1.8%</td><td>12.8%</td><td>88K</td><td>-10.3%</td></tr>
+<tr><td>SGMY</td><td>23.4%</td><td>51.1%</td><td>1.8%</td><td>14.8%</td><td>78K</td><td>-9.3%</td></tr>
+</table>
+
+<h3>模式偏好 × D1 留存（3 月 vs 2 月）</h3>
+<table>
+<tr><th>市場</th><th>BR D1 (3月/2月)</th><th>MP D1 (3月/2月)</th><th>無偏好 D1 (3月/2月)</th></tr>
+<tr><td>ALL</td><td>79.3% / 73.8% (+5.5pp)</td><td>74.0% / 69.9% (+4.1pp)</td><td>82.1% / 77.8% (+4.3pp)</td></tr>
+<tr><td>PH</td><td>80.4% / 74.2% (+6.2pp)</td><td>76.3% / 70.3% (+6.0pp)</td><td>83.6% / 78.2% (+5.4pp)</td></tr>
+<tr><td>TWHKMO</td><td>63.4% / 68.2% (-4.8pp)</td><td><span class="warn">59.3% / 70.6% (<strong>-11.3pp</strong>)</span></td><td><span class="warn">61.9% / 74.6% (<strong>-12.7pp</strong>)</span></td></tr>
+<tr><td>TH</td><td>69.8% / 68.3% (+1.5pp)</td><td>67.5% / 67.0% (+0.5pp)</td><td>73.1% / 73.0% (+0.1pp)</td></tr>
+<tr><td>ID</td><td>68.6% / 71.9% (-3.3pp)</td><td>67.5% / 69.8% (-2.3pp)</td><td>75.6% / 78.1% (-2.5pp)</td></tr>
+<tr><td>SGMY</td><td>68.5% / 69.0% (-0.5pp)</td><td>62.8% / 67.2% (-4.4pp)</td><td>70.1% / 75.0% (-4.9pp)</td></tr>
+</table>
+
+<h2>交叉摘要</h2>
+<table>
+<tr><th>市場</th><th>L0 判定</th><th>L1 最大變動</th><th>L2 池遷移</th><th>L3 行為</th><th>外部語境</th><th>最緊迫問題</th><th>行動方向</th></tr>
+<tr><td>PH</td><td>衰退 -8.2%<br>YoY 持平</td><td>回流 +13.9%</td><td>A+B -2.4pp</td><td>D1 +5pp</td><td>⚠️ 應穩定</td><td>A 池 -19.8%</td><td>核心留池活動 + 抓 D1 窗口</td></tr>
+<tr><td>TWHKMO</td><td><span class="warn">嚴重衰退</span></td><td>NU -38.6%</td><td>全池萎縮</td><td>MP D1 -11pp</td><td>⚠️ YoY 超出</td><td>全面結構衰退</td><td>專項異動分析 + 清明窗口</td></tr>
+<tr><td>TH</td><td>表面穩定 -1.4%</td><td>NU +8.6%</td><td>A+B 持平</td><td>D1 持平</td><td><span class="warn">⚠️ 暑假未兌現</span></td><td>季節紅利失效</td><td>排查競品分流 + 暑假活動</td></tr>
+<tr><td>ID</td><td>局部成長 +6.2%</td><td>NU +11.2%</td><td>中低池膨脹</td><td>D1 -2~3pp</td><td>✅ 符合</td><td>成長品質存疑</td><td>追蹤 NU 品質</td></tr>
+<tr><td>SGMY</td><td>微幅衰退</td><td>NU 持平</td><td>A+B -1.1pp</td><td>MP D1 -4.4pp</td><td>✅ 符合</td><td>Delta Force 分流</td><td>推播 B→A 升池</td></tr>
+<tr><td><strong>跨市場</strong></td><td>—</td><td>—</td><td>A+B 全線萎縮</td><td>—</td><td>雙 IP 夾擊</td><td><strong>A+B 流失 + 競品共振</strong></td><td>全市場核心留池機制</td></tr>
+</table>
+
+<h2>Next Steps</h2>
+<table>
+<tr><th>優先序</th><th>行動項目</th><th>Owner</th><th>Timeline</th><th>外部語境考量</th></tr>
+<tr><td><strong>P0</strong></td><td>TWHKMO 專項異動分析</td><td>活躍組 + UA</td><td>本週內</td><td>清明連假（4/4-6）是最近回升窗口</td></tr>
+<tr><td><strong>P0</strong></td><td>TH 暑假紅利失效分析</td><td>活躍組</td><td>本週內</td><td>暑假持續至 5 月，仍有 2 個月窗口</td></tr>
+<tr><td><strong>P0</strong></td><td>C7 流失用戶行為分析</td><td>活躍組 + 數據</td><td>本週內</td><td>距警報線僅 2.3pp</td></tr>
+<tr><td><strong>P1</strong></td><td>A/B 池留池活動設計（7 天連續登入遞進獎勵）</td><td>活躍組</td><td>4 月第 2 週上線</td><td>MLBB Naruto 持續至 5/10</td></tr>
+<tr><td><strong>P1</strong></td><td>ID 新進品質追蹤</td><td>活躍組 + UA</td><td>4 月第 1 週</td><td>Ramadan 結束，回歸正常</td></tr>
+<tr><td>P2</td><td>PH D1 提升原因復盤</td><td>活躍組</td><td>4 月第 1 週</td><td>PH 暑假 4/1 起，可延續</td></tr>
+<tr><td>P2</td><td>E→D 升池推播策略優化</td><td>活躍組</td><td>4 月持續</td><td>—</td></tr>
+<tr><td>P2</td><td>4 月競品對標：MLBB Naruto + PUBG JJK 每週掃描</td><td>活躍組</td><td>4 月每週</td><td>雙 IP 同期至 5 月</td></tr>
+</table>
+
+<h2>Skill 反思</h2>
+<ul>
+<li><strong>本次好用</strong>：M-14 外部因素掃描以 WebSearch 取得 2026 年實際日期後，有效建立語境——TH 暑假紅利未兌現和 TWHKMO 開學回落 vs 結構衰退的拆解均是語境驅動的洞察。M-02 議題樹串聯 L0→L2 因果鏈有效。M-17 留存命名規範避免混用</li>
+<li><strong>不適用/缺口</strong>：L3 缺活動參與數據；M-14 競品掃描靠 WebSearch，未來應有結構化競品日曆追蹤</li>
+<li><strong>建議調整</strong>：(1) WF-02 增加「語境反面訊號」自動升級規則；(2) M-14 新增 Blood Strike 到監控清單；(3) M-14 新增 ID Mudik 返鄉潮為獨立事件類型</li>
+</ul>
+
+</body>
+</html>
