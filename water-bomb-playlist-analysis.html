@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>泼水节（Hydro Splash）赛单成效分析報告</title>
+<style>
+body {
+  font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background: #fff;
+  color: #1a1a1a;
+  line-height: 1.75;
+}
+h1 { font-size: 1.6rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; margin-top: 2rem; }
+h2 { font-size: 1.3rem; border-bottom: 1px solid #ccc; padding-bottom: 0.3rem; margin-top: 2rem; }
+h3 { font-size: 1.1rem; margin-top: 1.5rem; }
+h4 { font-size: 1.0rem; margin-top: 1.2rem; color: #333; }
+blockquote {
+  border-left: 3px solid #2563eb;
+  background: #eff6ff;
+  padding: 0.8rem 1rem;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 0.88rem;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 6px 8px;
+  text-align: left;
+}
+th { background: #1e293b; color: #fff; font-weight: 600; }
+tr:nth-child(even) { background: #f8f9fa; }
+.meta { color: #666; font-size: 0.9rem; }
+.highlight { background: #f0fdf4; }
+.warn { color: #dc2626; }
+.ok { color: #16a34a; font-weight: 600; }
+.verdict {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.8;
+  padding: 1rem;
+  border: 2px solid #16a34a;
+  background: #f0fdf4;
+  margin: 1rem 0;
+  border-radius: 4px;
+}
+.multiplier { color: #2563eb; font-weight: 700; }
+.chart-note { font-size: 0.82rem; color: #666; margin-top: 0.3rem; }
+.sa { border-left: 4px solid #2563eb; padding-left: 1rem; margin: 1.5rem 0; }
+.sa h3 { border-bottom: none; margin-top: 0; }
+.fact { color: #1e293b; }
+.impl { color: #4338ca; }
+.action { color: #15803d; }
+.dim-table td:first-child { font-weight: 600; }
+.def-table { font-size: 0.85rem; }
+.def-table th { background: #475569; }
+.context-table th { background: #1e40af; }
+.reflection { background: #f8fafc; border: 1px solid #e2e8f0; padding: 1rem; border-radius: 4px; margin-top: 2rem; font-size: 0.9rem; }
+svg text { font-family: 'Noto Sans TC', sans-serif; }
+</style>
+</head>
+<body>
+
+<h1>泼水节（Hydro Splash）赛单成效分析報告</h1>
+
+<p class="meta">
+<strong>報告類型</strong>：遊戲內容成效分析（WF-07）<br>
+<strong>分析期間</strong>：2026-03-19 ~ 2026-04-01（上線首 14 天）<br>
+<strong>數據範圍</strong>：Garena 全區（ALL）<br>
+<strong>分析對象</strong>：泼水节赛单（playlistid=500191，子類型：節日/本地化）<br>
+<strong>報告目的</strong>：評估泼水节赛单投入產出，為後續本地化內容開發需求提供數據支撐
+</p>
+
+<!-- ===== 名詞定義 ===== -->
+<h2>名詞定義</h2>
+
+<table class="def-table">
+<tr><th>術語</th><th>定義</th><th>來源</th></tr>
+<tr><td>參與玩家</td><td>當日參與該赛单的不重複玩家數</td><td>playlist-data.csv <code>参与玩家</code></td></tr>
+<tr><td>玩家參與率</td><td>當日參與該赛单不重複玩家數 ÷ 當日 DAU</td><td><code>玩家参与率</code></td></tr>
+<tr><td>人次參與占比</td><td>該赛单參與人次 ÷ 全普通匹配總人次</td><td><code>人次参与占比</code></td></tr>
+<tr><td>人均局數</td><td>該赛单總局數 ÷ 參與玩家數</td><td><code>人均局数</code></td></tr>
+<tr><td>中退率</td><td>中途退出局數 ÷ 總局數（越低越好）</td><td><code>中退率</code></td></tr>
+<tr><td>赛单 R2 / R3 / R7 / R14</td><td>當日參與者中，第 N 日仍參與該赛单的比例</td><td><code>赛单次留</code> / <code>赛单三留</code> / <code>赛单七留</code> / <code>赛单十四留</code></td></tr>
+<tr><td>次日登入留存</td><td>當日參與者中，次日仍登入遊戲（不要求仍玩該赛单）的比例</td><td><code>次日留存</code></td></tr>
+<tr><td>Core 常態</td><td>永久可用基礎模式（ID=100xxx，排除 Train/Practice）</td><td>分類規則見下</td></tr>
+<tr><td>Event 版本赛单</td><td>500xxx、非 Featured、非 IP、非節日的版本限時赛单</td><td>分類規則見下</td></tr>
+</table>
+
+<blockquote>⚠️ <strong>匯總偏誤提醒</strong>：CODM SEA 中 PH DAU 佔全市場約 85%。本報告使用 ALL 數據，實質上反映 PH 市場表現。其他市場的數據差異可能被 PH 量體掩蓋。本次數據無分市場拆分，此為已知限制。</blockquote>
+
+<!-- ===== 外部語境 ===== -->
+<h2>外部語境摘要（2026-03-19 ~ 2026-04-01）</h2>
+
+<table class="context-table">
+<tr><th>市場</th><th>已知外部事件</th><th>預期 DAU 影響</th><th>實際是否符合預期</th></tr>
+<tr><td>PH</td><td>暑假開始（約 3/28 起）</td><td>↑升（+10-20%）</td><td class="ok">✅ 符合：4/1 DAU 2,457K，升幅 ~10%</td></tr>
+<tr><td>TH</td><td>暑假開始 + 泼水節臨近（4/13-15）</td><td>↑升</td><td>無分市場數據，無法直接驗證；泼水節文化主題可能對 TH 參與有正向疊加</td></tr>
+<tr><td>ID</td><td>齋月期間（約 2/28 起）</td><td>結構性變化</td><td>無分市場數據，無法驗證</td></tr>
+<tr><td>TWHKMO</td><td>開學後回落期</td><td>↓降（預期行為）</td><td>無分市場數據，無法驗證</td></tr>
+</table>
+
+<!-- ===== 赛单分類 ===== -->
+<h2>赛单分類與對標基準</h2>
+
+<h3>分類方法論</h3>
+<p>CODM 赛单數據依兩層邏輯分類。第一層由數據源原生欄位 <code>playlist类型</code> 區分 MP/BR/排位/錦標賽；第二層在「普通匹配」內部，按 playlistid 區間 + 描述名命名模式進一步細分。泼水节（500191）屬於「普通匹配 → 500xxx 限時赛单 → 節日/本地化」。</p>
+<p><strong>分析範圍限定為 MP 普通匹配</strong>——泼水节是 MP 限時玩法，與 BR 模式的參與結構和指標意義完全不同，不適合直接對標。</p>
+
+<pre style="background:#f8f9fa;padding:1rem;border:1px solid #e2e8f0;border-radius:4px;font-size:0.85rem;line-height:1.6;overflow-x:auto;">
+CODM 全部赛单
+├─ BR排位（10xxx/60xxx）── 不在分析範圍（玩法類型不同）
+├─ BR匹配（10xxx）── 不在分析範圍（玩法類型不同）
+├─ MP排位（400xxx）── 不在分析範圍（競技性質不同）
+├─ 錦標賽（600xxx）── 不在分析範圍
+└─ 普通匹配 ◀ 分析範圍
+    ├─ Core 常態（100xxx，排除 Train/Practice）── 對標基準②
+    │   └─ Frontline, FFA, S&amp;D, Hardpoint, TDM, Domination, Kill Confirmed（7 個）
+    ├─ Core 輔助（Train, Practice VS. AI）── 排除（訓練用途）
+    └─ 500xxx 限時赛单
+        ├─ Featured 輪替（Featured- 前綴）── 排除（全球版自帶輪替）
+        ├─ Event 版本赛单（無特殊標記）── 對標基準①
+        │   └─ power up, Stand Off, Enhanced Warrior, Carnival Shootout, CCP2, Patrol（6 個）
+        ├─ IP 聯動（含已知 IP 名稱）── 補充參考⑤
+        │   └─ Gundam(500174), WWE(500180)
+        ├─ <strong>節日/本地化（節日文化主題）◀ 分析對象</strong>
+        │   └─ <strong>泼水节(500191)</strong>, 装卸货场-新春(500188)
+        ├─ FS 系列（(FS) 後綴）── 未納入對標
+        ├─ Collection 回顧（年份+Collection）── 未納入對標
+        └─ 其他（SLQ, 单挑系列等）── 未納入對標
+</pre>
+
+<blockquote><strong>分類原則</strong>：分類從數據推導，非預設。每個赛单的子類型由 playlistid 區間 + 描述名命名模式共同判定。邊界模糊時，以最能反映其<strong>策劃目的</strong>的子類型為準。</blockquote>
+
+<h3>選用對標基準</h3>
+<table>
+<tr><th>基準</th><th>組成</th><th>選用理由</th></tr>
+<tr><td><strong>① Event 版本赛单均值</strong></td><td>power up, Stand Off, Enhanced Warrior, Carnival Shootout, Community Choice Playlist 2, Patrol（6 個）</td><td>同子類型僅 1 個歷史樣本，以更廣的 Event 作為主基準</td></tr>
+<tr><td><strong>② Core 常態均值</strong></td><td>Frontline, FFA, S&D, Hardpoint, TDM, Domination, Kill Confirmed（7 個）</td><td>日常遊玩行為基準</td></tr>
+<tr><td><strong>③ 同版本並行赛单</strong></td><td>同期在線的所有 Event 赛单</td><td>相對位置判斷</td></tr>
+<tr><td><strong>④ 歷史節日/本地化</strong></td><td>装卸货场-新春（唯一樣本）</td><td>同子類型方向性比較</td></tr>
+<tr><td><strong>⑤ 歷史 IP 聯動（補充）</strong></td><td>Gundam（2025/7）、WWE</td><td>有 IP 加持的上限參照</td></tr>
+</table>
+
+<!-- ===== Governing Thought ===== -->
+<h2>Governing Thought</h2>
+
+<div class="verdict">
+泼水节赛单是 36.2 版本表現最佳的限時赛单：日均參與玩家（71,562）為同期 Event 版本赛单均值的 3.7 倍，中退率（4.01%）僅為其 1/4，且在無 IP 授權的條件下達到 Core 常態赛单水準。數據顯示「節日主題本地化赛单」作為可複製的內容路徑具備可行性，建議在後續版本中延續。
+</div>
+
+<!-- ===== 四維度摘要 ===== -->
+<h2>四維度摘要</h2>
+
+<table class="dim-table">
+<tr><th>維度</th><th>判定</th><th>核心數據</th></tr>
+<tr><td>D1 參與規模</td><td class="ok">✅ 優秀</td><td>日均 71,562 人（Event 均值的 <span class="multiplier">3.7x</span>），參與率 3.23%（<span class="multiplier">3.3x</span>）</td></tr>
+<tr><td>D2 體驗品質</td><td class="ok">✅ 優秀</td><td>中退率 4.01%（Event 均值的 <span class="multiplier">0.25x</span>），人均 3.18 局（<span class="multiplier">1.31x</span>）</td></tr>
+<tr><td>D3 生態定位</td><td class="ok">✅ 顯著</td><td>佔 500xxx 局次 49-77%（均值 ~63%），主導限時赛单生態</td></tr>
+<tr><td>D4 趨勢與留存</td><td class="ok">✅ 正面</td><td>14 天無衰退，4/1 飆升 +74%（PH 暑假啟動 + 文化節點疊加）；參與者次日登入留存 77.6%（> 活躍 R2 基準 73.6%）</td></tr>
+</table>
+
+<!-- ===== SA 1 ===== -->
+<div class="sa">
+<h3>Supporting Argument 1：泼水节日均參與達同期 Event 赛单均值的 3.7 倍</h3>
+
+<p class="fact"><strong>Fact</strong>：泼水节日均參與玩家 71,562 人，是同期 6 個 Event 版本赛单均值（19,364）的 <span class="multiplier">3.7 倍</span>；玩家參與率 3.23%，是 Event 均值（0.98%）的 <span class="multiplier">3.3 倍</span>。第二名 power up（32,613）僅為其 46%。14 天累計 1,001,865 人次·天、3,187,247 局次。</p>
+
+<h4 id="sa-chart-1">SA圖｜同版本並行赛单對比（日均玩家 × 中退率）</h4>
+<svg width="100%" viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg" aria-label="同版本並行赛单日均玩家與中退率對比">
+<title>同版本並行赛单日均玩家與中退率對比長條圖</title>
+<!-- Background -->
+<rect width="680" height="280" fill="#fafafa" rx="4"/>
+<!-- Y axis labels -->
+<text x="5" y="35" font-size="10" fill="#666">80K</text>
+<text x="5" y="75" font-size="10" fill="#666">60K</text>
+<text x="5" y="115" font-size="10" fill="#666">40K</text>
+<text x="5" y="155" font-size="10" fill="#666">20K</text>
+<text x="5" y="195" font-size="10" fill="#666">0</text>
+<!-- Gridlines -->
+<line x1="40" y1="30" x2="670" y2="30" stroke="#e5e7eb" stroke-width="0.5"/>
+<line x1="40" y1="70" x2="670" y2="70" stroke="#e5e7eb" stroke-width="0.5"/>
+<line x1="40" y1="110" x2="670" y2="110" stroke="#e5e7eb" stroke-width="0.5"/>
+<line x1="40" y1="150" x2="670" y2="150" stroke="#e5e7eb" stroke-width="0.5"/>
+<line x1="40" y1="190" x2="670" y2="190" stroke="#333" stroke-width="1"/>
+<!-- Bars (scale: 80K = y30, 0 = y190, range=160px for 80K) -->
+<!-- 泼水节: 71562 → y=190-71562/80000*160=190-143=47 -->
+<rect x="55" y="47" width="70" height="143" fill="#16a34a" rx="2"/>
+<text x="90" y="42" font-size="11" fill="#16a34a" text-anchor="middle" font-weight="700">71,562</text>
+<text x="90" y="208" font-size="9" fill="#333" text-anchor="middle">泼水节</text>
+<text x="90" y="220" font-size="9" fill="#16a34a" text-anchor="middle" font-weight="600">4.0%退</text>
+<!-- power up: 32613 → y=190-32613/80000*160=190-65=125 -->
+<rect x="145" y="125" width="70" height="65" fill="#2563eb" rx="2"/>
+<text x="180" y="120" font-size="11" fill="#2563eb" text-anchor="middle">32,613</text>
+<text x="180" y="208" font-size="9" fill="#333" text-anchor="middle">power up</text>
+<text x="180" y="220" font-size="9" fill="#666" text-anchor="middle">7.3%退</text>
+<!-- Stand Off: 27238 → y=190-54=136 -->
+<rect x="235" y="136" width="70" height="54" fill="#2563eb" rx="2"/>
+<text x="270" y="131" font-size="11" fill="#2563eb" text-anchor="middle">27,238</text>
+<text x="270" y="208" font-size="9" fill="#333" text-anchor="middle">Stand Off</text>
+<text x="270" y="220" font-size="9" fill="#f59e0b" text-anchor="middle">11.2%退</text>
+<!-- Enhanced Warrior: 18424 → y=190-37=153 -->
+<rect x="325" y="153" width="70" height="37" fill="#2563eb" rx="2"/>
+<text x="360" y="148" font-size="11" fill="#2563eb" text-anchor="middle">18,424</text>
+<text x="360" y="208" font-size="9" fill="#333" text-anchor="middle">Enhanced W.</text>
+<text x="360" y="220" font-size="9" fill="#16a34a" text-anchor="middle" font-weight="600">2.4%退</text>
+<!-- Carnival Shootout: 14880 → y=190-30=160 -->
+<rect x="415" y="160" width="70" height="30" fill="#dc2626" rx="2"/>
+<text x="450" y="155" font-size="11" fill="#dc2626" text-anchor="middle">14,880</text>
+<text x="450" y="208" font-size="9" fill="#333" text-anchor="middle">Carnival S.</text>
+<text x="450" y="220" font-size="9" fill="#dc2626" text-anchor="middle" font-weight="600">52.8%退</text>
+<!-- CCP2: 13854 → y=190-28=162 -->
+<rect x="505" y="162" width="70" height="28" fill="#2563eb" rx="2"/>
+<text x="540" y="157" font-size="11" fill="#2563eb" text-anchor="middle">13,854</text>
+<text x="540" y="208" font-size="9" fill="#333" text-anchor="middle">CCP 2</text>
+<text x="540" y="220" font-size="9" fill="#f59e0b" text-anchor="middle">13.5%退</text>
+<!-- Patrol: 9178 → y=190-18=172 -->
+<rect x="595" y="172" width="70" height="18" fill="#2563eb" rx="2"/>
+<text x="630" y="167" font-size="11" fill="#2563eb" text-anchor="middle">9,178</text>
+<text x="630" y="208" font-size="9" fill="#333" text-anchor="middle">Patrol</text>
+<text x="630" y="220" font-size="9" fill="#666" text-anchor="middle">8.2%退</text>
+<!-- Legend -->
+<rect x="55" y="245" width="12" height="12" fill="#16a34a" rx="2"/>
+<text x="72" y="256" font-size="10" fill="#333">節日/本地化</text>
+<rect x="170" y="245" width="12" height="12" fill="#2563eb" rx="2"/>
+<text x="187" y="256" font-size="10" fill="#333">Event 版本赛单</text>
+<rect x="310" y="245" width="12" height="12" fill="#dc2626" rx="2"/>
+<text x="327" y="256" font-size="10" fill="#333">體驗品質極差</text>
+<text x="450" y="256" font-size="10" fill="#666">柱底標注 = 中退率</text>
+</svg>
+<p class="chart-note">泼水节不僅參與量是第二名的 2.2 倍，且中退率僅 4.0%——唯一同時在「規模」和「品質」兩個維度領先的赛单。Carnival Shootout 參與量低且中退率 52.8%，反映體驗設計失敗。</p>
+
+<p class="impl"><strong>Implication</strong>：泼水节的參與規模與同期 Event 赛单存在量級差距（3.7x），顯示「節日主題 × 本地化」的內容定位具有獨立的參與拉動力，不依賴 IP 授權即可達成。</p>
+<p class="action"><strong>Action</strong>：建議後續版本規劃中，將本地化節日赛单的優先級提升至與 IP 聯動赛单同級，作為常態化的內容品類納入版本排期。</p>
+</div>
+
+<!-- ===== SA 2 ===== -->
+<div class="sa">
+<h3>Supporting Argument 2：中退率 4.01%，低於 Event 均值 15.89% 與 Core 均值 9.49%</h3>
+
+<p class="fact"><strong>Fact</strong>：泼水节中退率 4.01%，排名第二低（僅次於 Enhanced Warrior 2.41%），遠低於 Event 版本赛单均值 15.89%、Core 常態均值 9.49%。搭配人均 3.18 局（Event 均值 2.42 的 1.31x、Core 均值 2.92 的 1.09x），玩家不僅玩完每局還主動重複遊玩。</p>
+
+<h4 id="chart-1">中退率排名（同期所有赛单 + 基準線）</h4>
+<svg width="100%" viewBox="0 0 680 240" xmlns="http://www.w3.org/2000/svg" aria-label="中退率排名橫向長條圖">
+<title>中退率排名對比</title>
+<rect width="680" height="240" fill="#fafafa" rx="4"/>
+<!-- Scale: 0-55%, width 400px, starting x=200 -->
+<!-- Enhanced Warrior 2.41% → 400*2.41/55=17.5 -->
+<text x="195" y="28" font-size="10" fill="#333" text-anchor="end">Enhanced Warrior</text>
+<rect x="200" y="18" width="18" height="16" fill="#16a34a" rx="2"/>
+<text x="222" y="30" font-size="10" fill="#16a34a" font-weight="600">2.41%</text>
+<!-- 泼水节 4.01% → 29 -->
+<text x="195" y="50" font-size="10" fill="#333" text-anchor="end" font-weight="700">泼水节</text>
+<rect x="200" y="40" width="29" height="16" fill="#16a34a" rx="2"/>
+<text x="233" y="52" font-size="10" fill="#16a34a" font-weight="700">4.01%</text>
+<!-- power up 7.31% → 53 -->
+<text x="195" y="72" font-size="10" fill="#333" text-anchor="end">power up</text>
+<rect x="200" y="62" width="53" height="16" fill="#2563eb" rx="2"/>
+<text x="257" y="74" font-size="10" fill="#2563eb">7.31%</text>
+<!-- Patrol 8.15% → 59 -->
+<text x="195" y="94" font-size="10" fill="#333" text-anchor="end">Patrol</text>
+<rect x="200" y="84" width="59" height="16" fill="#2563eb" rx="2"/>
+<text x="263" y="96" font-size="10" fill="#2563eb">8.15%</text>
+<!-- Core 常態均值 9.49% → 69 -->
+<text x="195" y="116" font-size="10" fill="#333" text-anchor="end">Core 常態均值</text>
+<rect x="200" y="106" width="69" height="16" fill="#94a3b8" rx="2"/>
+<text x="273" y="118" font-size="10" fill="#64748b">9.49%</text>
+<!-- Stand Off 11.19% → 81 -->
+<text x="195" y="138" font-size="10" fill="#333" text-anchor="end">Stand Off</text>
+<rect x="200" y="128" width="81" height="16" fill="#f59e0b" rx="2"/>
+<text x="285" y="140" font-size="10" fill="#b45309">11.19%</text>
+<!-- CCP2 13.47% → 98 -->
+<text x="195" y="160" font-size="10" fill="#333" text-anchor="end">CCP 2</text>
+<rect x="200" y="150" width="98" height="16" fill="#f59e0b" rx="2"/>
+<text x="302" y="162" font-size="10" fill="#b45309">13.47%</text>
+<!-- Event 均值 15.89% → 116 -->
+<text x="195" y="182" font-size="10" fill="#333" text-anchor="end">Event 均值</text>
+<rect x="200" y="172" width="116" height="16" fill="#94a3b8" rx="2"/>
+<text x="320" y="184" font-size="10" fill="#64748b">15.89%</text>
+<!-- Carnival Shootout 52.80% → 384 -->
+<text x="195" y="204" font-size="10" fill="#333" text-anchor="end">Carnival Shootout</text>
+<rect x="200" y="194" width="384" height="16" fill="#dc2626" rx="2"/>
+<text x="588" y="206" font-size="10" fill="#dc2626" font-weight="600">52.80%</text>
+<!-- 10% reference line -->
+<line x1="273" y1="12" x2="273" y2="218" stroke="#dc2626" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="276" y="228" font-size="9" fill="#dc2626">← 10% 分界線（正常/偏高）</text>
+</svg>
+<p class="chart-note">泼水节中退率低於 Core 常態均值（9.49%），說明其體驗品質不僅是「限時赛单中的優秀」，而是「優於玩家日常遊玩的基礎模式」。</p>
+
+<p class="impl"><strong>Implication</strong>：低中退率 = 玩家不願中途退出 = 遊戲體驗令人滿意。這是純玩法品質的驗證，與 IP 吸引力無關。</p>
+<p class="action"><strong>Action</strong>：建議將泼水节的核心機制設計（固定趣味武器、增強滑鏟距離、快速技能充能）提煉為本地化赛单的設計範本，供後續版本復用。關鍵公式：短局（&lt;3 分鐘）+ 低門檻 + 節日主題機制融合。</p>
+</div>
+
+<!-- ===== SA 3 ===== -->
+<div class="sa">
+<h3>Supporting Argument 3：4/1 參與飆升 +74%，與 PH 暑假啟動時間吻合</h3>
+
+<p class="fact"><strong>Fact</strong>：泼水节上線 14 天參與趨勢平穩（日均 63K-76K），4/1 突然飆升至 118,237 人（+74% vs 前日），參與率 3.13% → 4.81%，局次占比 9.40% → 12.23%。4/1 正值 PH 暑假啟動（約 3/28 起），PH 佔全區 DAU 約 85%，ALL 數據的飆升主要反映 PH 市場的暑假效應。TH 泼水節文化認同（4/13-15 臨近）可能為次要疊加因素，但因無分市場數據，其獨立貢獻度無法量化。</p>
+
+<h4 id="chart-2">14 天日參與趨勢</h4>
+<svg width="100%" viewBox="0 0 680 250" xmlns="http://www.w3.org/2000/svg" aria-label="泼水节14天日參與趨勢折線圖">
+<title>泼水节14天日參與趨勢</title>
+<rect width="680" height="250" fill="#fafafa" rx="4"/>
+<!-- Y axis: 0-120K, chart area: x=50-660, y=25-195 -->
+<text x="8" y="30" font-size="10" fill="#666">120K</text>
+<text x="8" y="72" font-size="10" fill="#666">90K</text>
+<text x="8" y="114" font-size="10" fill="#666">60K</text>
+<text x="8" y="156" font-size="10" fill="#666">30K</text>
+<text x="8" y="198" font-size="10" fill="#666">0</text>
+<!-- Gridlines -->
+<line x1="50" y1="25" x2="660" y2="25" stroke="#e5e7eb" stroke-width="0.5"/>
+<line x1="50" y1="67" x2="660" y2="67" stroke="#e5e7eb" stroke-width="0.5"/>
+<line x1="50" y1="109" x2="660" y2="109" stroke="#e5e7eb" stroke-width="0.5"/>
+<line x1="50" y1="151" x2="660" y2="151" stroke="#e5e7eb" stroke-width="0.5"/>
+<line x1="50" y1="193" x2="660" y2="193" stroke="#333" stroke-width="1"/>
+<!-- Data points: scale 120K=y25, 0=y193, range=168px -->
+<!-- 68418→y193-168*68418/120000=193-96=97 -->
+<!-- 74986→193-105=88 -->
+<!-- 70615→193-99=94 -->
+<!-- 67331→193-94=99 -->
+<!-- 61215→193-86=107 -->
+<!-- 64433→193-90=103 -->
+<!-- 63126→193-88=105 -->
+<!-- 64179→193-90=103 -->
+<!-- 63198→193-89=104 -->
+<!-- 66454→193-93=100 -->
+<!-- 67421→193-94=99 -->
+<!-- 76882→193-108=85 -->
+<!-- 75370→193-106=87 -->
+<!-- 118237→193-166=27 -->
+<polyline points="93,97 137,88 180,94 224,99 268,107 311,103 355,105 398,103 442,104 485,100 529,99 572,85 616,87 660,27"
+  fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linejoin="round"/>
+<!-- Data dots -->
+<circle cx="93" cy="97" r="3" fill="#2563eb"/>
+<circle cx="137" cy="88" r="3" fill="#2563eb"/>
+<circle cx="180" cy="94" r="3" fill="#2563eb"/>
+<circle cx="224" cy="99" r="3" fill="#2563eb"/>
+<circle cx="268" cy="107" r="3" fill="#2563eb"/>
+<circle cx="311" cy="103" r="3" fill="#2563eb"/>
+<circle cx="355" cy="105" r="3" fill="#2563eb"/>
+<circle cx="398" cy="103" r="3" fill="#2563eb"/>
+<circle cx="442" cy="104" r="3" fill="#2563eb"/>
+<circle cx="485" cy="100" r="3" fill="#2563eb"/>
+<circle cx="529" cy="99" r="3" fill="#2563eb"/>
+<circle cx="572" cy="85" r="3" fill="#2563eb"/>
+<circle cx="616" cy="87" r="3" fill="#2563eb"/>
+<circle cx="660" cy="27" r="5" fill="#dc2626"/>
+<!-- Labels -->
+<text x="93" y="92" font-size="9" fill="#333" text-anchor="middle">68K</text>
+<text x="137" y="83" font-size="9" fill="#333" text-anchor="middle">75K</text>
+<text x="268" y="118" font-size="9" fill="#666" text-anchor="middle">61K</text>
+<text x="572" y="80" font-size="9" fill="#333" text-anchor="middle">77K</text>
+<text x="660" y="22" font-size="11" fill="#dc2626" text-anchor="middle" font-weight="700">118K</text>
+<!-- X axis dates -->
+<text x="93" y="210" font-size="8" fill="#666" text-anchor="middle">3/19</text>
+<text x="180" y="210" font-size="8" fill="#666" text-anchor="middle">3/21</text>
+<text x="268" y="210" font-size="8" fill="#666" text-anchor="middle">3/23</text>
+<text x="355" y="210" font-size="8" fill="#666" text-anchor="middle">3/25</text>
+<text x="442" y="210" font-size="8" fill="#666" text-anchor="middle">3/27</text>
+<text x="529" y="210" font-size="8" fill="#666" text-anchor="middle">3/29</text>
+<text x="616" y="210" font-size="8" fill="#666" text-anchor="middle">3/31</text>
+<text x="660" y="210" font-size="8" fill="#dc2626" text-anchor="middle" font-weight="600">4/1</text>
+<!-- Annotation arrow -->
+<line x1="660" y1="35" x2="660" y2="193" stroke="#dc2626" stroke-width="1" stroke-dasharray="3,3"/>
+<text x="630" y="60" font-size="10" fill="#dc2626" text-anchor="end" font-weight="600">+74%</text>
+<text x="630" y="72" font-size="9" fill="#dc2626" text-anchor="end">PH 暑假啟動</text>
+<text x="630" y="82" font-size="9" fill="#dc2626" text-anchor="end">+ 文化節點</text>
+</svg>
+<p class="chart-note">14 天趨勢平穩無衰退，4/1 與 PH 暑假啟動吻合帶來 +74% 飆升——若延長至 4/13 實際泼水節，TH 市場可能帶來額外峰值。</p>
+
+<p class="impl"><strong>Implication</strong>：4/1 飆升的主要驅動力為 PH 暑假啟動帶來的整體 DAU 增長，泼水节赛单作為當期最具吸引力的限時內容，自然承接了增量用戶。同時，泼水節文化主題可能對 TH 市場有額外拉動，若延長至實際泼水節（4/13-15），有機會進一步驗證文化節點效應。</p>
+<p class="action"><strong>Action</strong>：（1）建議延長泼水节赛单至 4/15（覆蓋實際泼水節），測試文化節點高峰期的參與潛力。（2）後續本地化赛单的上線時間建議提前於節日 2-3 週，讓主題與節日氛圍同步升溫。</p>
+</div>
+
+<!-- ===== SA 4 ===== -->
+<div class="sa">
+<h3>Supporting Argument 4：無 IP 授權下達到 Core 常態水準，玩法本身具備參與拉動力</h3>
+
+<p class="fact"><strong>Fact</strong>：泼水节在無 IP 授權條件下——日均參與 71,562 = Core 常態均值 65,616 的 <span class="multiplier">1.09x</span>；人次參與占比 9.21% ≈ Core 均值 9.87%；中退率 4.01% 遠優於 Core 均值 9.49%；人均局數 3.18 > Core 均值 2.92。與歷史 IP 聯動比較：達到 Gundam 峰值（275,548）的 26%、超越 WWE（45,661）的 <span class="multiplier">1.57x</span>、超越装卸货场-新春（36,203）的 <span class="multiplier">1.98x</span>。</p>
+
+<table>
+<tr><th>赛单</th><th>子類型</th><th>日均玩家</th><th>參與率</th><th>人均局數</th></tr>
+<tr><td>Gundam（2025/7 峰值期）</td><td>IP 聯動</td><td>275,548</td><td>10.70%</td><td>3.44</td></tr>
+<tr class="highlight"><td><strong>泼水节</strong></td><td><strong>節日/本地化</strong></td><td><strong>71,562</strong></td><td><strong>3.23%</strong></td><td><strong>3.18</strong></td></tr>
+<tr><td>WWE</td><td>IP 聯動</td><td>45,661</td><td>1.78%</td><td>2.50</td></tr>
+<tr><td>装卸货场-新春</td><td>節日/本地化</td><td>36,203</td><td>1.61%</td><td>2.20</td></tr>
+<tr><td>Core 常態均值</td><td>—</td><td>65,616</td><td>2.98%</td><td>2.92</td></tr>
+<tr><td>Event 版本赛单均值</td><td>—</td><td>19,364</td><td>0.98%</td><td>2.42</td></tr>
+</table>
+
+<p class="impl"><strong>Implication</strong>：泼水节在零 IP 成本下超越 WWE（1.57x）和装卸货场-新春（1.98x），人均局數（3.18）接近 Gundam（3.44），顯示玩法本身的吸引力可獨立於 IP 存在。</p>
+<p class="action"><strong>Action</strong>：建議在後續版本中延續本地化赛单路徑，將其作為與 IP 聯動互補的常態內容品類。已識別的潛在文化節點：PH 暑假（4-5 月）、ID 開齋節、TWHKMO 中秋。Garena 側可提供各市場文化節點日曆與玩家行為數據，協助開發團隊評估排期。</p>
+</div>
+
+<!-- ===== 留存 ===== -->
+<h2>赛单留存與登入留存</h2>
+
+<table>
+<tr><th>留存窗口</th><th>泼水节（3/19 首日）</th><th>說明</th></tr>
+<tr><td>赛单 R2</td><td>22.87%</td><td>限時玩法預期行為</td></tr>
+<tr><td>赛单 R3</td><td>16.12%</td><td>正常</td></tr>
+<tr><td>赛单 R7</td><td>10.77%</td><td>正常</td></tr>
+<tr><td>赛单 R14</td><td>9.52%</td><td>正常</td></tr>
+<tr class="highlight"><td><strong>參與者次日登入留存</strong></td><td><strong>77.6%</strong>（14 天均值）</td><td><strong>高於活躍 R2 基準 73.6%</strong></td></tr>
+</table>
+
+<blockquote>赛单留存低於 Core 常態是預期行為——玩家不會每天玩同一限時模式。<strong>關鍵觀察</strong>：參與者次日登入留存 77.6%，高於全體活躍 R2 基準（73.6%），代表泼水节參與者是高黏性用戶群，參與赛单正向貢獻整體留存。</blockquote>
+
+<!-- ===== 生態定位 ===== -->
+<h2>生態定位：500xxx 赛单局次主導率</h2>
+
+<table>
+<tr><th>日期</th><th>泼水节局次</th><th>全部 500xxx 局次</th><th>泼水节占比</th></tr>
+<tr><td>3/19（首日）</td><td>208,500</td><td>427,584</td><td>48.8%</td></tr>
+<tr><td>3/25（工作日）</td><td>204,604</td><td>294,368</td><td><strong>69.5%</strong></td></tr>
+<tr><td>3/30（週末）</td><td>236,062</td><td>307,889</td><td><strong>76.7%</strong></td></tr>
+<tr><td>4/1</td><td>394,490</td><td>590,106</td><td>66.9%</td></tr>
+</table>
+
+<!-- ===== 社群回響（M-15 輿情分析） ===== -->
+<h2>社群回響（M-15 輿情分析）</h2>
+
+<table>
+<tr><th>項目</th><th>內容</th></tr>
+<tr><td>分析對象</td><td>泼水节赛单（Hydro Splash）</td></tr>
+<tr><td>英文名稱</td><td>Hydro Splash</td></tr>
+<tr><td>掃描平台</td><td>Reddit (r/CallOfDutyMobile)、Facebook 官方粉專（SGMY/PH/TH/ID）、YouTube、Twitter/X</td></tr>
+<tr><td>搜索覆蓋度</td><td><strong>低</strong> — 非英語社群（TH/ID/PH 本地論壇、Facebook 社團留言、LINE 群組）WebSearch 覆蓋極有限，發行地區玩家真實反應樣本不足</td></tr>
+<tr><td>整體情緒</td><td><strong>無法可靠判定</strong> — 可觸及樣本以官方推播為主，缺乏發行地區玩家自發討論的足夠樣本</td></tr>
+<tr><td>聲量判斷</td><td><strong>低</strong> — Reddit 未出現大量專題討論，發行地區本地社群反應需人工補充</td></tr>
+<tr><td>信心水準</td><td><strong>低</strong> — 搜索覆蓋發行地區社群不足，無法對整體玩家態度下結論</td></tr>
+</table>
+
+<blockquote>⚠️ <strong>輿情覆蓋不足</strong>：WebSearch 對 Facebook 社團留言、LINE 群組、泰文/印尼文/菲律賓本地論壇的覆蓋率天然偏低。以下為有限樣本的定性觀察，<strong>不代表發行地區玩家的整體態度</strong>。如需可靠的輿情判斷，建議由各市場 PM 人工收集本地社群截圖補充。</blockquote>
+
+<h3>可觸及的正面訊號</h3>
+<table>
+<tr><th>來源</th><th>內容</th><th>限制</th></tr>
+<tr><td>官方社群（Facebook SGMY）</td><td>CODM 官方以「WATER BOMB — a new game mode and a splash of free rewards to start your summer」推播，貼文互動正面</td><td>官方推播的正面互動不等同於玩家自發好評</td></tr>
+</table>
+
+<h3>負面回饋</h3>
+<table>
+<tr><th>來源</th><th>內容</th></tr>
+<tr><td>綜合搜索</td><td>未發現針對 Hydro Splash 的集中負面投訴、bug 回報或體驗抱怨</td></tr>
+</table>
+
+<h3>體驗痛點</h3>
+<p>本次搜索未發現明確痛點。但鑑於搜索覆蓋度低，不能排除發行地區本地社群存在未觸及的反饋。</p>
+
+<h3>輿情結論</h3>
+<blockquote>泼水节赛单的量化數據表現優異（參與 3.7x、中退率 0.25x），但社群端缺乏足夠的發行地區玩家自發正面評價來佐證「主題做得好」的結論。<strong>數據好 ≠ 社群好評</strong>——前者反映參與行為，後者反映玩家認知與口碑傳播。建議後續本地化赛单搭配各市場 PM 的人工輿情收集，才能完整評估內容成效。</blockquote>
+
+<!-- ===== 累計觸達 ===== -->
+<h2>14 天累計觸達</h2>
+
+<table>
+<tr><th>指標</th><th>數值</th></tr>
+<tr><td>累計參與人次·天</td><td><strong>1,001,865</strong></td></tr>
+<tr><td>累計總局次</td><td><strong>3,187,247</strong>（320 萬局）</td></tr>
+<tr><td>估計不重複觸達玩家</td><td>約 60 萬（假設 40% 日間重疊）</td></tr>
+<tr><td>DAU 滲透率均值</td><td>3.23%</td></tr>
+<tr><td>500xxx 赛单局次主導率</td><td>49-77%（均值 ~63%）</td></tr>
+</table>
+
+<hr>
+<p class="meta"><em>數據來源：Garena 內部赛单數據（playlist-data.csv）；社群搜索：WebSearch<br>
+對標基準：Event 版本赛单均值（6 個）、Core 常態均值（7 個）、歷史節日/本地化、歷史 IP 聯動</em></p>
+
+</body>
+</html>
